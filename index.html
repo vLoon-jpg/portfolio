@@ -29,6 +29,22 @@
       overflow-x: hidden;
     }
 
+    /* Subtle noise texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
     a {
       color: inherit;
       text-decoration: none;
@@ -269,10 +285,21 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       transform: translate(-50%, -50%);
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 107, 1, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      top: 20%;
+      right: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 107, 1, 0.04) 0%, transparent 50%);
       pointer-events: none;
     }
 
@@ -357,6 +384,14 @@
       background: var(--bg-alt);
     }
 
+    #about::before {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 107, 1, 0.03) 0%,
+        transparent 50%
+      );
+    }
+
     .about-grid {
       display: grid;
       grid-template-columns: 160px 1fr;
@@ -414,6 +449,14 @@
       background: var(--bg-primary);
     }
 
+    #skills::before {
+      background: radial-gradient(
+        ellipse at 20% 30%,
+        rgba(255, 107, 1, 0.02) 0%,
+        transparent 60%
+      );
+    }
+
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -424,15 +467,17 @@
     .skill-card {
       background: var(--bg-alt);
       border-radius: 12px;
-      padding: 20px;
+      padding: 24px 20px;
       text-align: center;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       cursor: default;
+      border: 1px solid rgba(255, 255, 255, 0.04);
     }
 
     .skill-card:hover {
       background: var(--bg-card);
       transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     }
 
     .skill-icon {
@@ -462,6 +507,14 @@
       background: var(--bg-alt);
     }
 
+    #projects::before {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 107, 1, 0.03) 0%,
+        transparent 50%
+      );
+    }
+
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -473,14 +526,29 @@
       background: var(--bg-card);
       border-radius: 12px;
       padding: 28px;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
       display: flex;
       flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+      opacity: 0.7;
     }
 
     .project-card:hover {
       background: var(--bg-card-hover);
       transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
     }
 
     .project-emoji {
@@ -544,6 +612,14 @@
     #contact {
       background: var(--bg-primary);
       text-align: center;
+    }
+
+    #contact::before {
+      background: radial-gradient(
+        ellipse at 50% 30%,
+        rgba(255, 107, 1, 0.03) 0%,
+        transparent 60%
+      );
     }
 
     .contact-links {

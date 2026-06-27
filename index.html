@@ -1,250 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>vLoon — Levy | Portfolio</title>
-<style>
-  /* RESET & BASE */
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-  body{
-    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-    background:#000;color:#fff;line-height:1.47;overflow-x:hidden
-  }
-  /* Noise texture overlay */
-  body::after{
-    content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9999;opacity:.025;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat:repeat;background-size:256px 256px
-  }
-  a{color:#FF6B01;text-decoration:none;transition:color .2s}
-  a:hover{color:#FF8C33}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vLoon — Levy | Portfolio</title>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.1.2/lib/anime.min.js"></script>
+  <style>
+    /* RESET */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      background:#000;color:#e0e0e0;line-height:1.6;overflow-x:hidden
+    }
+    /* Noise texture — our signature */
+    body::after{
+      content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9999;opacity:.03;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat:repeat;background-size:256px 256px
+    }
+    a{color:#FF6B01;text-decoration:none;transition:color .2s}a:hover{color:#FF8C33}
 
-  /* TOKENS */
-  :root{
-    --accent:#FF6B01;--accent-hover:#FF8C33;--accent-glow:rgba(255,107,1,.08);
-    --bg-alt:#141414;--bg-card:#1a1a1a;--border:rgba(255,255,255,.06);
-    --text:#fff;--text-secondary:rgba(255,255,255,.72);--text-muted:rgba(255,255,255,.48);
-    --section-pad:120px 0;--content-max:980px;
-    --shadow-card:0 8px 30px rgba(0,0,0,.3);
-  }
+    /* DESIGN TOKENS */
+    :root{
+      --accent:#FF6B01;--accent-hover:#FF8C33;--accent-glow:rgba(255,107,1,.12);
+      --bg-alt:#0d0d0d;--border:#1a1a1a;
+      --text:#fff;--text-secondary:#aaa;--text-muted:#888;
+      --section-pad:100px 0;--content-max:1000px;
+    }
 
-  /* LAYOUT */
-  .container{max-width:var(--content-max);margin:0 auto;padding:0 24px;position:relative;z-index:1}
-  .section{padding:var(--section-pad);position:relative}
-  .section-alt{background:var(--bg-alt)}
+    /* LAYOUT */
+    .container{max-width:var(--content-max);margin:0 auto;padding:0 24px}
+    .section{padding:var(--section-pad);border-bottom:1px solid var(--border);position:relative}
+    .section:last-of-type{border-bottom:none}
+    h2{font-size:clamp(1.6rem,4vw,2rem);font-weight:800;color:var(--text);margin-bottom:12px}
+    .section-sub{font-size:1rem;color:var(--text-muted);margin-bottom:40px;max-width:600px}
 
-  /* NAV — glass */
-  nav{
-    position:fixed;top:0;left:0;width:100%;z-index:100;
-    background:rgba(0,0,0,.8);backdrop-filter:saturate(180%) blur(20px);
-    -webkit-backdrop-filter:saturate(180%) blur(20px);
-    border-bottom:1px solid var(--border)
-  }
-  nav .container{display:flex;align-items:center;justify-content:space-between;height:48px}
-  .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text)}
-  .nav-logo .accent{color:var(--accent)}
-  .nav-links{display:flex;gap:28px;list-style:none}
-  .nav-links a{font-size:.75rem;font-weight:400;color:var(--text-secondary);transition:color .2s}
-  .nav-links a:hover{color:var(--text)}
-  .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;background:none;border:none;padding:4px}
-  .hamburger span{display:block;width:20px;height:1.5px;background:var(--text);border-radius:1px}
-  .nav-overlay{
-    display:none;position:fixed;top:48px;left:0;right:0;bottom:0;
-    background:var(--bg-alt);z-index:99;padding:40px 24px;
-    flex-direction:column;gap:20px;transform:translateX(100%);transition:transform .3s
-  }
-  .nav-overlay.open{display:flex;transform:translateX(0)}
-  .nav-overlay a{font-size:1.5rem;font-weight:600;color:var(--text)}
+    /* TAGS */
+    .tag{display:inline-block;background:var(--accent-glow);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:.75rem;font-weight:600;margin:2px 4px 2px 0}
 
-  /* HERO — Apple cinematic dark */
-  #hero{
-    min-height:100vh;display:flex;align-items:center;justify-content:center;
-    text-align:center;padding-top:48px;position:relative;overflow:hidden
-  }
-  #hero::before{
-    content:'';position:absolute;top:50%;left:50%;width:800px;height:800px;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(circle,rgba(255,107,1,.06) 0%,transparent 60%);
-    pointer-events:none
-  }
-  .hero-badge{
-    display:inline-flex;align-items:center;gap:6px;
-    background:var(--accent-glow);border:1px solid rgba(255,107,1,.2);
-    border-radius:980px;padding:6px 18px;font-size:.75rem;font-weight:500;
-    color:var(--accent);margin-bottom:20px;letter-spacing:-.12px
-  }
-  .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
-  .hero-name{
-    font-size:clamp(2.2rem,5.5vw,3.5rem);font-weight:600;line-height:1.07;
-    letter-spacing:-.28px;color:var(--text);margin-bottom:12px
-  }
-  .hero-name span{color:var(--accent)}
-  .hero-sub{font-size:clamp(1rem,2vw,1.31rem);font-weight:400;color:var(--text-secondary);margin-bottom:8px}
-  .hero-motto{
-    font-size:1.15rem;font-weight:400;color:var(--accent);margin-bottom:32px;
-    font-style:italic;display:inline-block;letter-spacing:-.12px
-  }
-  .hero-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-  .btn{
-    display:inline-flex;align-items:center;gap:6px;
-    background:var(--accent);color:#000;font-weight:500;
-    padding:8px 15px;border-radius:8px;font-size:1rem;
-    transition:all .2s;border:none;cursor:pointer
-  }
-  .btn:hover{background:#fff;color:#000;transform:translateY(-1px)}
-  .btn-outline{
-    background:transparent;color:var(--accent);
-    border:1px solid var(--accent);border-radius:980px;padding:8px 18px
-  }
-  .btn-outline:hover{background:var(--accent-glow);color:var(--accent-hover)}
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-weight:700;padding:12px 28px;border-radius:8px;font-size:.9rem;transition:all .2s;border:none;cursor:pointer}
+    .btn:hover{background:#fff;color:#000;transform:translateY(-2px)}
+    .btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+    .btn-outline:hover{background:var(--accent-glow);color:var(--accent)}
 
-  /* SECTION TITLES */
-  h2{
-    font-size:clamp(1.6rem,3vw,2rem);font-weight:600;line-height:1.1;
-    color:var(--text);margin-bottom:8px;text-align:center
-  }
-  .section-sub{
-    font-size:.93rem;color:var(--text-muted);text-align:center;
-    margin-bottom:48px;max-width:520px;margin-left:auto;margin-right:auto
-  }
+    /* NAV — our glass nav, simplified */
+    nav{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    nav .container{display:flex;align-items:center;justify-content:space-between;height:56px}
+    .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text)}
+    .nav-logo .fade{color:var(--text-muted)}
+    .nav-logo .accent{color:var(--accent)}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{font-size:.85rem;color:var(--text-secondary);position:relative}
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .2s}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+    .nav-overlay{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg-alt);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s;transform:translateX(100%)}
+    .nav-overlay.open{display:flex;transform:translateX(0)}
+    .nav-overlay a{font-size:1.5rem;font-weight:600;color:var(--text)}
 
-  /* ABOUT */
-  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
-  .about-text{color:var(--text-secondary);font-size:1rem;line-height:1.6}
-  .about-text p+p{margin-top:16px}
-  .about-text strong{color:var(--text);font-weight:600}
-  .quick-facts{
-    background:var(--bg-card);border:1px solid var(--border);
-    border-radius:12px;padding:28px
-  }
-  .quick-facts h3{
-    color:var(--text);font-size:.85rem;font-weight:600;
-    text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px
-  }
-  .quick-facts ul{list-style:none;display:flex;flex-direction:column;gap:10px}
-  .quick-facts li{display:flex;gap:8px;font-size:.9rem}
-  .quick-facts li span:first-child{color:var(--accent);font-weight:600;flex-shrink:0}
-  .quick-facts li span:last-child{color:var(--text-secondary)}
+    /* HERO — our glow + Agnes typography */
+    #hero{min-height:100vh;display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden}
+    #hero::before{content:'';position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,107,1,.06) 0%,transparent 60%);pointer-events:none}
+    #hero .container{position:relative;z-index:1}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:16px;animation:pulse 2s ease-in-out infinite}
+    .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
+    .hero-name{font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:12px}
+    .hero-name span{color:var(--accent)}
+    .hero-sub{font-size:1.15rem;color:var(--text-secondary);margin-bottom:8px}
+    .hero-motto{font-size:1.3rem;font-weight:600;color:var(--accent);margin-bottom:32px;font-style:italic}
+    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
 
-  /* SKILLS */
-  .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  .skill-card{
-    background:var(--bg-card);border:1px solid var(--border);
-    border-radius:8px;padding:28px 20px;text-align:center;
-    transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
-    cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px
-  }
-  .skill-card:hover{
-    transform:translateY(-3px);
-    box-shadow:var(--shadow-card);
-    border-color:rgba(255,107,1,.3)
-  }
-  .skill-card .skill-emoji{font-size:1.8rem}
-  .skill-card .skill-name{color:var(--text);font-weight:600;font-size:.95rem}
-  .skill-card .skill-desc{color:var(--text-secondary);font-size:.8rem;line-height:1.4}
-  .skill-card .skill-link{
-    color:var(--accent);font-size:.7rem;font-weight:500;
-    text-transform:uppercase;letter-spacing:.03em;margin-top:2px;opacity:.7;
-    transition:opacity .2s
-  }
-  .skill-card:hover .skill-link{opacity:1}
+    /* ABOUT — Agnes Quick Facts sidebar, our layout */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+    .about-text{color:#ccc;font-size:1rem;line-height:1.7}
+    .about-text p+p{margin-top:16px}
+    .quick-facts{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px}
+    .quick-facts h3{color:var(--text);font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .quick-facts ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .quick-facts li{display:flex;gap:8px;font-size:.9rem}
+    .quick-facts li span:first-child{color:var(--accent);font-weight:700}
+    .quick-facts li span:last-child{color:var(--text-secondary)}
 
-  /* PROJECTS */
-  .projects-list{display:flex;flex-direction:column;gap:20px}
-  .project-card{
-    background:var(--bg-card);border:1px solid var(--border);
-    border-radius:8px;padding:24px 28px;position:relative;
-    transition:transform .3s ease,box-shadow .3s ease;
-    cursor:pointer
-  }
-  .project-card::before{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;
-    background:linear-gradient(90deg,var(--accent),var(--accent-hover));
-    border-radius:8px 8px 0 0
-  }
-  .project-card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 12px 40px rgba(0,0,0,.4)
-  }
-  .project-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px}
-  .project-header h3{color:var(--text);font-size:1.05rem;font-weight:600}
-  .project-link-icon{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:26px;height:26px;border-radius:6px;
-    background:var(--accent-glow);color:var(--accent);font-size:.8rem;
-    transition:all .2s;flex-shrink:0
-  }
-  .project-link-icon:hover{background:var(--accent);color:#000}
-  .project-card > p{color:var(--text-secondary);font-size:.88rem;margin-bottom:12px;line-height:1.55}
-  .project-tags{display:flex;flex-wrap:wrap;gap:6px}
-  .tag{
-    display:inline-block;background:rgba(255,107,1,.1);
-    color:var(--accent);padding:3px 10px;border-radius:980px;
-    font-size:.7rem;font-weight:500
-  }
+    /* SKILLS — 6 individual cards */
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .skill-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:32px 24px;text-align:center;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .skill-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.3);border-color:var(--accent)}
+    .skill-card .skill-emoji{font-size:2rem}
+    .skill-card .skill-name{color:var(--text);font-weight:700;font-size:1.05rem}
+    .skill-card .skill-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.5}
+    .skill-card .skill-link{color:var(--accent);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;opacity:.7;transition:opacity .2s}
+    .skill-card:hover .skill-link{opacity:1}
 
-  /* Terminal arrow */
-  .projects-wrapper{position:relative}
-  .select-arrow{
-    position:absolute;left:-20px;top:0;font-size:1.1rem;font-weight:700;
-    color:var(--accent);font-family:monospace;pointer-events:none;
-    transition:top .3s cubic-bezier(.4,0,.2,1);opacity:0
-  }
-  .select-arrow.active{opacity:1}
+    /* PROJECTS — our cards, Agnes vertical list */
+    .projects-list{display:flex;flex-direction:column;gap:20px}
+    .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    .project-card{cursor:pointer}
+    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
+    .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+    .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+    .project-header h3{color:var(--text);font-size:1.15rem}
+    .project-link-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--accent-glow);color:var(--accent);font-size:.85rem;transition:all .2s;flex-shrink:0}
+    .project-link-icon:hover{background:var(--accent);color:#000}
+    .project-card > p{color:var(--text-secondary);font-size:.9rem;margin-bottom:14px;line-height:1.6}
+    .project-tags{display:flex;flex-wrap:wrap;gap:6px}
+    /* Terminal cursor arrow */
+    .projects-wrapper{position:relative}
+    .select-arrow{position:absolute;left:-24px;top:0;font-size:1.2rem;font-weight:700;color:var(--accent);font-family:monospace;pointer-events:none;transition:top .3s cubic-bezier(.4,0,.2,1);opacity:0}
+    .select-arrow.active{opacity:1}
 
-  /* CONTACT */
-  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .contact-card{
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-    background:var(--bg-card);border:1px solid var(--border);
-    border-radius:12px;padding:28px 16px;
-    transition:border-color .4s ease,transform .4s ease,box-shadow .4s ease
-  }
-  .contact-card:hover{
-    border-color:rgba(255,107,1,.4);
-    transform:translateY(-4px);
-    box-shadow:0 8px 24px rgba(255,107,1,.08)
-  }
-  .contact-card .icon{font-size:1.6rem}
-  .contact-card .name{color:var(--text);font-weight:600;font-size:.9rem}
-  .contact-card .handle{color:var(--text-muted);font-size:.78rem}
+    /* CONTACT — our pill buttons, Agnes layout */
+    .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px 16px;transition:border-color .4s ease,transform .4s ease,box-shadow .4s ease}
+    .contact-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px rgba(255,107,1,.08)}
+    .contact-card .icon{font-size:1.8rem}
+    .contact-card .name{color:var(--text);font-weight:600;font-size:.95rem}
+    .contact-card .handle{color:var(--text-muted);font-size:.8rem}
 
-  /* FOOTER */
-  footer{padding:32px 0;border-top:1px solid var(--border);text-align:center}
-  footer p{color:var(--text-muted);font-size:.75rem}
-  footer span{color:var(--accent)}
+    /* FOOTER */
+    footer{padding:32px 0;border-top:1px solid var(--border);text-align:center}
+    footer p{color:#555;font-size:.8rem}
+    footer span{color:var(--accent)}
 
-  /* RESPONSIVE */
-  @media (max-width:768px){
-    :root{--section-pad:64px 0}
-    .nav-links{display:none}.hamburger{display:flex}
-    .about-grid{grid-template-columns:1fr}
-    .skills-grid{grid-template-columns:1fr}
-    .contact-grid{grid-template-columns:1fr}
-    .hero-buttons{flex-direction:column;align-items:center}
-    .hero-name{font-size:clamp(1.8rem,8vw,2.5rem)}
-  }
-  @media (max-width:480px){
-    .container{padding:0 16px}
-    .quick-facts{padding:20px}
-    .project-card{padding:20px}
-  }
+    /* RESPONSIVE */
+    @media (max-width:768px){
+      :root{--section-pad:60px 0}
+      .nav-links{display:none}.hamburger{display:flex}
+      .about-grid{grid-template-columns:1fr}
+      .skills-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .hero-buttons{flex-direction:column;align-items:flex-start}
+    }
+    @media (max-width:480px){
+      .container{padding:0 16px}
+      .quick-facts{padding:16px}
+    }
 
-  /* SCROLLBAR */
-  ::-webkit-scrollbar{width:6px}
-  ::-webkit-scrollbar-track{background:#0a0a0a}
-  ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
-  ::-webkit-scrollbar-thumb:hover{background:#555}
-</style>
+    /* SCROLLBAR */
+    ::-webkit-scrollbar{width:8px}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:#555}
+  </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav>
   <div class="container">
-    <a href="#hero" class="nav-logo"><span class="accent">L</span>v</a>
+    <a href="#hero" class="nav-logo"><span class="accent">L</span><span class="fade">v</span></a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
@@ -279,15 +187,15 @@
 </section>
 
 <!-- ABOUT -->
-<section id="about" class="section section-alt">
+<section id="about" class="section">
   <div class="container">
     <h2>About Me</h2>
     <p class="section-sub">A young developer who tinkers, breaks, and rebuilds with curiosity.</p>
     <div class="about-grid">
       <div class="about-text">
         <p>
-          I'm Levy — known online as <strong>vLoon</strong>. I'm in my eleventh year at
-          <strong>SMANDA</strong> (SMA Negeri 2 Amlapura) in Bali, Indonesia.
+          I'm Levy — known online as <strong style="color:#fff">vLoon</strong>. I'm in my eleventh year at
+          <strong style="color:#fff">SMANDA</strong> (SMA Negeri 2 Amlapura) in Bali, Indonesia.
           I've been obsessed with how software works from the inside out: modding games,
           scripting automation, building tools, and occasionally writing things that look
           slightly dangerous (for educational purposes, of course).
@@ -357,7 +265,7 @@
 </section>
 
 <!-- PROJECTS -->
-<section id="projects" class="section section-alt">
+<section id="projects" class="section">
   <div class="container">
     <h2>Projects</h2>
     <p class="section-sub">Things I've built, broken, and shipped.</p>
@@ -370,7 +278,7 @@
           <h3>More Firework Mod</h3>
           <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
-        <p>Vanilla fireworks were boring — so I weaponized them. Minecraft Fabric 1.21 combat fireworks: ore rockets that knock you back, crossbow chain-explosions, and seeker missiles that hunt targets. Works in Survival.</p>
+        <p>Minecraft Fabric 1.21 combat fireworks. Ore rockets, crossbow chain-explosions, and seeker missiles that track targets. Because vanilla fireworks were boring.</p>
         <div class="project-tags">
           <span class="tag">Java 21</span><span class="tag">Fabric</span><span class="tag">Mixin</span><span class="tag">Minecraft</span>
         </div>
@@ -381,7 +289,7 @@
           <h3>RimWorldDownloader</h3>
           <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
-        <p>Steam Workshop won't serve pirate copies — so I built a backdoor. Pulls RimWorld mods straight from Steam's own servers without an installed client. One script, zero excuses not to have your mod list sorted.</p>
+        <p>Steam Workshop won't serve pirate copies — so I built a backdoor. Pulls RimWorld mods from Steam's own servers without an installed client.</p>
         <div class="project-tags">
           <span class="tag">Python</span><span class="tag">Steam API</span>
         </div>
@@ -392,7 +300,7 @@
           <h3>Steam Auto-Claimer</h3>
           <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
-        <p>Never miss a free game again. Auto-scrapes and claims free Steam games via Playwright, tracks claimed games in SQLite, and sends notifications through Discord. Set it, forget it, watch your library grow for free.</p>
+        <p>Auto-scrapes and claims free Steam games via Playwright. Tracks claimed games in SQLite and sends notifications through Discord. Never miss a freebie again.</p>
         <div class="project-tags">
           <span class="tag">Python</span><span class="tag">Automation</span><span class="tag">Playwright</span>
         </div>
@@ -407,7 +315,7 @@
 <section id="contact" class="section">
   <div class="container">
     <h2>Contact</h2>
-    <p class="section-sub">Let's connect — always open to collaborations, mod ideas, or just chatting.</p>
+    <p class="section-sub">Let's connect — I'm always open to collaborations, mod ideas, or just chatting.</p>
     <div class="contact-grid">
       <a href="https://github.com/vLoon-jpg" target="_blank" class="contact-card">
         <span class="icon">🐙</span>
@@ -435,116 +343,115 @@
   </div>
 </footer>
 
-<script type="module">
-import { animate, stagger, splitText } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileOverlay').classList.toggle('open');
+  }
 
-window.toggleMenu = () => document.getElementById('mobileOverlay').classList.toggle('open');
+  // Wait for anime.js CDN, then bootstrap everything
+  function waitForAnime(fn) {
+    if (typeof anime !== 'undefined') return fn();
+    setTimeout(() => waitForAnime(fn), 50);
+  }
 
-// ── Hero: splitText name + badge + buttons ──
-const h1 = document.querySelector('.hero-name');
-if (h1) {
-  const { words } = splitText(h1, { words: true, chars: false });
-  animate(words, {
-    y: [{ to: '-2rem', ease: 'outExpo', duration: 500 }, { to: 0, ease: 'outBounce', duration: 700, delay: 80 }],
-    opacity: [{ to: 1, duration: 0 }, { to: 1, duration: 700 }],
-    delay: stagger(100, { start: 200 }),
-    ease: 'inOutCirc'
-  });
-}
+  waitForAnime(() => {
+    // Sections + cards — only hide children, not the container
+    const sections = document.querySelectorAll('.section');
+    const cards = document.querySelectorAll('.project-card,.skill-card,.contact-card');
 
-// Badge + subtitle + buttons (everything not h1 or motto)
-const heroContainer = document.querySelector('#hero .container');
-const motto = document.getElementById('heroMotto');
-if (heroContainer) {
-  const rest = Array.from(heroContainer.children).filter(c => c !== h1 && c !== motto);
-  animate(rest, {
-    translateY: [20, 0],
-    opacity: [0, 1],
-    duration: 600,
-    delay: stagger(80, { start: 500 }),
-    ease: 'cubicBezier(.4, 0, .2, 1)'
-  });
-}
+    [...sections, ...cards].forEach(el => {
+      const kids = Array.from(el.children);
+      kids.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
+    });
 
-// ── Typewriter motto ──
-if (motto) {
-  const text = '\u201CI break things, then build cooler things\u201D';
-  let i = 0;
-  const type = () => {
-    if (i < text.length) { motto.textContent += text[i]; i++; setTimeout(type, 60); }
-    else { motto.style.borderRight = 'none'; }
-  };
-  Object.assign(motto.style, {
-    borderRight: '2px solid var(--accent)',
-    color: 'var(--accent)',
-    fontWeight: '400',
-    fontSize: '1.15rem',
-    fontStyle: 'italic',
-    marginBottom: '32px',
-    display: 'inline-block'
-  });
-  setTimeout(type, 1200);
-}
-
-// ── Scroll reveals: sections + cards ──
-const revealEls = document.querySelectorAll('.section, .skill-card, .project-card, .contact-card');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    observer.unobserve(el);
-
-    // For sections: animate direct children individually
-    if (el.classList.contains('section')) {
-      const kids = Array.from(el.querySelector('.container').children);
-      animate(kids, {
-        translateY: [40, 0],
-        opacity: [0, 1],
-        duration: 600,
-        delay: stagger(80),
-        ease: 'cubicBezier(.4, 0, .2, 1)'
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const children = Array.from(el.children).filter(c => c.style.opacity === '0');
+        if (children.length === 0) return;
+        revealObserver.unobserve(el);
+        anime({
+          targets: children,
+          translateY: [40, 0],
+          opacity: [0, 1],
+          duration: 700,
+          delay: anime.stagger(80, { start: 100 }),
+          easing: 'cubicBezier(.4, 0, .2, 1)',
+        });
       });
-    } else {
-      // For cards: animate the card itself
-      animate(el, {
-        translateY: [30, 0],
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    [...sections, ...cards].forEach(el => revealObserver.observe(el));
+
+    // Hero — pulse badge + typewriter motto
+    const hero = document.querySelector('#hero');
+    if (!hero) return;
+    const h1 = hero.querySelector('h1');
+    if (h1) {
+      const { words } = anime.splitText(h1, { words: true, chars: false });
+      anime({
+        targets: words,
+        translateY: ['2rem', 0],
         opacity: [0, 1],
-        duration: 500,
-        easing: 'cubicBezier(.4, 0, .2, 1)'
+        duration: 800,
+        delay: anime.stagger(100, { start: 200 }),
+        easing: 'outExpo',
       });
     }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-revealEls.forEach(el => observer.observe(el));
+    // Typewriter motto
+    const motto = document.getElementById('heroMotto');
+    if (motto) {
+      const text = '\u201CI break things, then build cooler things\u201D';
+      let i = 0;
+      const type = () => {
+        if (i < text.length) { motto.textContent += text[i]; i++; setTimeout(type, 60); }
+        else { motto.style.borderRight = 'none'; }
+      };
+      motto.style.borderRight = '2px solid var(--accent)';
+      motto.style.color = 'var(--accent)';
+      motto.style.fontWeight = '600';
+      motto.style.fontSize = '1.3rem';
+      motto.style.fontStyle = 'italic';
+      motto.style.marginBottom = '32px';
+      motto.style.display = 'inline-block';
+      setTimeout(type, 1200);
+    }
 
-// ── Terminal arrow on project cards ──
-const arrow = document.getElementById('selectArrow');
-const pCards = document.querySelectorAll('.project-card');
-
-pCards.forEach((card) => {
-  card.addEventListener('mouseenter', () => {
-    const wrapper = card.closest('.projects-wrapper');
-    const wr = wrapper.getBoundingClientRect();
-    const cr = card.getBoundingClientRect();
-    arrow.style.top = (cr.top - wr.top + cr.height/2 - 12) + 'px';
-    arrow.classList.add('active');
-  });
-});
-
-const wrapper = document.querySelector('.projects-wrapper');
-wrapper.addEventListener('mouseleave', () => arrow.classList.remove('active'));
-
-// Update arrow positions on resize
-window.addEventListener('resize', () => {
-  if (!arrow.classList.contains('active')) return;
-  const activeCard = document.querySelector('.project-card:hover');
-  if (activeCard) {
-    const wr = wrapper.getBoundingClientRect();
-    const cr = activeCard.getBoundingClientRect();
-    arrow.style.top = (cr.top - wr.top + cr.height/2 - 12) + 'px';
+    // Rest
+    const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1 && c !== motto);
+    anime({
+      targets: rest,
+      translateY: [20, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay: anime.stagger(100, { start: 600 }),
+      easing: 'cubicBezier(.4, 0, .2, 1)',
+    });
   }
-});
+
+  // Terminal cursor arrow for projects
+  const arrow = document.getElementById('selectArrow');
+  const pCards = document.querySelectorAll('.project-card');
+  let activeIdx = -1;
+
+  pCards.forEach((card, i) => {
+    card.addEventListener('mouseenter', () => {
+      activeIdx = i;
+      const wrapper = card.closest('.projects-wrapper');
+      const wr = wrapper.getBoundingClientRect();
+      const cr = card.getBoundingClientRect();
+      arrow.style.top = (cr.top - wr.top + cr.height/2 - 15) + 'px';
+      arrow.classList.add('active');
+    });
+  });
+
+  // Hide arrow when no card is hovered
+  document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {
+    activeIdx = -1;
+    arrow.classList.remove('active');
+  });
 </script>
 </body>
 </html>

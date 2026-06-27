@@ -41,7 +41,7 @@
 
     /* BUTTONS */
     .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-weight:700;padding:12px 28px;border-radius:8px;font-size:.9rem;transition:all .2s;border:none;cursor:pointer}
-    .btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
+    .btn:hover{background:#fff;color:#000;transform:translateY(-2px)}
     .btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
     .btn-outline:hover{background:var(--accent-glow);color:var(--accent)}
 
@@ -84,22 +84,26 @@
     .quick-facts li span:first-child{color:var(--accent);font-weight:700}
     .quick-facts li span:last-child{color:var(--text-secondary)}
 
-    /* SKILLS — Agnes 3-column grouped */
+    /* SKILLS — 6 individual cards */
     .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-    .skill-group{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform .3s ease,box-shadow .3s ease}
-    .skill-group:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
-    .skill-group h3{color:var(--text);font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-    .skill-group .skill-emoji{font-size:1.2rem}
-    .skill-group p{color:var(--text-secondary);font-size:.9rem;line-height:1.6}
+    .skill-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:32px 24px;text-align:center;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px}
+    .skill-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.3);border-color:var(--accent)}
+    .skill-card .skill-emoji{font-size:2rem}
+    .skill-card .skill-name{color:var(--text);font-weight:700;font-size:1.05rem}
+    .skill-card .skill-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.5}
+    .skill-card .skill-link{color:var(--accent);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;opacity:.7;transition:opacity .2s}
+    .skill-card:hover .skill-link{opacity:1}
 
     /* PROJECTS — our cards, Agnes vertical list */
     .projects-list{display:flex;flex-direction:column;gap:20px}
     .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    .project-card{cursor:pointer}
     .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
     .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
     .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
     .project-header h3{color:var(--text);font-size:1.15rem}
-    .project-header a{font-size:.8rem;color:var(--text-muted)}
+    .project-link-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--accent-glow);color:var(--accent);font-size:.85rem;transition:all .2s;flex-shrink:0}
+    .project-link-icon:hover{background:var(--accent);color:#000}
     .project-card > p{color:var(--text-secondary);font-size:.9rem;margin-bottom:14px;line-height:1.6}
     .project-tags{display:flex;flex-wrap:wrap;gap:6px}
 
@@ -214,17 +218,41 @@
     <h2>Skills &amp; Tools</h2>
     <p class="section-sub">Languages, frameworks, and platforms I work with regularly.</p>
     <div class="skills-grid">
-      <div class="skill-group">
-        <h3><span class="skill-emoji">&#x1F4BB;</span> Languages</h3>
-        <p>Java &bull; C# &bull; C++ &bull; Python</p>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/Java_(programming_language)','_blank')">
+        <span class="skill-emoji">&#x260E;</span>
+        <span class="skill-name">Java</span>
+        <span class="skill-desc">Fabric mods, Minecraft plugins, school projects</span>
+        <span class="skill-link">Learn &rarr;</span>
       </div>
-      <div class="skill-group">
-        <h3><span class="skill-emoji">&#x1F6E0;</span> Frameworks &amp; Tools</h3>
-        <p>Unity &bull; Fabric (MC modding) &bull; n8n &bull; Flask</p>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/C_Sharp_(programming_language)','_blank')">
+        <span class="skill-emoji">&#x23;&#x20E3;</span>
+        <span class="skill-name">C#</span>
+        <span class="skill-desc">Unity game dev, school assignments</span>
+        <span class="skill-link">Learn &rarr;</span>
       </div>
-      <div class="skill-group">
-        <h3><span class="skill-emoji">&#x2699;</span> Workflow &amp; DevOps</h3>
-        <p>Git &bull; Gradle &bull; Playwright &bull; Docker basics</p>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/C%2B%2B','_blank')">
+        <span class="skill-emoji">&#x26A1;</span>
+        <span class="skill-name">C++</span>
+        <span class="skill-desc">Competitive programming, OSK 96% score</span>
+        <span class="skill-link">Learn &rarr;</span>
+      </div>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/Python_(programming_language)','_blank')">
+        <span class="skill-emoji">&#x1F40D;</span>
+        <span class="skill-name">Python</span>
+        <span class="skill-desc">Automation, web scraping, C2 tools, scripts</span>
+        <span class="skill-link">Learn &rarr;</span>
+      </div>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/Unity_(game_engine)','_blank')">
+        <span class="skill-emoji">&#x1F3AE;</span>
+        <span class="skill-name">Unity</span>
+        <span class="skill-desc">2D/3D game dev, flappy bird clones, physics</span>
+        <span class="skill-link">Learn &rarr;</span>
+      </div>
+      <div class="skill-card" onclick="window.open('https://en.wikipedia.org/wiki/Minecraft_modding','_blank')">
+        <span class="skill-emoji">&#x26CF;</span>
+        <span class="skill-name">Fabric Modding</span>
+        <span class="skill-desc">Mixin, Gradle, combat mechanics, data components</span>
+        <span class="skill-link">Learn &rarr;</span>
       </div>
     </div>
   </div>
@@ -237,10 +265,10 @@
     <p class="section-sub">Things I've built, broken, and shipped.</p>
     <div class="projects-list">
 
-      <div class="project-card">
+      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/morefirework','_blank')">
         <div class="project-header">
           <h3>More Firework Mod</h3>
-          <a href="https://github.com/vLoon-jpg/morefirework" target="_blank">github.com/vLoon-jpg/morefirework &nearr;</a>
+          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
         <p>Minecraft Fabric 1.21 combat fireworks. Ore rockets, crossbow chain-explosions, and seeker missiles that track targets. Because vanilla fireworks were boring.</p>
         <div class="project-tags">
@@ -248,10 +276,10 @@
         </div>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/edu-virus','_blank')">
         <div class="project-header">
           <h3>Edu-Virus</h3>
-          <a href="https://github.com/vLoon-jpg/edu-virus" target="_blank">github.com/vLoon-jpg/edu-virus &nearr;</a>
+          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
         <p>Educational malware C2 demo built for the SMANDA competition. 13 payloads, dual-mode C2 (ngrok &amp; Gist), Flask dashboard. Harmless, reversible, and thoroughly documented.</p>
         <div class="project-tags">
@@ -259,10 +287,10 @@
         </div>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/RimWorldDownloader','_blank')">
         <div class="project-header">
           <h3>RimWorldDownloader</h3>
-          <a href="https://github.com/vLoon-jpg/RimWorldDownloader" target="_blank">github.com/vLoon-jpg/RimWorldDownloader &nearr;</a>
+          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
         <p>Steam Workshop won't serve pirate copies — so I built a backdoor. Pulls RimWorld mods from Steam's own servers without an installed client.</p>
         <div class="project-tags">
@@ -270,10 +298,10 @@
         </div>
       </div>
 
-      <div class="project-card">
+      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer','_blank')">
         <div class="project-header">
           <h3>Steam Auto-Claimer</h3>
-          <a href="https://github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer" target="_blank">github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer &nearr;</a>
+          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
         </div>
         <p>Auto-scrapes and claims free Steam games via Playwright. Tracks claimed games in SQLite and sends notifications through Discord. Never miss a freebie again.</p>
         <div class="project-tags">
@@ -331,7 +359,7 @@
   waitForAnime(() => {
     // Sections + cards — only hide children, not the container
     const sections = document.querySelectorAll('.section');
-    const cards = document.querySelectorAll('.project-card,.skill-group,.contact-card');
+    const cards = document.querySelectorAll('.project-card,.skill-card,.contact-card');
 
     [...sections, ...cards].forEach(el => {
       const kids = Array.from(el.children);

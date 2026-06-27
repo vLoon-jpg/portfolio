@@ -94,7 +94,7 @@
     /* PROJECTS — our cards, Agnes vertical list */
     .projects-list{display:flex;flex-direction:column;gap:20px}
     .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
-    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover));transition:opacity .4s ease;opacity:calc(.35 + var(--glow,0) * .65);box-shadow:0 0 calc(2px + var(--glow,0) * 16px) calc(var(--glow,0) * 6px) var(--accent)}
+    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:radial-gradient(ellipse 80px 3px at calc(var(--spot,.5)*100%) 50%,var(--accent-hover) 0%,transparent 70%),linear-gradient(90deg,var(--accent),var(--accent-hover));opacity:calc(.35 + var(--glow,0)*.65);transition:opacity .4s ease}
     .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
     .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
     .project-header h3{color:var(--text);font-size:1.15rem}
@@ -335,19 +335,27 @@
   // Make hero always visible
   document.querySelector('#hero')?.classList.add('visible');
 
-  // Project card accent glow — tracks cursor proximity
-  document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
+  // Project card accent glow — global listener, radial spotlight
+  const cards = document.querySelectorAll('.project-card');
+  document.addEventListener('mousemove', e => {
+    cards.forEach(card => {
       const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width; // 0–1
-      // glow intensity peaks when cursor is near the top
-      const distFromTop = (e.clientY - rect.top) / rect.height;
-      const glow = distFromTop < 0.4 ? 1 - distFromTop / 0.4 : 0;
+      // expand detection zone 120px above and below the card
+      const top = rect.top - 120;
+      const bottom = rect.bottom + 120;
+      if (e.clientY < top || e.clientY > bottom || e.clientX < rect.left - 60 || e.clientX > rect.right + 60) {
+        card.style.setProperty('--glow', '0');
+        return;
+      }
+      // distance to card center (0 = center, 1 = edge of detection zone)
+      const cy = rect.top + rect.height/2;
+      const cx = rect.left + rect.width/2;
+      const dist = Math.sqrt((e.clientX-cx)**2 + (e.clientY-cy)**2);
+      const maxDist = Math.max(rect.width, rect.height) * 0.8;
+      const glow = Math.max(0, 1 - dist/maxDist);
+      const x = (e.clientX - rect.left) / rect.width;
       card.style.setProperty('--glow', glow);
-      card.style.setProperty('--spot', x);
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--glow', '0');
+      card.style.setProperty('--spot', Math.max(0, Math.min(1, x)));
     });
   });
 </script>

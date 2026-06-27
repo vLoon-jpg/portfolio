@@ -106,6 +106,10 @@
     .project-link-icon:hover{background:var(--accent);color:#000}
     .project-card > p{color:var(--text-secondary);font-size:.9rem;margin-bottom:14px;line-height:1.6}
     .project-tags{display:flex;flex-wrap:wrap;gap:6px}
+    /* Terminal cursor arrow */
+    .projects-wrapper{position:relative}
+    .select-arrow{position:absolute;left:-24px;top:0;font-size:1.2rem;font-weight:700;color:var(--accent);font-family:monospace;pointer-events:none;transition:top .3s cubic-bezier(.4,0,.2,1);opacity:0}
+    .select-arrow.active{opacity:1}
 
     /* CONTACT — our pill buttons, Agnes layout */
     .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -263,7 +267,9 @@
   <div class="container">
     <h2>Projects</h2>
     <p class="section-sub">Things I've built, broken, and shipped.</p>
-    <div class="projects-list">
+    <div class="projects-wrapper">
+      <span class="select-arrow" id="selectArrow">&#x276F;</span>
+      <div class="projects-list">
 
       <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/morefirework','_blank')">
         <div class="project-header">
@@ -298,6 +304,7 @@
         </div>
       </div>
 
+    </div>
     </div>
   </div>
 </section>
@@ -398,6 +405,28 @@
       delay: anime.stagger(100, { start: 600 }),
       easing: 'cubicBezier(.4, 0, .2, 1)',
     });
+  }
+
+  // Terminal cursor arrow for projects
+  const arrow = document.getElementById('selectArrow');
+  const pCards = document.querySelectorAll('.project-card');
+  let activeIdx = -1;
+
+  pCards.forEach((card, i) => {
+    card.addEventListener('mouseenter', () => {
+      activeIdx = i;
+      const wrapper = card.closest('.projects-wrapper');
+      const wr = wrapper.getBoundingClientRect();
+      const cr = card.getBoundingClientRect();
+      arrow.style.top = (cr.top - wr.top + cr.height/2 - 15) + 'px';
+      arrow.classList.add('active');
+    });
+  });
+
+  // Hide arrow when no card is hovered
+  document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {
+    activeIdx = -1;
+    arrow.classList.remove('active');
   });
 </script>
 </body>

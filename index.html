@@ -322,66 +322,66 @@
     document.getElementById('mobileOverlay').classList.toggle('open');
   }
 
-  // Anime.js staggered scroll reveal — only hide children, not the section container
-  const sections = document.querySelectorAll('.section');
-  const cards = document.querySelectorAll('.project-card,.skill-group,.contact-card');
+  // Wait for anime.js CDN, then bootstrap everything
+  function waitForAnime(fn) {
+    if (typeof anime !== 'undefined') return fn();
+    setTimeout(() => waitForAnime(fn), 50);
+  }
 
-  // Hide and prep for animation
-  [...sections, ...cards].forEach(el => {
-    const kids = Array.from(el.children);
-    kids.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
-  });
+  waitForAnime(() => {
+    // Sections + cards — only hide children, not the container
+    const sections = document.querySelectorAll('.section');
+    const cards = document.querySelectorAll('.project-card,.skill-group,.contact-card');
 
-  const revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      const children = Array.from(el.children).filter(c => {
-        // don't re-animate already-visible children
-        return c.style.opacity === '0';
-      });
-      if (children.length === 0) return;
-      anime({
-        targets: children,
-        translateY: [40, 0],
-        opacity: [0, 1],
-        duration: 700,
-        delay: anime.stagger(80, { start: 100 }),
-        easing: 'cubicBezier(.4, 0, .2, 1)',
-      });
-      revealObserver.unobserve(el);
+    [...sections, ...cards].forEach(el => {
+      const kids = Array.from(el.children);
+      kids.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  [...sections, ...cards].forEach(el => revealObserver.observe(el));
 
-  // Hero — comes in immediately, waits for anime.js if needed
-  function initHero() {
-    if (typeof anime === 'undefined') { setTimeout(initHero, 50); return; }
+    const revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const children = Array.from(el.children).filter(c => c.style.opacity === '0');
+        if (children.length === 0) return;
+        revealObserver.unobserve(el);
+        anime({
+          targets: children,
+          translateY: [40, 0],
+          opacity: [0, 1],
+          duration: 700,
+          delay: anime.stagger(80, { start: 100 }),
+          easing: 'cubicBezier(.4, 0, .2, 1)',
+        });
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    [...sections, ...cards].forEach(el => revealObserver.observe(el));
+
+    // Hero — splitText
     const hero = document.querySelector('#hero');
     if (!hero) return;
     const h1 = hero.querySelector('h1');
-    if (h1) {
-      const { words } = anime.splitText(h1, { words: true, chars: false });
-      anime({
-        targets: words,
-        translateY: ['2rem', 0],
-        opacity: [0, 1],
-        duration: 800,
-        delay: anime.stagger(100, { start: 200 }),
-        easing: 'outExpo',
-      });
-      const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1);
-      anime({
-        targets: rest,
-        translateY: [20, 0],
-        opacity: [0, 1],
-        duration: 600,
-        delay: anime.stagger(100, { start: 600 }),
-        easing: 'cubicBezier(.4, 0, .2, 1)',
-      });
-    }
-  }
-  initHero();
+    if (!h1) return;
+    const { words } = anime.splitText(h1, { words: true, chars: false });
+    anime({
+      targets: words,
+      translateY: ['2rem', 0],
+      opacity: [0, 1],
+      duration: 800,
+      delay: anime.stagger(100, { start: 200 }),
+      easing: 'outExpo',
+    });
+    const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1);
+    anime({
+      targets: rest,
+      translateY: [20, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay: anime.stagger(100, { start: 600 }),
+      easing: 'cubicBezier(.4, 0, .2, 1)',
+    });
+  });
 </script>
 </body>
 </html>

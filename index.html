@@ -2,1063 +2,338 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Levy · vLoon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>vLoon — Levy | Portfolio</title>
   <style>
-    /* ============================================
-       RESET & BASE
-       ============================================ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                   "Helvetica Neue", Arial, sans-serif;
-      background: #000000;
-      color: #ffffff;
-      line-height: 1.5;
-      overflow-x: hidden;
-    }
-
-    /* Subtle noise texture overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 256px 256px;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    /* ============================================
-       DESIGN TOKENS
-       ============================================ */
-    :root {
-      /* Backgrounds */
-      --bg-primary: #000000;
-      --bg-alt: #141414;
-      --bg-card: #1e1e1e;
-      --bg-card-hover: #282828;
-
-      /* Accent */
-      --accent: #FF6B01;
-      --accent-hover: #FF8C33;
-      --accent-glow: rgba(255, 107, 1, 0.15);
-
-      /* Text */
-      --text: #ffffff;
-      --text-secondary: rgba(255, 255, 255, 0.72);
-      --text-muted: rgba(255, 255, 255, 0.48);
-
-      /* Glass nav */
-      --glass-bg: rgba(0, 0, 0, 0.85);
-      --glass-border: rgba(255, 255, 255, 0.06);
-
-      /* Buttons */
-      --pill-radius: 980px;
-      --btn-radius: 8px;
-
-      /* Spacing */
-      --section-padding: 120px 24px;
-      --content-max: 980px;
-    }
-
-    /* ============================================
-       NAVIGATION
-       ============================================ */
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      height: 52px;
-      background: var(--glass-bg);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 20px;
-    }
-
-    .nav-inner {
-      width: 100%;
-      max-width: var(--content-max);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-logo {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: -0.28px;
-      color: var(--text);
-    }
-
-    .nav-logo .accent {
-      color: var(--accent);
-    }
-
-    .nav-logo .fade {
-      color: var(--text-muted);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      letter-spacing: -0.12px;
-      transition: color 0.2s;
-      position: relative;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--text);
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transition: transform 0.2s;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      transform: scaleX(1);
-    }
-
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 4px;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: 0.2s;
-    }
-
-    /* Mobile nav overlay */
-    .nav-overlay {
-      display: none;
-      position: fixed;
-      top: 52px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--bg-primary);
-      z-index: 99;
-      padding: 40px 24px;
-    }
-
-    .nav-overlay.open {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .nav-overlay a {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.28px;
-    }
-
-    /* ============================================
-       SECTION BASE
-       ============================================ */
-    section {
-      padding: var(--section-padding);
-      position: relative;
-    }
-
-    section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .section-content {
-      max-width: var(--content-max);
-      margin: 0 auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .section-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: 40px;
-      font-weight: 700;
-      line-height: 1.10;
-      letter-spacing: -0.28px;
-      margin-bottom: 20px;
-    }
-
-    .section-sub {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.47;
-      letter-spacing: -0.374px;
-      max-width: 600px;
-    }
-
-    /* ============================================
-       HERO
-       ============================================ */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 120px 24px 80px;
-      background: var(--bg-primary);
-      position: relative;
-      overflow: hidden;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 700px;
-      height: 700px;
-      transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(255, 107, 1, 0.08) 0%, transparent 60%);
-      pointer-events: none;
-    }
-
-    #hero::after {
-      content: '';
-      position: absolute;
-      top: 20%;
-      right: -10%;
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, rgba(255, 107, 1, 0.04) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-emoji {
-      font-size: 48px;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .hero-name {
-      font-size: 56px;
-      font-weight: 700;
-      line-height: 1.07;
-      letter-spacing: -0.28px;
-      margin-bottom: 8px;
-    }
-
-    .hero-name span {
-      color: var(--accent);
-    }
-
-    .hero-alias {
-      font-size: 21px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      letter-spacing: 0.231px;
-      line-height: 1.19;
-      margin-bottom: 24px;
-    }
-
-    .hero-tagline {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.47;
-      letter-spacing: -0.374px;
-      max-width: 480px;
-      margin: 0 auto 36px;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      padding: 12px 28px;
-      background: var(--accent);
-      color: #000000;
-      font-size: 17px;
-      font-weight: 600;
-      border-radius: var(--pill-radius);
-      letter-spacing: -0.224px;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .hero-cta:hover {
-      background: var(--accent-hover);
-      transform: scale(1.03);
-    }
-
-    .hero-scroll {
-      position: absolute;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 13px;
-      color: var(--text-muted);
-      letter-spacing: -0.12px;
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(6px); }
-    }
-
-    /* ============================================
-       ABOUT
-       ============================================ */
-    #about {
-      background: var(--bg-alt);
-    }
-
-    #about::before {
-      background: linear-gradient(
-        135deg,
-        rgba(255, 107, 1, 0.03) 0%,
-        transparent 50%
-      );
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 40px;
-      align-items: start;
-    }
-
-    .about-avatar {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      border: 3px solid var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--bg-card);
-      flex-shrink: 0;
-    }
-
-    .about-text {
-      font-size: 17px;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      letter-spacing: -0.374px;
-    }
-
-    .about-text p + p {
-      margin-top: 16px;
-    }
-
-    .about-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 16px;
-      padding: 6px 14px;
-      background: var(--bg-card);
-      border-radius: var(--pill-radius);
-      font-size: 14px;
-      color: var(--text-secondary);
-      letter-spacing: -0.224px;
-    }
-
-    .about-badge span {
-      color: var(--accent);
-    }
-
-    /* ============================================
-       SKILLS
-       ============================================ */
-    #skills {
-      background: var(--bg-primary);
-    }
-
-    #skills::before {
-      background: radial-gradient(
-        ellipse at 20% 30%,
-        rgba(255, 107, 1, 0.02) 0%,
-        transparent 60%
-      );
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-top: 40px;
-    }
-
-    .skill-card {
-      background: var(--bg-alt);
-      border-radius: 12px;
-      padding: 24px 20px;
-      text-align: center;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      cursor: default;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .skill-card:hover {
-      background: var(--bg-card);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
-
-    .skill-icon {
-      font-size: 32px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .skill-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.224px;
-      margin-bottom: 4px;
-    }
-
-    .skill-category {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: -0.12px;
-    }
-
-    /* ============================================
-       PROJECTS
-       ============================================ */
-    #projects {
-      background: var(--bg-alt);
-    }
-
-    #projects::before {
-      background: linear-gradient(
-        135deg,
-        rgba(255, 107, 1, 0.03) 0%,
-        transparent 50%
-      );
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 40px;
-    }
-
-    .project-card {
-      background: var(--bg-card);
-      border-radius: 12px;
-      padding: 28px;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-      opacity: 0.7;
-    }
-
-    .project-card:hover {
-      background: var(--bg-card-hover);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .project-emoji {
-      font-size: 36px;
-      margin-bottom: 16px;
-    }
-
-    .project-title {
-      font-size: 21px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.19;
-      letter-spacing: 0.231px;
-      margin-bottom: 10px;
-    }
-
-    .project-desc {
-      font-size: 14px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      letter-spacing: -0.224px;
-      margin-bottom: 16px;
-      flex: 1;
-    }
-
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
-
-    .project-tag {
-      padding: 3px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      background: var(--accent-glow);
-      border-radius: var(--pill-radius);
-      letter-spacing: -0.12px;
-    }
-
-    .project-link {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--accent);
-      letter-spacing: -0.224px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.2s;
-    }
-
-    .project-link:hover {
-      color: var(--accent-hover);
-    }
-
-    /* ============================================
-       CONTACT
-       ============================================ */
-    #contact {
-      background: var(--bg-primary);
-      text-align: center;
-    }
-
-    #contact::before {
-      background: radial-gradient(
-        ellipse at 50% 30%,
-        rgba(255, 107, 1, 0.03) 0%,
-        transparent 60%
-      );
-    }
-
-    .contact-links {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin: 40px 0 20px;
-    }
-
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: var(--bg-alt);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--pill-radius);
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: -0.224px;
-      transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    }
-
-    .contact-link:hover {
-      background: var(--bg-card);
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    .contact-link .icon {
-      font-size: 18px;
-    }
-
-    .contact-note {
-      font-size: 14px;
-      color: var(--text-muted);
-      letter-spacing: -0.224px;
-      margin-top: 8px;
-    }
-
-    /* ============================================
-       FOOTER
-       ============================================ */
-    footer {
-      padding: 32px 24px;
-      text-align: center;
-      background: var(--bg-primary);
-      border-top: 1px solid var(--glass-border);
-    }
-
-    footer p {
-      font-size: 12px;
-      color: var(--text-muted);
-      letter-spacing: -0.12px;
-    }
-
-    footer span {
-      color: var(--accent);
-    }
-
-    /* ============================================
-       RESPONSIVE
-       ============================================ */
-    @media (max-width: 900px) {
-      .skills-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      .projects-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 640px) {
-      :root {
-        --section-padding: 80px 20px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-
-      .hero-name {
-        font-size: 36px;
-      }
-
-      .hero-alias {
-        font-size: 18px;
-      }
-
-      .section-title {
-        font-size: 32px;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-
-      .about-avatar {
-        margin: 0 auto;
-      }
-
-      .about-badge {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-links {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .contact-link {
-        width: 100%;
-        max-width: 320px;
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
+    /* RESET */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      background:#000;color:#e0e0e0;line-height:1.6;overflow-x:hidden
+    }
+    /* Noise texture — our signature */
+    body::after{
+      content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9999;opacity:.03;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat:repeat;background-size:256px 256px
+    }
+    a{color:#FF6B01;text-decoration:none;transition:color .2s}a:hover{color:#ff944d}
+
+    /* DESIGN TOKENS */
+    :root{
+      --accent:#FF6B01;--accent-hover:#ff8533;--accent-glow:rgba(255,107,1,.12);
+      --bg-alt:#0d0d0d;--border:#1a1a1a;
+      --text:#fff;--text-secondary:#aaa;--text-muted:#888;
+      --section-pad:100px 0;--content-max:1000px;
+    }
+
+    /* LAYOUT */
+    .container{max-width:var(--content-max);margin:0 auto;padding:0 24px}
+    .section{padding:var(--section-pad);border-bottom:1px solid var(--border);position:relative}
+    .section:last-of-type{border-bottom:none}
+    h2{font-size:clamp(1.6rem,4vw,2rem);font-weight:800;color:var(--text);margin-bottom:12px}
+    .section-sub{font-size:1rem;color:var(--text-muted);margin-bottom:40px;max-width:600px}
+
+    /* TAGS */
+    .tag{display:inline-block;background:var(--accent-glow);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:.75rem;font-weight:600;margin:2px 4px 2px 0}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-weight:700;padding:12px 28px;border-radius:8px;font-size:.9rem;transition:all .2s;border:none;cursor:pointer}
+    .btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
+    .btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+    .btn-outline:hover{background:var(--accent-glow);color:var(--accent)}
+
+    /* NAV — our glass nav, simplified */
+    nav{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    nav .container{display:flex;align-items:center;justify-content:space-between;height:56px}
+    .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text)}
+    .nav-logo .fade{color:var(--text-muted)}
+    .nav-logo .accent{color:var(--accent)}
+    .nav-links{display:flex;gap:24px;list-style:none}
+    .nav-links a{font-size:.85rem;color:var(--text-secondary);position:relative}
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .2s}
+    .nav-links a:hover::after{transform:scaleX(1)}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
+    .nav-overlay{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg-alt);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s;transform:translateX(100%)}
+    .nav-overlay.open{display:flex;transform:translateX(0)}
+    .nav-overlay a{font-size:1.5rem;font-weight:600;color:var(--text)}
+
+    /* HERO — our glow + Agnes typography */
+    #hero{min-height:100vh;display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden}
+    #hero::before{content:'';position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,107,1,.06) 0%,transparent 60%);pointer-events:none}
+    #hero .container{position:relative;z-index:1}
+    .hero-label{color:var(--accent);font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    .hero-name{font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:12px}
+    .hero-name span{color:var(--accent)}
+    .hero-sub{font-size:1.15rem;color:var(--text-secondary);margin-bottom:8px}
+    .hero-motto{font-size:1.3rem;font-weight:600;color:var(--accent);margin-bottom:32px;font-style:italic}
+    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+
+    /* ABOUT — Agnes Quick Facts sidebar, our layout */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+    .about-text{color:#ccc;font-size:1rem;line-height:1.7}
+    .about-text p+p{margin-top:16px}
+    .quick-facts{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px}
+    .quick-facts h3{color:var(--text);font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .quick-facts ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .quick-facts li{display:flex;gap:8px;font-size:.9rem}
+    .quick-facts li span:first-child{color:var(--accent);font-weight:700}
+    .quick-facts li span:last-child{color:var(--text-secondary)}
+
+    /* SKILLS — Agnes 3-column grouped */
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .skill-group{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform .2s,box-shadow .2s}
+    .skill-group:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+    .skill-group h3{color:var(--text);font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .skill-group .skill-emoji{font-size:1.2rem}
+    .skill-group p{color:var(--text-secondary);font-size:.9rem;line-height:1.6}
+
+    /* PROJECTS — our cards, Agnes vertical list */
+    .projects-list{display:flex;flex-direction:column;gap:20px}
+    .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
+    .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+    .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+    .project-header h3{color:var(--text);font-size:1.15rem}
+    .project-header a{font-size:.8rem;color:var(--text-muted)}
+    .project-card > p{color:var(--text-secondary);font-size:.9rem;margin-bottom:14px;line-height:1.6}
+    .project-tags{display:flex;flex-wrap:wrap;gap:6px}
+
+    /* CONTACT — our pill buttons, Agnes layout */
+    .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px 16px;transition:all .2s}
+    .contact-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .contact-card .icon{font-size:1.8rem}
+    .contact-card .name{color:var(--text);font-weight:600;font-size:.95rem}
+    .contact-card .handle{color:var(--text-muted);font-size:.8rem}
+
+    /* FOOTER */
+    footer{padding:32px 0;border-top:1px solid var(--border);text-align:center}
+    footer p{color:#555;font-size:.8rem}
+    footer span{color:var(--accent)}
+
+    /* SCROLL FADE */
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+
+    /* RESPONSIVE */
+    @media (max-width:768px){
+      :root{--section-pad:60px 0}
+      .nav-links{display:none}.hamburger{display:flex}
+      .about-grid{grid-template-columns:1fr}
+      .skills-grid{grid-template-columns:1fr}
+      .contact-grid{grid-template-columns:1fr}
+      .hero-buttons{flex-direction:column;align-items:flex-start}
+    }
+    @media (max-width:480px){
+      .container{padding:0 16px}
+      .quick-facts{padding:16px}
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar{width:8px}
+    ::-webkit-scrollbar-track{background:#0a0a0a}
+    ::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+    ::-webkit-scrollbar-thumb:hover{background:#555}
   </style>
 </head>
 <body>
 
-<!-- ========== NAVIGATION ========== -->
-<nav class="nav" role="navigation">
-  <div class="nav-inner">
-    <div class="nav-logo"><span class="accent">L</span><span class="fade">v</span></div>
+<!-- NAV -->
+<nav>
+  <div class="container">
+    <a href="#hero" class="nav-logo"><span class="accent">L</span><span class="fade">v</span></a>
     <ul class="nav-links">
-      <li><a href="#hero" class="active">Home</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="hamburger" aria-label="Toggle navigation" onclick="toggleMenu()">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="hamburger" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
-
-<!-- Mobile overlay -->
 <div class="nav-overlay" id="mobileOverlay">
-  <a href="#hero" onclick="toggleMenu()">Home</a>
   <a href="#about" onclick="toggleMenu()">About</a>
   <a href="#skills" onclick="toggleMenu()">Skills</a>
   <a href="#projects" onclick="toggleMenu()">Projects</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
 </div>
 
-<!-- ========== HERO ========== -->
+<main>
+<!-- HERO -->
 <section id="hero">
-  <div class="hero-content">
-    <span class="hero-emoji">🚀</span>
-    <h1 class="hero-name">Levy <span>·</span> vLoon</h1>
-    <p class="hero-alias">Indonesian High Schooler &amp; Developer</p>
-    <p class="hero-tagline">
-      I break things, then build cooler things. Minecraft mods, Unity games,
-      automation pipelines, and competitive programming.
-    </p>
-    <a href="#projects" class="hero-cta">See my work →</a>
+  <div class="container">
+    <p class="hero-label">Pande Made Raditya Dhiparthama</p>
+    <h1 class="hero-name">Levy <span>(vLoon)</span></h1>
+    <p class="hero-sub">Kelas XI &middot; SMA Negeri 2 Amlapura, Bali</p>
+    <p class="hero-motto">&ldquo;I break things, then build cooler things&rdquo;</p>
+    <div class="hero-buttons">
+      <a href="#projects" class="btn">See my work &rarr;</a>
+      <a href="#contact" class="btn btn-outline">Contact me</a>
+    </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
 </section>
 
-<!-- ========== ABOUT ========== -->
-<section id="about">
-  <div class="section-content">
-    <p class="section-label">About Me</p>
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="container">
+    <h2>About Me</h2>
+    <p class="section-sub">A young developer who tinkers, breaks, and rebuilds with curiosity.</p>
     <div class="about-grid">
-      <div class="about-avatar">PL</div>
-      <div>
-        <p class="about-text">
-          Hey! I'm <strong>Pande Made Raditya Dhiparthama</strong> — call me
-          <strong>Levy</strong> or <strong>vLoon</strong>, whichever's easier.
-          I'm a <strong>kelas XI</strong> student at
-          <strong>SMANDA</strong> (SMA Negeri 2 Amlapura) in Bali.
+      <div class="about-text">
+        <p>
+          I'm Levy — known online as <strong style="color:#fff">vLoon</strong>. I'm in my eleventh year at
+          <strong style="color:#fff">SMANDA</strong> (SMA Negeri 2 Amlapura) in Bali, Indonesia.
+          I've been obsessed with how software works from the inside out: modding games,
+          scripting automation, building tools, and occasionally writing things that look
+          slightly dangerous (for educational purposes, of course).
         </p>
-        <p class="about-text">
-          By day I study, by night I code. I make Minecraft mods that go boom
-          (literally), Unity flappy bird clones, and automate everything I can
-          get my hands on. I learn by doing — hit compile first, ask questions later.
+        <p>
+          My mantra is simple — if I don't know how something works, I take it apart.
+          If it breaks, I learn. Then I build something better.
         </p>
-        <div class="about-badge">
-          <span>📍</span> Karangasem, Bali, Indonesia
-        </div>
+      </div>
+      <div class="quick-facts">
+        <h3>Quick Facts</h3>
+        <ul>
+          <li><span>&raquo;</span> <span>Location: Amlapura, Bali, Indonesia</span></li>
+          <li><span>&raquo;</span> <span>Languages: Indonesian, English</span></li>
+          <li><span>&raquo;</span> <span>Currently: Kelas XI, SMANDA</span></li>
+          <li><span>&raquo;</span> <span>Vibe: Modder, tinkerer, automation gremlin</span></li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== SKILLS ========== -->
-<section id="skills">
-  <div class="section-content">
-    <p class="section-label">What I Know</p>
-    <h2 class="section-title">Skills &amp; Technologies</h2>
-    <p class="section-sub">
-      Languages, frameworks, and tools I've picked up along the way.
-    </p>
-
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="container">
+    <h2>Skills &amp; Tools</h2>
+    <p class="section-sub">Languages, frameworks, and platforms I work with regularly.</p>
     <div class="skills-grid">
-      <div class="skill-card">
-        <span class="skill-icon">☕</span>
-        <p class="skill-name">Java</p>
-        <p class="skill-category">Language</p>
+      <div class="skill-group">
+        <h3><span class="skill-emoji">&#x1F4BB;</span> Languages</h3>
+        <p>Java &bull; C# &bull; C++ &bull; Python</p>
       </div>
-      <div class="skill-card">
-        <span class="skill-icon">#️⃣</span>
-        <p class="skill-name">C#</p>
-        <p class="skill-category">Language · Unity</p>
+      <div class="skill-group">
+        <h3><span class="skill-emoji">&#x1F6E0;</span> Frameworks &amp; Tools</h3>
+        <p>Unity &bull; Fabric (MC modding) &bull; n8n &bull; Flask</p>
       </div>
-      <div class="skill-card">
-        <span class="skill-icon">⚡</span>
-        <p class="skill-name">C++</p>
-        <p class="skill-category">Language · CP</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">🐍</span>
-        <p class="skill-name">Python</p>
-        <p class="skill-category">Language</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">🎮</span>
-        <p class="skill-name">Unity</p>
-        <p class="skill-category">Game Engine</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">⛏️</span>
-        <p class="skill-name">Fabric</p>
-        <p class="skill-category">Minecraft Modding</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">🔗</span>
-        <p class="skill-name">n8n</p>
-        <p class="skill-category">Automation</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">📊</span>
-        <p class="skill-name">Git &amp; Gradle</p>
-        <p class="skill-category">Tools</p>
+      <div class="skill-group">
+        <h3><span class="skill-emoji">&#x2699;</span> Workflow &amp; DevOps</h3>
+        <p>Git &bull; Gradle &bull; Playwright &bull; Docker basics</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== PROJECTS ========== -->
-<section id="projects">
-  <div class="section-content">
-    <p class="section-label">My Work</p>
-    <h2 class="section-title">Projects</h2>
-    <p class="section-sub">
-      Things I've built, broken, and shipped — from Minecraft to automation.
-    </p>
+<!-- PROJECTS -->
+<section id="projects" class="section">
+  <div class="container">
+    <h2>Projects</h2>
+    <p class="section-sub">Things I've built, broken, and shipped.</p>
+    <div class="projects-list">
 
-    <div class="projects-grid">
-      <!-- More Firework Mod -->
       <div class="project-card">
-        <span class="project-emoji">🎆</span>
-        <h3 class="project-title">More Firework Mod</h3>
-        <p class="project-desc">
-          Minecraft Fabric 1.21 combat fireworks mod. Ore rockets knock you back,
-          crossbows trigger chain explosions, seekers hunt targets. Works in Survival.
-        </p>
-        <div class="project-tags">
-          <span class="project-tag">Java 21</span>
-          <span class="project-tag">Fabric</span>
-          <span class="project-tag">Mixin</span>
-          <span class="project-tag">Minecraft</span>
+        <div class="project-header">
+          <h3>More Firework Mod</h3>
+          <a href="https://github.com/vLoon-jpg/morefirework" target="_blank">github.com/vLoon-jpg/morefirework &nearr;</a>
         </div>
-        <a href="https://github.com/vLoon-jpg/morefirework" target="_blank" class="project-link">
-          GitHub ↗
-        </a>
+        <p>Minecraft Fabric 1.21 combat fireworks. Ore rockets, crossbow chain-explosions, and seeker missiles that track targets. Because vanilla fireworks were boring.</p>
+        <div class="project-tags">
+          <span class="tag">Java 21</span><span class="tag">Fabric</span><span class="tag">Mixin</span><span class="tag">Minecraft</span>
+        </div>
       </div>
 
-      <!-- RimWorldDownloader -->
       <div class="project-card">
-        <span class="project-emoji">🏴‍☠️</span>
-        <h3 class="project-title">RimWorldDownloader</h3>
-        <p class="project-desc">
-          Steam Workshop won't serve pirate copies — so I built a backdoor.
-          A Python tool that pulls RimWorld mods from Steam's own servers
-          and packages them for anyone, legit or not. One script, zero
-          excuses not to have your mod list sorted.
-        </p>
-        <div class="project-tags">
-          <span class="project-tag">Python</span>
+        <div class="project-header">
+          <h3>Edu-Virus</h3>
+          <a href="https://github.com/vLoon-jpg/edu-virus" target="_blank">github.com/vLoon-jpg/edu-virus &nearr;</a>
         </div>
-        <a href="https://github.com/vLoon-jpg/RimWorldDownloader" target="_blank" class="project-link">
-          GitHub ↗
-        </a>
+        <p>Educational malware C2 demo built for the SMANDA competition. 13 payloads, dual-mode C2 (ngrok &amp; Gist), Flask dashboard. Harmless, reversible, and thoroughly documented.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">C2</span><span class="tag">Flask</span><span class="tag">Windows</span>
+        </div>
       </div>
 
-      <!-- Steam Free Game Auto-Claimer -->
       <div class="project-card">
-        <span class="project-emoji">💸</span>
-        <h3 class="project-title">Steam Auto-Claimer</h3>
-        <p class="project-desc">
-          Never miss a free game again. A Python bot that watches Steam's
-          freebie rotations and auto-claims them before you even wake up.
-          Set it, forget it, and watch your library grow for free.
-        </p>
-        <div class="project-tags">
-          <span class="project-tag">Python</span>
-          <span class="project-tag">Automation</span>
+        <div class="project-header">
+          <h3>RimWorldDownloader</h3>
+          <a href="https://github.com/vLoon-jpg/RimWorldDownloader" target="_blank">github.com/vLoon-jpg/RimWorldDownloader &nearr;</a>
         </div>
-        <a href="https://github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer" target="_blank" class="project-link">
-          GitHub ↗
-        </a>
+        <p>Steam Workshop won't serve pirate copies — so I built a backdoor. Pulls RimWorld mods from Steam's own servers without an installed client.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Steam API</span>
+        </div>
       </div>
+
+      <div class="project-card">
+        <div class="project-header">
+          <h3>Steam Auto-Claimer</h3>
+          <a href="https://github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer" target="_blank">github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer &nearr;</a>
+        </div>
+        <p>Auto-scrapes and claims free Steam games via Playwright. Tracks claimed games in SQLite and sends notifications through Discord. Never miss a freebie again.</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">Automation</span><span class="tag">Playwright</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ========== CONTACT ========== -->
-<section id="contact">
-  <div class="section-content">
-    <p class="section-label">Get in Touch</p>
-    <h2 class="section-title">Let's Connect</h2>
-    <p class="section-sub" style="margin: 0 auto;">
-      Whether it's a mod idea, collab, or just to say hi — I'm around.
-    </p>
-
-    <div class="contact-links">
-      <a href="https://github.com/vLoon-jpg" target="_blank" class="contact-link">
-        <span class="icon">🐙</span> GitHub
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container">
+    <h2>Contact</h2>
+    <p class="section-sub">Let's connect — I'm always open to collaborations, mod ideas, or just chatting.</p>
+    <div class="contact-grid">
+      <a href="https://github.com/vLoon-jpg" target="_blank" class="contact-card">
+        <span class="icon">🐙</span>
+        <span class="name">GitHub</span>
+        <span class="handle">@vLoon-jpg</span>
       </a>
-      <a href="https://www.instagram.com/vLoon/" target="_blank" class="contact-link">
-        <span class="icon">📸</span> @vLoon
+      <a href="https://instagram.com/vLoon" target="_blank" class="contact-card">
+        <span class="icon">📸</span>
+        <span class="name">Instagram</span>
+        <span class="handle">@vLoon</span>
       </a>
-      <a href="mailto:crabmuck@gmail.com" class="contact-link">
-        <span class="icon">✉️</span> crabmuck@gmail.com
+      <a href="mailto:crabmuck@gmail.com" class="contact-card">
+        <span class="icon">✉️</span>
+        <span class="name">Email</span>
+        <span class="handle">crabmuck@gmail.com</span>
       </a>
     </div>
-
-    <p class="contact-note">
-      Available for collabs, mod ideas, and automation projects. Hit me up.
-    </p>
   </div>
 </section>
+</main>
 
-<!-- ========== FOOTER ========== -->
 <footer>
-  <p>
-    Built with <span>⚡</span> by Levy &nbsp;·&nbsp; © 2026 Pande Made Raditya Dhiparthama
-  </p>
+  <div class="container">
+    <p>&copy; 2026 Levy (vLoon) &mdash; Pande Made Raditya Dhiparthama. Built with <span>&lt;/&gt;</span> in Amlapura, Bali.</p>
+  </div>
 </footer>
 
-<!-- ========== JAVASCRIPT ========== -->
 <script>
-  // Mobile menu toggle
   function toggleMenu() {
-    const overlay = document.getElementById('mobileOverlay');
-    overlay.classList.toggle('open');
-    const hamburger = document.querySelector('.hamburger');
-    hamburger.classList.toggle('open');
+    document.getElementById('mobileOverlay').classList.toggle('open');
   }
-
-  // Close mobile menu on nav link click
-  document.querySelectorAll('.nav-overlay a').forEach(link => {
-    link.addEventListener('click', () => {
-      document.getElementById('mobileOverlay').classList.remove('open');
-    });
+  // Scroll-triggered fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.section,.project-card,.skill-group,.contact-card').forEach(el => {
+    el.classList.add('fade-in');
+    observer.observe(el);
   });
-
-  // Active nav highlighting via Intersection Observer
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + entry.target.id) {
-            link.classList.add('active');
-          }
-        });
-      }
-    });
-  }, { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' });
-
-  sections.forEach(section => observer.observe(section));
-
-  // Fade-in-up reveal on scroll
-  const revealElements = document.querySelectorAll(
-    '.skill-card, .project-card, .contact-link, .about-grid, .section-title, .section-sub'
-  );
-
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  revealElements.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    revealObserver.observe(el);
-  });
-
-  // Closed hamburger style
-  document.querySelector('.hamburger').addEventListener('click', function() {
-    this.classList.toggle('active');
-    const spans = this.querySelectorAll('span');
-    if (this.classList.contains('active')) {
-      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-      spans[1].style.opacity = '0';
-      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-    } else {
-      spans[0].style.transform = 'none';
-      spans[1].style.opacity = '1';
-      spans[2].style.transform = 'none';
-    }
-  });
+  // Make hero always visible
+  document.querySelector('#hero')?.classList.add('visible');
 </script>
-
 </body>
 </html>

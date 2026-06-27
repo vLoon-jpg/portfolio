@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>vLoon — Levy | Portfolio</title>
+  <script src="https://cdn.jsdelivr.net/npm/animejs@4.1.2/lib/anime.min.js"></script>
   <style>
     /* RESET */
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -116,8 +117,6 @@
     footer span{color:var(--accent)}
 
     /* SCROLL FADE */
-    .fade-in{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
-    .fade-in.visible{opacity:1;transform:translateY(0)}
 
     /* RESPONSIVE */
     @media (max-width:768px){
@@ -324,16 +323,48 @@
   function toggleMenu() {
     document.getElementById('mobileOverlay').classList.toggle('open');
   }
-  // Scroll-triggered fade-in
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.section,.project-card,.skill-group,.contact-card').forEach(el => {
-    el.classList.add('fade-in');
-    observer.observe(el);
-  });
-  // Make hero always visible
-  document.querySelector('#hero')?.classList.add('visible');
+
+  // Anime.js staggered scroll reveal
+  const sections = document.querySelectorAll('.section,.project-card,.skill-group,.contact-card');
+  sections.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
+
+  const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      // Stagger children: fade + slide up
+      const children = el.querySelectorAll(':scope > *');
+      if (children.length > 0) {
+        anime({
+          targets: Array.from(children),
+          translateY: [40, 0],
+          opacity: [0, 1],
+          duration: 700,
+          delay: anime.stagger(80, { start: 100 }),
+          easing: 'cubicBezier(.4, 0, .2, 1)',
+        });
+      } else {
+        // Single element just fades in
+        anime({ targets: el, translateY: [40, 0], opacity: [0, 1], duration: 700, easing: 'cubicBezier(.4, 0, .2, 1)' });
+      }
+      revealObserver.unobserve(el);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  sections.forEach(el => revealObserver.observe(el));
+
+  // Hero is always visible — animate its children immediately
+  const hero = document.querySelector('#hero');
+  if (hero) {
+    const kids = hero.querySelectorAll(':scope > .container > *');
+    anime({
+      targets: Array.from(kids),
+      translateY: [40, 0],
+      opacity: [0, 1],
+      duration: 800,
+      delay: anime.stagger(120, { start: 200 }),
+      easing: 'cubicBezier(.4, 0, .2, 1)',
+    });
+  }
 
   // Project card accent glow — global listener, radial spotlight
   const cards = document.querySelectorAll('.project-card');

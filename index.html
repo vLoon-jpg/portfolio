@@ -95,7 +95,7 @@
     /* PROJECTS — our cards, Agnes vertical list */
     .projects-list{display:flex;flex-direction:column;gap:20px}
     .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
-    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:radial-gradient(ellipse 80px 3px at calc(var(--spot,.5)*100%) 50%,var(--accent-hover) 0%,transparent 70%),linear-gradient(90deg,var(--accent),var(--accent-hover));opacity:calc(.35 + var(--glow,0)*.65);transition:opacity .4s ease}
+    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
     .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
     .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
     .project-header h3{color:var(--text);font-size:1.15rem}
@@ -332,11 +332,10 @@
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const el = e.target;
-      // Stagger children: fade + slide up
-      const children = el.querySelectorAll(':scope > *');
+      const children = Array.from(el.children);
       if (children.length > 0) {
         anime({
-          targets: Array.from(children),
+          targets: children,
           translateY: [40, 0],
           opacity: [0, 1],
           duration: 700,
@@ -344,7 +343,6 @@
           easing: 'cubicBezier(.4, 0, .2, 1)',
         });
       } else {
-        // Single element just fades in
         anime({ targets: el, translateY: [40, 0], opacity: [0, 1], duration: 700, easing: 'cubicBezier(.4, 0, .2, 1)' });
       }
       revealObserver.unobserve(el);
@@ -352,43 +350,34 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
   sections.forEach(el => revealObserver.observe(el));
 
-  // Hero is always visible — animate its children immediately
+  // Hero — splitText name + staggered reveal
   const hero = document.querySelector('#hero');
-  if (hero) {
-    const kids = hero.querySelectorAll(':scope > .container > *');
-    anime({
-      targets: Array.from(kids),
-      translateY: [40, 0],
-      opacity: [0, 1],
-      duration: 800,
-      delay: anime.stagger(120, { start: 200 }),
-      easing: 'cubicBezier(.4, 0, .2, 1)',
-    });
+  if (hero && window.anime) {
+    const h1 = hero.querySelector('h1');
+    if (h1) {
+      const { words } = anime.splitText(h1, { words: true, chars: false });
+      hero.style.opacity = '1';
+      hero.style.transform = 'none';
+      anime({
+        targets: words,
+        translateY: ['2rem', 0],
+        opacity: [0, 1],
+        duration: 800,
+        delay: anime.stagger(100, { start: 200 }),
+        easing: 'outExpo',
+      });
+      // Animate rest of hero children
+      const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1);
+      anime({
+        targets: rest,
+        translateY: [20, 0],
+        opacity: [0, 1],
+        duration: 600,
+        delay: anime.stagger(100, { start: 600 }),
+        easing: 'cubicBezier(.4, 0, .2, 1)',
+      });
+    }
   }
-
-  // Project card accent glow — global listener, radial spotlight
-  const cards = document.querySelectorAll('.project-card');
-  document.addEventListener('mousemove', e => {
-    cards.forEach(card => {
-      const rect = card.getBoundingClientRect();
-      // expand detection zone 120px above and below the card
-      const top = rect.top - 120;
-      const bottom = rect.bottom + 120;
-      if (e.clientY < top || e.clientY > bottom || e.clientX < rect.left - 60 || e.clientX > rect.right + 60) {
-        card.style.setProperty('--glow', '0');
-        return;
-      }
-      // distance to card center (0 = center, 1 = edge of detection zone)
-      const cy = rect.top + rect.height/2;
-      const cx = rect.left + rect.width/2;
-      const dist = Math.sqrt((e.clientX-cx)**2 + (e.clientY-cy)**2);
-      const maxDist = Math.max(rect.width, rect.height) * 0.8;
-      const glow = Math.max(0, 1 - dist/maxDist);
-      const x = (e.clientX - rect.left) / rect.width;
-      card.style.setProperty('--glow', glow);
-      card.style.setProperty('--spot', Math.max(0, Math.min(1, x)));
-    });
-  });
 </script>
 </body>
 </html>

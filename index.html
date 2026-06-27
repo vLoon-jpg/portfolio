@@ -4,7 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>vLoon — Levy | Portfolio</title>
-  <script src="https://cdn.jsdelivr.net/npm/animejs@4.1.2/lib/anime.min.js"></script>
+  <script type="module">
+    import { animate, stagger, splitText } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
+    // Bridge v3 API (anime({targets, ...})) to v4 (animate(targets, params))
+    window.anime = function(params) {
+      const { targets, ...rest } = params;
+      return animate(targets, rest);
+    };
+    window.anime.stagger = stagger;
+    window.anime.splitText = splitText;
+  </script>
   <style>
     /* RESET */
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -359,30 +368,51 @@
     const sections = document.querySelectorAll('.section');
     const cards = document.querySelectorAll('.project-card,.skill-card,.contact-card');
 
-    [...sections, ...cards].forEach(el => {
-      const kids = Array.from(el.children);
-      kids.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
+    // Sections: hide inner .container's children (not .container itself)
+    sections.forEach(el => {
+      const container = el.querySelector('.container');
+      if (container) {
+        Array.from(container.children).forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
+      }
     });
+    // Cards: hide the card itself
+    cards.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(30px)'; });
 
     const revealObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
         const el = e.target;
-        const children = Array.from(el.children).filter(c => c.style.opacity === '0');
-        if (children.length === 0) return;
         revealObserver.unobserve(el);
-        anime({
-          targets: children,
-          translateY: [40, 0],
-          opacity: [0, 1],
-          duration: 700,
-          delay: anime.stagger(80, { start: 100 }),
-          easing: 'cubicBezier(.4, 0, .2, 1)',
-        });
+
+        if (el.classList.contains('section')) {
+          // Animate section: reveal .container's children
+          const container = el.querySelector('.container');
+          if (!container) return;
+          const children = Array.from(container.children).filter(c => c.style.opacity === '0');
+          if (children.length === 0) return;
+          anime({
+            targets: children,
+            translateY: [40, 0],
+            opacity: [0, 1],
+            duration: 700,
+            delay: anime.stagger(80, { start: 100 }),
+            easing: 'cubicBezier(.4, 0, .2, 1)',
+          });
+        } else {
+          // Animate card
+          anime({
+            targets: el,
+            translateY: [30, 0],
+            opacity: [0, 1],
+            duration: 500,
+            easing: 'cubicBezier(.4, 0, .2, 1)',
+          });
+        }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    [...sections, ...cards].forEach(el => revealObserver.observe(el));
+    sections.forEach(el => revealObserver.observe(el));
+    cards.forEach(el => revealObserver.observe(el));
 
     // Hero — pulse badge + typewriter motto
     const hero = document.querySelector('#hero');
@@ -451,6 +481,16 @@
   document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {
     activeIdx = -1;
     arrow.classList.remove('active');
+  });
+
+  // Update arrow on window resize
+  window.addEventListener('resize', () => {
+    if (activeIdx === -1) return;
+    const card = pCards[activeIdx];
+    const wrapper = card.closest('.projects-wrapper');
+    const wr = wrapper.getBoundingClientRect();
+    const cr = card.getBoundingClientRect();
+    arrow.style.top = (cr.top - wr.top + cr.height/2 - 15) + 'px';
   });
 </script>
 </body>

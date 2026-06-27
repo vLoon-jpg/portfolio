@@ -18,13 +18,13 @@
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
       background-repeat:repeat;background-size:256px 256px
     }
-    a{color:#FF6B01;text-decoration:none;transition:color .2s}a:hover{color:#ff944d}
+    a{color:#FF6B01;text-decoration:none;transition:color .2s}a:hover{color:#CA2E55}
 
     /* DESIGN TOKENS */
     :root{
-      --accent:#FF6B01;--accent-hover:#ff8533;--accent-glow:rgba(255,107,1,.12);
-      --bg-alt:#0d0d0d;--border:#1a1a1a;
-      --text:#fff;--text-secondary:#aaa;--text-muted:#888;
+      --accent:#FF6B01;--accent-hover:#FF8C33;--accent-alt:#CA2E55;--accent-glow:rgba(255,107,1,.12);
+      --bg-alt:#462521;--border:rgba(70,37,33,.5);
+      --text:#fff;--text-secondary:#D7DEDC;--text-muted:rgba(215,222,220,.55);
       --section-pad:100px 0;--content-max:1000px;
     }
 
@@ -85,7 +85,7 @@
 
     /* SKILLS — Agnes 3-column grouped */
     .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-    .skill-group{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform .2s,box-shadow .2s}
+    .skill-group{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px;transition:transform .3s ease,box-shadow .3s ease}
     .skill-group:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
     .skill-group h3{color:var(--text);font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:8px}
     .skill-group .skill-emoji{font-size:1.2rem}
@@ -93,7 +93,7 @@
 
     /* PROJECTS — our cards, Agnes vertical list */
     .projects-list{display:flex;flex-direction:column;gap:20px}
-    .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+    .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
     .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
     .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
     .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -104,8 +104,8 @@
 
     /* CONTACT — our pill buttons, Agnes layout */
     .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px 16px;transition:all .2s}
-    .contact-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+    .contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px 16px;transition:border-color .4s ease,transform .4s ease,box-shadow .4s ease}
+    .contact-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px rgba(255,107,1,.08)}
     .contact-card .icon{font-size:1.8rem}
     .contact-card .name{color:var(--text);font-weight:600;font-size:.95rem}
     .contact-card .handle{color:var(--text-muted);font-size:.8rem}
@@ -116,7 +116,7 @@
     footer span{color:var(--accent)}
 
     /* SCROLL FADE */
-    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease-out,transform .6s ease-out}
+    .fade-in{opacity:0;transform:translateY(30px);transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1)}
     .fade-in.visible{opacity:1;transform:translateY(0)}
 
     /* RESPONSIVE */

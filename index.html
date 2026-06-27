@@ -66,7 +66,9 @@
     #hero{min-height:100vh;display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden}
     #hero::before{content:'';position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,107,1,.06) 0%,transparent 60%);pointer-events:none}
     #hero .container{position:relative;z-index:1}
-    .hero-label{color:var(--accent);font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:16px;animation:pulse 2s ease-in-out infinite}
+    .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
     .hero-name{font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:12px}
     .hero-name span{color:var(--accent)}
     .hero-sub{font-size:1.15rem;color:var(--text-secondary);margin-bottom:8px}

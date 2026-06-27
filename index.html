@@ -116,8 +116,6 @@
     footer p{color:#555;font-size:.8rem}
     footer span{color:var(--accent)}
 
-    /* SCROLL FADE */
-
     /* RESPONSIVE */
     @media (max-width:768px){
       :root{--section-pad:60px 0}
@@ -324,40 +322,46 @@
     document.getElementById('mobileOverlay').classList.toggle('open');
   }
 
-  // Anime.js staggered scroll reveal
-  const sections = document.querySelectorAll('.section,.project-card,.skill-group,.contact-card');
-  sections.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; });
+  // Anime.js staggered scroll reveal — only hide children, not the section container
+  const sections = document.querySelectorAll('.section');
+  const cards = document.querySelectorAll('.project-card,.skill-group,.contact-card');
+
+  // Hide and prep for animation
+  [...sections, ...cards].forEach(el => {
+    const kids = Array.from(el.children);
+    kids.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(40px)'; });
+  });
 
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const el = e.target;
-      const children = Array.from(el.children);
-      if (children.length > 0) {
-        anime({
-          targets: children,
-          translateY: [40, 0],
-          opacity: [0, 1],
-          duration: 700,
-          delay: anime.stagger(80, { start: 100 }),
-          easing: 'cubicBezier(.4, 0, .2, 1)',
-        });
-      } else {
-        anime({ targets: el, translateY: [40, 0], opacity: [0, 1], duration: 700, easing: 'cubicBezier(.4, 0, .2, 1)' });
-      }
+      const children = Array.from(el.children).filter(c => {
+        // don't re-animate already-visible children
+        return c.style.opacity === '0';
+      });
+      if (children.length === 0) return;
+      anime({
+        targets: children,
+        translateY: [40, 0],
+        opacity: [0, 1],
+        duration: 700,
+        delay: anime.stagger(80, { start: 100 }),
+        easing: 'cubicBezier(.4, 0, .2, 1)',
+      });
       revealObserver.unobserve(el);
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  sections.forEach(el => revealObserver.observe(el));
+  [...sections, ...cards].forEach(el => revealObserver.observe(el));
 
-  // Hero — splitText name + staggered reveal
-  const hero = document.querySelector('#hero');
-  if (hero && window.anime) {
+  // Hero — comes in immediately, waits for anime.js if needed
+  function initHero() {
+    if (typeof anime === 'undefined') { setTimeout(initHero, 50); return; }
+    const hero = document.querySelector('#hero');
+    if (!hero) return;
     const h1 = hero.querySelector('h1');
     if (h1) {
       const { words } = anime.splitText(h1, { words: true, chars: false });
-      hero.style.opacity = '1';
-      hero.style.transform = 'none';
       anime({
         targets: words,
         translateY: ['2rem', 0],
@@ -366,7 +370,6 @@
         delay: anime.stagger(100, { start: 200 }),
         easing: 'outExpo',
       });
-      // Animate rest of hero children
       const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1);
       anime({
         targets: rest,
@@ -378,6 +381,7 @@
       });
     }
   }
+  initHero();
 </script>
 </body>
 </html>

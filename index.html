@@ -175,10 +175,10 @@
 <!-- HERO -->
 <section id="hero">
   <div class="container">
-    <p class="hero-label">Pande Made Raditya Dhiparthama</p>
+    <div class="hero-badge"><span class="dot"></span> Currently modding Minecraft</div>
     <h1 class="hero-name">Levy <span>(vLoon)</span></h1>
     <p class="hero-sub">Kelas XI &middot; SMA Negeri 2 Amlapura, Bali</p>
-    <p class="hero-motto">&ldquo;I break things, then build cooler things&rdquo;</p>
+    <p class="hero-motto" id="heroMotto"></p>
     <div class="hero-buttons">
       <a href="#projects" class="btn">See my work &rarr;</a>
       <a href="#contact" class="btn btn-outline">Contact me</a>
@@ -384,21 +384,43 @@
 
     [...sections, ...cards].forEach(el => revealObserver.observe(el));
 
-    // Hero — splitText
+    // Hero — pulse badge + typewriter motto
     const hero = document.querySelector('#hero');
     if (!hero) return;
     const h1 = hero.querySelector('h1');
-    if (!h1) return;
-    const { words } = anime.splitText(h1, { words: true, chars: false });
-    anime({
-      targets: words,
-      translateY: ['2rem', 0],
-      opacity: [0, 1],
-      duration: 800,
-      delay: anime.stagger(100, { start: 200 }),
-      easing: 'outExpo',
-    });
-    const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1);
+    if (h1) {
+      const { words } = anime.splitText(h1, { words: true, chars: false });
+      anime({
+        targets: words,
+        translateY: ['2rem', 0],
+        opacity: [0, 1],
+        duration: 800,
+        delay: anime.stagger(100, { start: 200 }),
+        easing: 'outExpo',
+      });
+    }
+
+    // Typewriter motto
+    const motto = document.getElementById('heroMotto');
+    if (motto) {
+      const text = '\u201CI break things, then build cooler things\u201D';
+      let i = 0;
+      const type = () => {
+        if (i < text.length) { motto.textContent += text[i]; i++; setTimeout(type, 60); }
+        else { motto.style.borderRight = 'none'; }
+      };
+      motto.style.borderRight = '2px solid var(--accent)';
+      motto.style.color = 'var(--accent)';
+      motto.style.fontWeight = '600';
+      motto.style.fontSize = '1.3rem';
+      motto.style.fontStyle = 'italic';
+      motto.style.marginBottom = '32px';
+      motto.style.display = 'inline-block';
+      setTimeout(type, 1200);
+    }
+
+    // Rest
+    const rest = Array.from(hero.querySelector('.container').children).filter(c => c !== h1 && c !== motto);
     anime({
       targets: rest,
       translateY: [20, 0],

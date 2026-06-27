@@ -94,7 +94,7 @@
     /* PROJECTS — our cards, Agnes vertical list */
     .projects-list{display:flex;flex-direction:column;gap:20px}
     .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
-    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
+    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover));transition:opacity .4s ease;opacity:calc(.35 + var(--glow,0) * .65);box-shadow:0 0 calc(2px + var(--glow,0) * 16px) calc(var(--glow,0) * 6px) var(--accent)}
     .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
     .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
     .project-header h3{color:var(--text);font-size:1.15rem}
@@ -334,6 +334,22 @@
   });
   // Make hero always visible
   document.querySelector('#hero')?.classList.add('visible');
+
+  // Project card accent glow — tracks cursor proximity
+  document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width; // 0–1
+      // glow intensity peaks when cursor is near the top
+      const distFromTop = (e.clientY - rect.top) / rect.height;
+      const glow = distFromTop < 0.4 ? 1 - distFromTop / 0.4 : 0;
+      card.style.setProperty('--glow', glow);
+      card.style.setProperty('--spot', x);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--glow', '0');
+    });
+  });
 </script>
 </body>
 </html>

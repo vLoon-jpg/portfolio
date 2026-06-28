@@ -163,6 +163,121 @@
     ::-webkit-scrollbar-track{background:#0a0a0a}
     ::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
     ::-webkit-scrollbar-thumb:hover{background:#555}
+
+    /* ═══════════════ TERMINAL WIDGET ═══════════════ */
+    .term-window{
+      background:#050505;border:1px solid #1a1a1a;border-radius:8px;overflow:hidden;
+      margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.4);
+    }
+    .term-titlebar{
+      background:#111;padding:8px 14px;display:flex;align-items:center;gap:8px;
+      font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      font-size:.72rem;color:#666;border-bottom:1px solid #1a1a1a;user-select:none;
+    }
+    .term-titlebar span:first-of-type{margin-left:0}
+    .term-split-btn{
+      margin-left:auto;background:none;border:1px solid #333;color:#666;
+      font-family:inherit;font-size:.65rem;cursor:pointer;padding:2px 8px;border-radius:4px;
+      transition:all .15s;
+    }
+    .term-split-btn:hover{color:var(--accent);border-color:var(--accent)}
+    .term-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .term-dot:nth-child(1){background:#FF5F56}
+    .term-dot:nth-child(2){background:#FFBD2E}
+    .term-dot:nth-child(3){background:#27C93F}
+    .term-body{
+      padding:16px;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      position:relative;
+    }
+    .term-body::after{
+      content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:1;opacity:.025;
+      background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.03) 2px,rgba(255,255,255,.03) 4px);
+    }
+    .term-panes{display:flex;gap:1px;background:#1a1a1a}
+    .term-pane{
+      flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;
+      background:#050505;border-left:2px solid transparent;transition:border-color .2s;
+    }
+    .term-pane.active{border-left-color:var(--accent)}
+    .term-pane .term-body{padding:12px;display:flex;flex-direction:column;flex:1}
+    .term-pane .term-body::after{/* override — already on pane */}
+    .term-output{
+      min-height:200px;max-height:380px;overflow-y:auto;margin-bottom:12px;
+      font-size:.82rem;line-height:1.8;color:#c0c0c0;position:relative;z-index:2;
+    }
+    .term-line{margin-bottom:2px;white-space:pre-wrap;word-break:break-word}
+    .term-line.cmd{color:var(--text-muted)}
+    .term-line.cmd .tprompt{color:var(--accent)}
+    .term-line.error{color:#FF5F56}
+    .term-line.info{color:#888}
+    .term-line.dir{color:#6CB6FF}
+    .term-line.exec{color:#4ADE80}
+    .term-line.success{color:#4ADE80}
+    .term-line.warn{color:#FFBD2E}
+    .term-line.ctf{color:#FF6B01;font-weight:700}
+    .term-line a{color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+    .term-line a:hover{color:#FF8C33}
+    .term-input-line{display:flex;align-items:center;gap:0;position:relative;z-index:2}
+    .term-prompt{
+      color:var(--accent);font-weight:700;font-size:.85rem;flex-shrink:0;user-select:none;
+      white-space:nowrap;
+    }
+    .term-input{
+      flex:1;background:transparent;border:none;outline:none;color:#c0c0c0;
+      font-family:inherit;font-size:.85rem;caret-color:var(--accent);margin-left:6px;
+    }
+    .term-input::placeholder{color:#333}
+    @keyframes term-blink{0%,100%{opacity:1}50%{opacity:0}}
+    .term-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .term-hint{font-size:.8rem;color:var(--text-muted);margin-right:4px;user-select:none}
+    .term-chip{
+      background:var(--accent-glow);color:var(--accent);border:1px solid rgba(255,107,1,.25);
+      padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:600;
+      cursor:pointer;transition:all .2s;font-family:inherit;
+    }
+    .term-chip:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+
+    /* Nano editor */
+    .term-nano{display:none;position:relative;z-index:2}
+    .term-nano.active{display:flex;flex-direction:column;min-height:200px;max-height:380px}
+    .term-nano-bar{
+      background:#111;color:#fff;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      font-size:.72rem;padding:4px 12px;border-bottom:1px solid #1a1a1a;
+      display:flex;justify-content:space-between;user-select:none;
+    }
+    .term-nano-bar.top{background:#004488;color:#fff}
+    .term-nano-bar.mid{background:#111;color:#ccc;justify-content:flex-start;gap:16px}
+    .term-nano-bar .dim{color:#888}
+    .term-nano-textarea{
+      flex:1;min-height:150px;max-height:300px;background:#050505;color:#c0c0c0;
+      border:none;outline:none;padding:12px;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      font-size:.82rem;resize:none;line-height:1.7;tab-size:4;
+    }
+    .term-nano-status{
+      background:#111;color:#ccc;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      font-size:.7rem;padding:4px 12px;border-top:1px solid #1a1a1a;user-select:none;
+    }
+    .term-nano-shortcuts{
+      background:#111;color:#999;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      font-size:.68rem;padding:4px 12px;display:flex;gap:16px;flex-wrap:wrap;user-select:none;
+    }
+    .term-nano-shortcuts span{color:#fff}
+
+    .term-output::-webkit-scrollbar{width:4px}
+    .term-output::-webkit-scrollbar-track{background:transparent}
+    .term-output::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+    .term-output::-webkit-scrollbar-thumb:hover{background:#333}
+    .term-nano-textarea::-webkit-scrollbar{width:4px}
+    .term-nano-textarea::-webkit-scrollbar-track{background:transparent}
+    .term-nano-textarea::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+
+    @media (max-width:768px){
+      .term-output{max-height:280px;font-size:.76rem}
+      .term-input{font-size:.78rem}
+      .term-chip{padding:3px 10px;font-size:.68rem}
+      .term-body{padding:12px}
+      .term-nano-textarea{max-height:220px;font-size:.76rem}
+    }
   </style>
 </head>
 <body>
@@ -285,45 +400,42 @@
 <section id="projects" class="section">
   <div class="container">
     <h2>Projects</h2>
-    <p class="section-sub">Things I've built, broken, and shipped.</p>
-    <div class="projects-wrapper">
-      <span class="select-arrow" id="selectArrow">&#x276F;</span>
-      <div class="projects-list">
-
-      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/morefirework','_blank')">
-        <div class="project-header">
-          <h3>More Firework Mod</h3>
-          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
-        </div>
-        <p>Minecraft Fabric 1.21 combat fireworks. Ore rockets, crossbow chain-explosions, and seeker missiles that track targets. Because vanilla fireworks were boring.</p>
-        <div class="project-tags">
-          <span class="tag">Java 21</span><span class="tag">Fabric</span><span class="tag">Mixin</span><span class="tag">Minecraft</span>
+    <p class="section-sub">Kali Linux terminal — picoCTF challenges inside. Type <code style="color:var(--accent)">help</code> or <code style="color:var(--accent)">ctf-hints</code> to begin.</p>
+    <div class="term-window" id="termWindow">
+      <div class="term-titlebar">
+        <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+        <span id="termTitleText">vloon@portfolio — bash</span>
+        <button class="term-split-btn" id="termSplitBtn" title="Split terminal (tmux)">⏸</button>
+      </div>
+      <div class="term-panes" id="termPanes">
+        <!-- Pane 0 (primary) -->
+        <div class="term-pane active" data-pane="0" id="termPane0">
+          <div class="term-output" id="termOutput0"></div>
+          <div class="term-nano" id="termNano0">
+            <div class="term-nano-bar top">  GNU nano 8.2 <span class="dim">Modified</span></div>
+            <div class="term-nano-bar mid">  File: <span class="term-nano-file"></span></div>
+            <textarea class="term-nano-textarea" spellcheck="false"></textarea>
+            <div class="term-nano-status"></div>
+            <div class="term-nano-shortcuts"><span>^O</span> WriteOut <span>^X</span> Exit <span>^K</span> Cut <span>^U</span> Paste</div>
+          </div>
+          <div class="term-input-line">
+            <span class="term-prompt" id="termPrompt0">vloon@portfolio:~$ </span>
+            <input type="text" class="term-input" id="termInput0" autocomplete="off" spellcheck="false" placeholder="type a command...">
+          </div>
         </div>
       </div>
-
-      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/RimWorldDownloader','_blank')">
-        <div class="project-header">
-          <h3>RimWorldDownloader</h3>
-          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
-        </div>
-        <p>Steam Workshop won't serve pirate copies — so I built a backdoor. Pulls RimWorld mods from Steam's own servers without an installed client.</p>
-        <div class="project-tags">
-          <span class="tag">Python</span><span class="tag">Steam API</span>
-        </div>
-      </div>
-
-      <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer','_blank')">
-        <div class="project-header">
-          <h3>Steam Auto-Claimer</h3>
-          <span class="project-link-icon" title="Open GitHub">&#x2197;</span>
-        </div>
-        <p>Auto-scrapes and claims free Steam games via Playwright. Tracks claimed games in SQLite and sends notifications through Discord. Never miss a freebie again.</p>
-        <div class="project-tags">
-          <span class="tag">Python</span><span class="tag">Automation</span><span class="tag">Playwright</span>
-        </div>
-      </div>
-
     </div>
+    <div class="term-chips" id="termChips">
+      <span class="term-hint">Try: </span>
+      <button class="term-chip" data-cmd="tmux">tmux</button>
+      <button class="term-chip" data-cmd="ls /opt/ctf">ls /ctf</button>
+      <button class="term-chip" data-cmd="cat /opt/ctf/challenge1/README.txt">challenge 1</button>
+      <button class="term-chip" data-cmd="ls /projects">ls /projects</button>
+      <button class="term-chip" data-cmd="grep -r vloonCTF /projects">grep projects</button>
+      <button class="term-chip" data-cmd="nmap localhost">nmap localhost</button>
+      <button class="term-chip" data-cmd="neofetch">neofetch</button>
+      <button class="term-chip" data-cmd="ctf-hints">ctf-hints</button>
+      <button class="term-chip" data-cmd="help">help</button>
     </div>
   </div>
 </section>
@@ -374,7 +486,7 @@
   waitForAnime(() => {
     // Sections + cards — only hide children, not the container
     const sections = document.querySelectorAll('.section');
-    const cards = document.querySelectorAll('.project-card,.skill-card,.contact-card');
+    const cards = document.querySelectorAll('.skill-card,.contact-card');
 
     // Sections: hide inner .container's children (not .container itself)
     sections.forEach(el => {
@@ -505,34 +617,1346 @@
     });
   });
 
-  // Terminal cursor arrow for projects
-  const arrow = document.getElementById('selectArrow');
-  const pCards = document.querySelectorAll('.project-card');
-  let activeIdx = -1;
 
-  pCards.forEach((card, i) => {
-    card.addEventListener('mouseenter', () => {
-      activeIdx = i;
-      const wrapper = card.closest('.projects-wrapper');
-      const wr = wrapper.getBoundingClientRect();
-      const cr = card.getBoundingClientRect();
-      arrow.style.top = (cr.top - wr.top + cr.height/2 - 15) + 'px';
-      arrow.classList.add('active');
+  // ═══════════════ KALI LINUX CTF TERMINAL ═══════════════
+  (function(){
+  var F={type:'dir',children:{}};
+  function D(n,p){var o={type:'dir',children:{}};if(!p)p=F;var s=n.split('/');for(var i=0;i<s.length-1;i++){if(!p.children[s[i]])p.children[s[i]]={type:'dir',children:{}};p=p.children[s[i]]}p.children[s[s.length-1]]=o;return o}
+  function f(n,c,ex){var o={type:'file',content:c||'',executable:!!ex};var s=n.split('/'),nm=s.pop(),p=F;for(var i=0;i<s.length;i++){if(!p.children[s[i]])p.children[s[i]]={type:'dir',children:{}};p=p.children[s[i]]}p.children[nm]=o;return o}
+  // Direct root-level files and dirs
+  var R=F.children;
+  // /etc
+  var etc=D('etc');var etcC=etc.children;
+  etcC['passwd']=f('passwd','root:x:0:0:root:/root:/bin/bash\nvloon:x:1000:1000:vLoon:/home/vloon:/bin/bash\nmysql:x:999:999:MySQL:/var/lib/mysql:/bin/false\nwww-data:x:33:33:www-data:/var/www:/usr/sbin/nologin\nbackdoor:x:1337:1337::/dev/null:/bin/sh');
+  etcC['shadow']=f('shadow','root:$6$salt$hashedpasshere:19000:0:99999:7:::\nvloon:$1$ZmxhZ3toNHNoX2NyNGNrM2R9:19000:0:99999:7:::');
+  etcC['hosts']=f('hosts','127.0.0.1 localhost\n10.0.0.5 vloon-server\n192.168.1.1 ctf.local\n8.8.8.8 google.com');
+  etcC['motd']=f('motd','Welcome to vLoonOS v2026.06 LTS\n* CTF challenges available in /ctf/\n* Type ctf-hints to get started\n* All flags use format: vloonCTF{...}');
+  etcC['crontab']=f('crontab','# Hint: something runs every minute\n*/1 * * * * root echo "tick: $(date)" >> /tmp/cron_output.txt');
+  D('etc/ssh');etcC['ssh'].children['sshd_config']=f('sshd_config','Port 22\nPermitRootLogin no\nPasswordAuthentication yes');
+
+  // /var/log
+  var vl=D('var/log');var vlC=vl.children;
+  vlC['syslog']=f('syslog','Jun 28 10:00:01 portfolio CRON[123]: (root) CMD (echo tick)\nJun 28 10:00:05 portfolio systemd[1]: Started Session 42 of user vloon.\nJun 28 10:01:01 portfolio CRON[456]: (vloon) CMD (cd /ctf && ./check.sh)\nJun 28 10:02:15 portfolio kernel: [UFW BLOCK] IN=eth0 SRC=10.0.0.7 DST=10.0.0.5\nJun 28 10:05:00 portfolio systemd[1]: Starting Cleanup...\nJun 28 10:10:00 portfolio CRON[789]: (root) CMD (/usr/bin/backdoor)');
+  vlC['auth.log']=f('auth.log','Jun 28 10:03:15 sshd[1234]: Failed password for root from 192.168.1.100 port 22\nJun 28 10:03:18 sshd[1234]: Failed password for root: 123456\nJun 28 10:03:21 sshd[1234]: Failed password for root: password\nJun 28 10:03:25 sshd[1234]: Failed password for vloon from 10.0.0.7\nJun 28 10:03:28 sshd[1234]: Failed password for vloon: vloonCTF\nJun 28 10:03:31 sshd[1234]: Failed password for vloon: vloonCTF{l0gs_\nJun 28 10:03:34 sshd[1234]: Failed password for vloon: vloonCTF{l0gs_n3v3r\nJun 28 10:03:37 sshd[1234]: Failed password for vloon: vloonCTF{l0gs_n3v3r_l13}\nJun 28 10:04:01 sshd[1234]: Accepted password for vloon from 10.0.0.7');
+  D('var/log/apache2');vlC['apache2'].children['access.log']=f('access.log','192.168.1.100 - - [28/Jun/2026:10:05:00] "GET / HTTP/1.1" 200 1234\n192.168.1.100 - - [28/Jun/2026:10:05:02] "GET /admin HTTP/1.1" 403 567\n10.0.0.7 - - [28/Jun/2026:10:05:10] "GET /secret HTTP/1.1" 200 890\n192.168.1.100 - - [28/Jun/2026:10:05:15] "GET /login?user=admin\'-- HTTP/1.1" 200 456');
+
+  // /tmp
+  var tmp=D('tmp');var tmpC=tmp.children;
+  tmpC['.secret_token']=f('.secret_token','Hint: The final flag is where only root can go.\nBut maybe this sandbox has a bug?');
+  tmpC['cron_output.txt']=f('cron_output.txt','tick: Sun Jun 28 10:01:00 WITA 2026\ntick: Sun Jun 28 10:02:00 WITA 2026\ntick: Sun Jun 28 10:03:00 WITA 2026');
+
+  // /opt
+  var opt=D('opt');var optC=opt.children;
+  D('opt/tools');optC['tools'].children['readme.txt']=f('readme.txt','Welcome to vLoon\'s toolkit.\nAvailable: rot13, base64, xxd, strings, grep, nmap, binwalk');
+
+  // /ctf with 6 challenges
+  var ctf=D('opt/ctf');
+
+  // Challenge 1: Transformation (ROT13)
+  var c1=D('opt/ctf/challenge1');
+  c1.children['README.txt']=f('README.txt','Challenge 1: Transformation (50 pts)\n=====================================\nI wonder what this could be? It looks like text\nbut something is... off.\n\nHint: Julius Caesar used ciphers like this.\nHint 2: ROT13 is a real Linux command here.');
+  c1.children['enc.txt']=f('enc.txt','iybbaPGS{g0qq_f3z0_g0f0}');
+
+  // Challenge 2: Cookie Monster (Web)
+  var c2=D('opt/ctf/challenge2');
+  c2.children['README.txt']=f('README.txt','Challenge 2: Cookie Monster (75 pts)\n=====================================\nThe factory is running a web server internally.\nCheck what headers it sends back.\n\nHint: try curl -v ctf.local:8080');
+  c2.children['note.txt']=f('note.txt','I heard the admin page at /admin returns\nsomething interesting in the response headers.\nTry curl -v ctf.local:8080/admin');
+
+  // Challenge 3: Strings It (Forensics)
+  var c3=D('opt/ctf/challenge3');
+  c3.children['README.txt']=f('README.txt','Challenge 3: Strings It (100 pts)\n==================================\nWe found this file on a compromised server.\nIt looks like garbage but there might be\nsomething readable inside.\n\nHint: Try the strings command\nHint: Then grep for the flag pattern');
+  c3.children['mystery.bin']=f('mystery.bin','\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00>\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00Connecting to server...\nAuthentication required.\nvloonCTF{str1ngs_1s_y0ur_b3st_fr13nd}\nSegmentation fault (core dumped)\n');
+
+  // Challenge 4: What Lies Beneath
+  var c4=D('opt/ctf/challenge4');
+  c4.children['README.txt']=f('README.txt','Challenge 4: What Lies Beneath (125 pts)\n=========================================\nWe recovered this file from a USB drive.\nThe extension says .png but the metadata is suspicious.\n\nHint: binwalk hidden.png\nHint: PNG files end with "IEND"');
+  c4.children['hidden.png']=f('hidden.png','\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x01\x00\x00\x00\x01\x00\x08\x02\x00\x00\x00\x90wSÞ\x00\x00\x00\x01sRGB\x00®\xce\x1cé\x00\x00\x00\x04gAMA\x00\x00±\x8f\x0büa\x05\x00\x00\x00\tpHYs\x00\x00\x0eÄ\x00\x00\x0eÄ\x01\x95+\x0e\x1b\x00\x00\x00\x1dIDATx\x9c\xedÁ\x01\x00\x00\x00\x82\x20\xff¯n\x1eH@\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00IEND\xaeB`\x82\n\nYou thought this was just a PNG?\nThe flag is: vloonCTF{h1dd3n_4ft3r_th3_3nd}\n');
+
+  // Challenge 5: Based (2-step base64)
+  var c5=D('opt/ctf/challenge5');
+  c5.children['README.txt']=f('README.txt','Challenge 5: Based (150 pts)\n=============================\nThey say everything is base-something.\nThis went through multiple encodings.\n\nHint: Start with base64 -d\nHint: The output is... also base64');
+  c5.children['layered.txt']=f('layered.txt','ZG14dmIyNURWRVo3YkRSNU0zSnpYekJtWDJJMGN6TT0=');
+
+  // Challenge 6: First Grep
+  var c6=D('opt/ctf/challenge6');var c6f=D('opt/ctf/challenge6/files');
+  c6.children['README.txt']=f('README.txt','Challenge 6: First Grep Part II (200 pts)\n==========================================\nThe flag is somewhere in the files/ directory.\nThere are 100 files. Only one has the real flag.\n\nHint: grep can search through many files at once\nHint: grep -r vloonCTF files/');
+  // Generate 100 files. Only file042 has the flag.
+  for(var i=1;i<=100;i++){
+    var fn='file'+(i<10?'00':i<100?'0':'')+i+'.txt';
+    var fc='This is file number '+i+'.\n'+(Math.random()>0.5?'Nothing to see here.\n':'Just some random data.\n')+'The quick brown fox jumps over the lazy dog.\n'+'Lorem ipsum dolor sit amet.\n'+'File ID: '+Math.floor(Math.random()*99999)+'\n';
+    if(i===42) fc+='\nvloonCTF{gr3p_1s_0p_h4ck3r_t00l}\n';
+    c6f.children[fn]=f(fn,fc);
+  }
+
+  // /root - the final flag
+  var rootDir=D('root');
+  rootDir.children['.bash_history']=f('.bash_history','ls -la /root\ncat /root/the-final-flag.txt\nexit\n');
+  rootDir.children['the-final-flag.txt']=f('the-final-flag.txt','████████████████████████████████████████████\n█  THE FINAL FLAG                          █\n█                                          █\n█  vloonCTF{c0ngr4ts_y0u_0wn_th3_b0x}      █\n█                                          █\n█  Congratulations! You found all 7        █\n█  flags across the vLoon CTF arena.       █\n█                                          █\n█  You have proven your skills in:         █\n█  - Cryptography (ROT13, base64)          █\n█  - Web exploitation (cookies, curl)      █\n█  - Forensics (strings, binwalk)          █\n█  - Reconnaissance (grep, log analysis)   █\n█  - Source auditing (hidden flag)         █\n█                                          █\n█  "The quieter you become, the more       █\n█   you are able to hear." - Ram Dass      █\n█                                          █\n████████████████████████████████████████████\n');
+
+  // /usr/share/wordlists
+  D('usr/share/wordlists');
+  F.children['usr'].children['share'].children['wordlists'].children['rockyou.txt']=f('rockyou.txt','123456\npassword\n12345678\nqwerty\nabc123\nmonkey\n1234567\nletmein\ntrustno1\ndragon\nbaseball\niloveyou\nmaster\nsunshine\nashley\nbailey\nshadow\n123123\n654321\nsuperman\nqazwsx\nmichael\nfootball\nvloonCTF\nadmin123\nletmein123\nsummer2026');
+
+  // /home/vloon (existing content + new hidden files)
+  var home=D('home/vloon');
+  var hC=home.children;
+  hC['.bash_history']=f('.bash_history','ls -la\ncd projects\ncat about.md\nneofetch\nping 8.8.8.8\necho "flag{not_so_hidden_after_all}"\nnmap localhost\ncurl ctf.local:8080/admin\ncd /ctf\nls challenge*\ncat challenge1/README.txt\nwhoami\nsudo rm -rf /\nman grep\nstrings /opt/ctf/challenge3/mystery.bin\ncd /root\ncat the-final-flag.txt\n');
+  hC['ctf-welcome.txt']=f('ctf-welcome.txt','Welcome to the vLoon CTF Arena!\n================================\n\nThere are 7 hidden flags throughout this system.\nAll flags use the format: vloonCTF{...}\n\nChallenges are in /opt/ctf/challenge1 through /opt/ctf/challenge6\nReal project source code is in /projects/\nType "ctf-hints" for help getting started.\nType "ctf-status" to track your progress.\n\nGood luck, hacker!\n');
+  D('home/vloon/.ssh');
+  hC['.ssh'].children['id_rsa']=f('id_rsa','-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...this is just for show...\n-----END RSA PRIVATE KEY-----');
+  hC['.ssh'].children['authorized_keys']=f('authorized_keys','ssh-rsa AAAAB3NzaC1yc2E... vloon@portfolio');
+  D('home/vloon/Documents');
+  hC['Documents'].children['notes.txt']=f('notes.txt','Meeting notes:\n- Fix the backdoor on port 4444\n- Rotate the SSH keys\n- Check /var/log/auth.log for failed logins\n- The root password is stored somewhere obvious\n- CTF flag hunting: did you check /root/?');
+  hC['Documents'].children['secrets.zip']=f('secrets.zip','PK\x03\x04\x14\x00\x00\x00\x00\x00...encrypted zip file...\nCANNOT EXTRACT WITHOUT PASSWORD');
+
+  // ═══ REAL PROJECT SOURCE CODE ═══
+  var projects=D('projects');
+  projects.children['README.txt']=f('README.txt','These are the REAL source files from Levys GitHub projects.\nTry: ls /projects/  |  cat /projects/morefirework/README.md  |  grep -r vloonCTF /projects/');
+  var mfw=D('projects/morefirework');
+  mfw.children['README.md']=f('README.md','# More Firework\n\nA Minecraft Fabric mod that turns fireworks into a deep combat system.\n\n## Features\n| Ore | Rocket Type | What It Does |\n|---|---|---|\n| Diamond | Stab | Marks armor — zero protection |\n| Iron | Bleed | 0.5 hearts/stack every 2s |\n| Gold | Shotgun | 8 shrapnel pieces in 60 cone |\n| Emerald | Tracker | Heat Signature — enables Seeker homing |\n| Amethyst | Fracture | Stack fractures -> Crystalized stun finisher |\n| Redstone | Addon | Craft onto ANY rocket to make it a Seeker |\n\nSource: github.com/vLoon-jpg/morefirework');
+  mfw.children['MoreFirework.java']=f('MoreFirework.java','// Mod init — item registration, creative tab, dispenser behavior\n// Full source: github.com/vLoon-jpg/morefirework\n// Try: cat FireworkRocketEntityMixin.java');
+  mfw.children['FireworkRocketEntityMixin.java']=f('FireworkRocketEntityMixin.java','package com.morefirework.mixin;\n\nimport com.morefirework.component.FireworkEffectComponent;\nimport com.morefirework.component.ModComponents;\nimport com.morefirework.effect.GoldShotgun;\nimport com.morefirework.effect.SeekerBehavior;\nimport com.morefirework.effect.SeekerBehavior.SeekerData;\nimport com.morefirework.item.OreFireworkItem;\nimport net.minecraft.entity.Entity;\nimport net.minecraft.entity.LivingEntity;\nimport net.minecraft.entity.EquipmentSlot;\nimport net.minecraft.entity.projectile.FireworkRocketEntity;\nimport net.minecraft.item.ItemStack;\nimport net.minecraft.util.math.Box;\nimport net.minecraft.util.math.Vec3d;\nimport net.minecraft.util.math.BlockPos;\nimport net.minecraft.util.hit.BlockHitResult;\nimport net.minecraft.world.RaycastContext;\nimport org.slf4j.Logger;\nimport org.slf4j.LoggerFactory;\nimport org.spongepowered.asm.mixin.Mixin;\nimport org.spongepowered.asm.mixin.Shadow;\nimport org.spongepowered.asm.mixin.injection.At;\nimport org.spongepowered.asm.mixin.injection.Inject;\nimport org.spongepowered.asm.mixin.injection.callback.CallbackInfo;\n\nimport java.util.*;\n\n@Mixin(FireworkRocketEntity.class)\npublic abstract class FireworkRocketEntityMixin {\n    private static final Logger LOG = LoggerFactory.getLogger("morefirework:rocket");\n    // Build provenance hash: vloonCTF{0r3_r0ck3t_s0urc3_l34k}\n\n    @Shadow private void explode() {}\n    @Shadow private int life;\n    private boolean hasExploded = false;\n\n    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)\n    private void morefirework$seekerTick(CallbackInfo ci) {\n        FireworkRocketEntity self = (FireworkRocketEntity) (Object) this;\n        ItemStack stack = self.getStack();\n        // Gold proximity fuse: SMART — seeker detonates within 1 block for max damage\n        // Non-seeker gold uses original 3.5-block fuse\n        boolean inLaunchPhase = false;\n        boolean isSeeker = OreFireworkItem.hasRedstone(stack);\n        if (isSeeker) {\n            SeekerData launchCheck = SeekerBehavior.SeekerData.getOrCreate(self);\n            inLaunchPhase = launchCheck.placedOrDispensed && launchCheck.flightTicks < 30;\n        }\n        if (!inLaunchPhase && !hasExploded && stack.getItem() instanceof OreFireworkItem oreItem && oreItem.getOreType() == OreFireworkItem.OreType.GOLD) {\n            if (!self.getWorld().isClient) {\n                double fuseRadius = isSeeker ? 1.0 : 3.5;\n                Box box = self.getBoundingBox().expand(fuseRadius);\n                List<LivingEntity> targets = self.getWorld().getEntitiesByClass(LivingEntity.class, box,\n                    e -> e != self.getOwner() && e.isAlive());\n                if (!targets.isEmpty()) {\n                    hasExploded = true;\n                    LivingEntity nearest = targets.stream()\n                        .min(java.util.Comparator.comparingDouble(e -> e.squaredDistanceTo(self)))\n                        .orElse(targets.get(0));\n                    Vec3d dir = nearest.getPos().add(0, nearest.getHeight() / 2, 0).subtract(self.getPos());\n                    if (dir.lengthSquared() < 0.001) dir = self.getVelocity();\n                    GoldShotgun.shatter(self.getWorld(), self.getPos(), dir.normalize(),\n                        self.getOwner() != null ? self.getOwner() : self);\n                    self.discard();\n                    ci.cancel();\n                    return;\n                }\n            }\n        }\n        // ... seeker homing logic (SeekerBehavior.tick), block/entity collision, AOE effects\n        // Full source: github.com/vLoon-jpg/morefirework\n    }\n}');
+  mfw.children['SeekerBehavior.java']=f('SeekerBehavior.java','// Homing logic for Redstone-addon rockets — speed curve, turning radius, target timeout, velocity prediction\n// Full source: github.com/vLoon-jpg/morefirework\n// ~600 lines of seeker AI — vision cone, emerald heat priority, slerp steering, dragon breath trails');
+  mfw.children['CrossbowItemMixin.java']=f('CrossbowItemMixin.java','// Makes OreFireworkItem valid crossbow ammo — overwrites getHeldProjectiles() and getSpeed()\n// Full source: github.com/vLoon-jpg/morefirework');
+
+  // RimWorldDownloader
+  var rw=D('projects/RimWorldDownloader');
+  rw.children['README.md']=f('README.md','# RimWorld Downloader\n\nSteam Workshop doesnt serve pirate copies. So I built a backdoor.\n\nThis tool pulls RimWorld mods straight from Steams own servers — no legit copy required. One script, zero excuses not to have your mod list sorted.\n\nSource: github.com/vLoon-jpg/RimWorldDownloader');
+  rw.children['Main.py']=f('Main.py','import os\nimport threading\nimport queue\nimport subprocess\nimport requests\nimport re\nimport shutil\nimport time\nimport xml.etree.ElementTree as ET\nfrom bs4 import BeautifulSoup\n\nAPP_ID = "294100"  # RimWorld\nSTEAMCMD_PATH = r"C:\\SteamCMD\\steamcmd.exe"\nWORKSHOP_PATH = r"C:\\SteamCMD\\steamapps\\workshop\\content\\294100"\nMODS_PATH = r"C:\\GOG Games\\RimWorld\\Mods"\nMAX_WORKERS = 5\n\ndownload_queue = queue.Queue()\nstop_event = threading.Event()\nactive_downloads = {}\nconsole_lock = threading.Lock()\n\ndef scrape_ids_from_page(url):\n    """Scrape Steam Workshop mod IDs from a collection or single mod page."""\n    ids_found = set()\n    if url.isdigit(): return [url]\n    try:\n        headers = {\"User-Agent\": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}\n        response = requests.get(url, headers=headers, timeout=15)\n        soup = BeautifulSoup(response.text, "html.parser")\n        for item in soup.find_all("div", class_="collectionItem"):\n            a_tag = item.find("a", href=True)\n            if a_tag:\n                found = extract_id_from_url(a_tag[href])\n                if found: ids_found.add(found)\n        for link in soup.find_all("a", href=True):\n            if "filedetails" in link[href]:\n                found = extract_id_from_url(link[href])\n                if found: ids_found.add(found)\n    except Exception as e:\n        print(f"[ERROR] Scraper failed: {e}")\n    return list(ids_found)\n\ndef run_steamcmd(workshop_id):\n    cmd = [STEAMCMD_PATH, "+login", "anonymous",\n           "+workshop_download_item", APP_ID, workshop_id, "+quit"]\n    subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)\n\n# ... (full source on GitHub — multi-threaded downloader with queue, retry, install)\n# github.com/vLoon-jpg/RimWorldDownloader');
+
+  // SteamFreeGameClaimer
+  var sfgc=D('projects/SteamFreeGameClaimer');
+  sfgc.children['app.py']=f('app.py','import os\nimport json\nfrom datetime import datetime\nfrom fastapi import FastAPI, HTTPException\nfrom playwright.sync_api import sync_playwright\nimport httpx\nfrom dotenv import load_dotenv\n\nload_dotenv()\nDISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")\nDB_FILE = "claimed_games.json"\nAUTH_FILE = "steam_auth.json"\n\napp = FastAPI(title="Steam Auto Claimer API")\n\ndef get_claimed_games() -> dict:\n    if not os.path.exists(DB_FILE):\n        return {"claimed_app_ids": {}}\n    with open(DB_FILE, "r") as f:\n        return json.load(f)\n\ndef save_claimed_game(app_id: str, game_name: str):\n    db = get_claimed_games()\n    db["claimed_app_ids"][app_id] = {"name": game_name, "claimed_at": datetime.now().isoformat()}\n    with open(DB_FILE, "w") as f:\n        json.dump(db, f, indent=2)\n\ndef send_discord_report(status: str, app_id: str, game_name: str, details: str, screenshot_path=None):\n    """Send embedded notification to Discord webhook with screenshot attachment."""\n    if not DISCORD_WEBHOOK_URL: return\n    color = 3066993 if status == "SUCCESS" else (15158332 if status == "FAILED" else 3447003)\n    embed = {"title": f"Steam Auto Claimer - {status}", "description": details, "color": color}\n    payload = {"embeds": [embed]}\n    try:\n        if screenshot_path and os.path.exists(screenshot_path):\n            embed["image"] = {"url": "attachment://screenshot.png"}\n            with open(screenshot_path, "rb") as f:\n                files = {"file": ("screenshot.png", f.read(), "image/png")}\n            data = {"payload_json": json.dumps(payload)}\n            res = httpx.post(DISCORD_WEBHOOK_URL, data=data, files=files, timeout=30.0)\n        else:\n            res = httpx.post(DISCORD_WEBHOOK_URL, json=payload, timeout=30.0)\n    except Exception as e:\n        print(f"Failed to send Discord webhook: {e}")\n\ndef run_claim_playwright(app_id: str, game_name=None) -> dict:\n    """Headless Playwright claiming engine with Steam session persistence."""\n    if not os.path.exists(AUTH_FILE):\n        return {"status": "FAILED", "message": "Session not found! Run login.py first."}\n    with sync_playwright() as p:\n        browser = p.chromium.launch(headless=True)\n        context = browser.new_context(storage_state=AUTH_FILE)\n        context.add_cookies([\n            {"name": "birthtime", "value": "-2211667760", "domain": "store.steampowered.com", "path": "/"},\n            {"name": "lastagecheckage", "value": "1-0-1900", "domain": "store.steampowered.com", "path": "/"},\n            {"name": "wants_mature_content", "value": "1", "domain": "store.steampowered.com", "path": "/"}\n        ])\n        page = context.new_page()\n        page.goto(f"https://store.steampowered.com/app/{app_id}/", timeout=45000)\n        page.wait_for_timeout(3000)\n        # Check ownership, find claim button, click, verify success\n        if page.locator(".already_in_library, .already_owned, #owned_app_banner").count() > 0:\n            save_claimed_game(app_id, game_name or f"App ID {app_id}")\n            return {"status": "ALREADY_CLAIMED", "message": "Already in library."}\n        for pattern in ["Add to Library", "Add to Account", "Play Game"]:\n            btn = page.get_by_role("button", name=pattern, exact=False)\n            if btn.count() > 0:\n                btn.first.click()\n                page.wait_for_timeout(5000)\n                save_claimed_game(app_id, game_name or f"App ID {app_id}")\n                return {"status": "SUCCESS", "message": f"Claimed {game_name}!"}\n        return {"status": "FAILED", "message": "No claim button found."}\n\n@app.post("/claim")\ndef claim_game(req: ClaimRequest):\n    db = get_claimed_games()\n    if req.app_id in db.get("claimed_app_ids", {}):\n        return {"status": "ALREADY_CLAIMED"}\n    res = run_claim_playwright(req.app_id, req.game_name)\n    if res["status"] == "FAILED":\n        raise HTTPException(status_code=500, detail=res["message"])\n    return res\n\n# ... full source: github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer');
+  sfgc.children['steam_claimer.py']=f('steam_claimer.py','# Desktop app scraper — scrapes Steam search specials for 100% off free games\n# Uses Playwright headless browser with session persistence\n# Multi-tier browser launch: Chrome -> Edge -> Bundled Chromium\n# Full source: github.com/vLoon-jpg/Steam-Free-Game-Auto-Claimer');
+
+  // Known flags for tracking
+  var FLAGS={
+    'vloonCTF{t0dd_m3s0_t0f0}':'Challenge 1: Transformation',
+    'vloonCTF{c00k13_m0n5t3r}':'Challenge 2: Cookie Monster',
+    'vloonCTF{str1ngs_1s_y0ur_b3st_fr13nd}':'Challenge 3: Strings It',
+    'vloonCTF{h1dd3n_4ft3r_th3_3nd}':'Challenge 4: What Lies Beneath',
+    'vloonCTF{b4s3d_4nd_b4s3d_4g41n}':'Challenge 5: Based',
+    'vloonCTF{gr3p_1s_0p_h4ck3r_t00l}':'Challenge 6: First Grep',
+    'vloonCTF{c0ngr4ts_y0u_0wn_th3_b0x}':'BONUS: The Final Flag',
+    'vloonCTF{0r3_r0ck3t_s0urc3_l34k}':'Challenge 7: Source Code Leak'
+  };
+  var foundFlags=[];
+
+  // ── TERMINAL ENGINE (Pane-aware) ──
+  // We support up to 2 panes. pane 0 is always active; pane 1 created by tmux.
+  var panes=[];
+  var activePane=0;
+  var panesEl=document.getElementById('termPanes');
+  var termSplitBtn=document.getElementById('termSplitBtn');
+  var termTitleText=document.getElementById('termTitleText');
+  var termChips=document.getElementById('termChips');
+
+  function makePane(idx){
+    var pEl=document.getElementById('termPane'+idx);
+    if(!pEl) return null;
+    return {
+      el:pEl, idx:idx,
+      output:pEl.querySelector('.term-output'),
+      promptEl:pEl.querySelector('.term-prompt'),
+      input:pEl.querySelector('.term-input'),
+      nanoEl:pEl.querySelector('.term-nano'),
+      nanoFileEl:pEl.querySelector('.term-nano-file'),
+      nanoTextarea:pEl.querySelector('.term-nano-textarea'),
+      nanoStatus:pEl.querySelector('.term-nano-status'),
+      cwd:['home','vloon'],prevCwd:['home','vloon'],
+      history:[],historyIdx:-1,
+      nanoFile:null,nanoClipboard:'',
+      showNano:function(f){var pn=this;pn.nanoEl.classList.add('active');pn.output.style.display='none';pn.nanoTextarea.focus();pn.nanoFile=f;pn.nanoFileEl.textContent=f.fname;pn.nanoTextarea.value=f.node?f.node.content:'';pn.updateNanoStatus();},
+      updateNanoStatus:function(){var l=this.nanoTextarea.value.split('\n').length;this.nanoStatus.textContent='[ Read '+l+' lines ]';},
+    };
+  }
+
+  panes.push(makePane(0));
+
+  function addPane(){
+    if(panes.length>=2) return;
+    var wrapper=document.createElement('div');
+    wrapper.className='term-pane';wrapper.setAttribute('data-pane','1');wrapper.id='termPane1';
+    wrapper.innerHTML='<div class="term-body"><div class="term-output" id="termOutput1"></div><div class="term-nano" id="termNano1"><div class="term-nano-bar top">  GNU nano 8.2 <span class="dim">Modified</span></div><div class="term-nano-bar mid">  File: <span class="term-nano-file"></span></div><textarea class="term-nano-textarea" spellcheck="false"></textarea><div class="term-nano-status"></div><div class="term-nano-shortcuts"><span>^O</span> WriteOut <span>^X</span> Exit <span>^K</span> Cut <span>^U</span> Paste</div></div><div class="term-input-line"><span class="term-prompt" id="termPrompt1">vloon@portfolio:~$ </span><input type="text" class="term-input" id="termInput1" autocomplete="off" spellcheck="false" placeholder="type a command..."></div></div>';
+    panesEl.appendChild(wrapper);
+    var p2=makePane(1);
+    panes.push(p2);
+    panesEl.style.display='flex';
+    termTitleText.textContent='vloon@portfolio — tmux [pane 0 | pane 1]';
+    // Bind pane 1
+    bindPane(p2);
+    activePane=1;
+    panes[0].el.classList.remove('active');
+    p2.el.classList.add('active');
+    renderPrompt(p2);
+    p2.input.focus();
+    printTo(p2,'Terminal split (tmux mode). Ctrl+click a pane to focus it.','info');
+    printTo(p2,'Type <span style="color:var(--accent)">tmux kill</span> to close this pane.','info');
+    printTo(p2,'');
+  }
+
+  function removePane(idx){
+    if(panes.length<=1) return;
+    var p=panes[idx];
+    if(!p) return;
+    p.el.remove();
+    panes.splice(idx,1);
+    // Renumber remaining
+    for(var i=0;i<panes.length;i++){panes[i].idx=i;panes[i].el.id='termPane'+i;panes[i].el.setAttribute('data-pane',i);}
+    panesEl.style.display=panes.length>1?'flex':'';
+    termTitleText.textContent=panes.length>1?'vloon@portfolio — tmux':'vloon@portfolio — bash';
+    if(activePane>=panes.length) activePane=panes.length-1;
+    panes[activePane].el.classList.add('active');
+    panes[activePane].input.focus();
+  }
+
+  function getPane(){return panes[activePane];}
+
+  // ── FILESYSTEM UTILS ──
+  function getNode(arr){
+    var node=F;
+    for(var i=0;i<arr.length;i++){
+      if(!node||node.type!=='dir'||!node.children) return null;
+      node=node.children[arr[i]];
+      if(!node) return null;
+    }
+    return node;
+  }
+  function getDir(arr){var n=getNode(arr);return n&&n.type==='dir'?n:null;}
+
+  function resolvePath(raw,pn){
+    pn=pn||getPane();
+    if(raw==='') return pn.cwd.slice();
+    if(raw==='-') return pn.prevCwd.slice();
+    var parts=raw.split('/');
+    var res=[];
+    if(raw[0]==='/'){res=[];parts.shift();}
+    else if(raw[0]==='~'){res=['home','vloon'];parts.shift();}
+    else{res=pn.cwd.slice();}
+    for(var i=0;i<parts.length;i++){
+      var s=parts[i];
+      if(s===''||s==='.') continue;
+      if(s==='..'){if(res.length>0) res.pop();}
+      else res.push(s);
+    }
+    return res;
+  }
+  function getParent(arr){var p=arr.slice();p.pop();return p;}
+
+  function renderPrompt(pn){
+    pn=pn||getPane();
+    var ps='/'+pn.cwd.join('/');
+    var hs='/home/vloon';
+    if(ps===hs) pn.promptEl.textContent='vloon@portfolio:~$ ';
+    else if(ps.indexOf(hs+'/')===0) pn.promptEl.textContent='vloon@portfolio:~'+ps.slice(hs.length)+'$ ';
+    else pn.promptEl.textContent='vloon@portfolio:'+ps+'$ ';
+  }
+
+  function printTo(pn,text,cls){
+    var line=document.createElement('div');
+    line.className='term-line'+(cls?' '+cls:'');
+    line.innerHTML=text||'&nbsp;';
+    pn.output.appendChild(line);
+    pn.output.scrollTop=pn.output.scrollHeight;
+  }
+  function print(text,cls){printTo(getPane(),text,cls);}
+
+  function esc(s){
+    var d=document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+
+  // ── COMMAND DISPATCH ──
+  function dispatch(cmd,args,argStr,pn){
+    pn=pn||getPane();
+    var p,node,resolved,dest,srcN,destN,parent,srcR,destR,td;
+
+    switch(cmd){
+
+      case 'ls':
+        var showH=false,longF=false,hasOpt=false;
+        for(var i=0;i<args.length;i++){
+          if(args[i]==='-a'||args[i]==='-la'||args[i]==='-al'){showH=true;hasOpt=true;}
+          if(args[i]==='-l'||args[i]==='-la'||args[i]==='-al'){longF=true;hasOpt=true;}
+        }
+        var lsArgs=args.filter(function(a){return a[0]!=='-';});
+        resolved=resolvePath(lsArgs[0]||'',pn);
+        td=getDir(resolved);
+        if(!td){printTo(pn,'ls: cannot access: No such file or directory','error');break;}
+        var entries=Object.keys(td.children).sort();
+        if(!showH) entries=entries.filter(function(k){return k[0]!=='.';});
+        if(!longF){
+          var line='';
+          for(var j=0;j<entries.length;j++){
+            var e=td.children[entries[j]];
+            if(e.type==='dir'&&e.children&&e.children['symlink']) line+='<span class="exec">'+entries[j]+'</span>  ';
+            else if(e.type==='dir') line+='<span class="dir">'+entries[j]+'</span>/  ';
+            else if(e.executable) line+='<span class="exec">'+entries[j]+'</span>*  ';
+            else line+=esc(entries[j])+'  ';
+          }
+          printTo(pn,line||'(empty)');
+        }else{
+          printTo(pn,'total '+entries.length);
+          for(var k=0;k<entries.length;k++){
+            var en=entries[k],ent=td.children[en];
+            var perms=ent.type==='dir'?'d':'-';
+            perms+=(ent.readonly?'r--':'rw-');
+            perms+='r--';
+            perms+=ent.executable?'x':'-';
+            perms+=' 1 vloon vloon';
+            var size=String(ent.content?ent.content.length:4096);
+            while(size.length<5) size=' '+size;
+            var hash=0;for(var hi=0;hi<en.length;hi++) hash=((hash<<5)-hash)+en.charCodeAt(hi);
+            var month=1+Math.abs(hash%12),day=1+Math.abs((hash>>4)%28);
+            var date='2026-'+(month<10?'0':'')+month+'-'+(day<10?'0':'')+day;
+            var col;
+            if(ent.type==='dir'&&ent.children&&ent.children['symlink']) col='<span class="exec">'+en+'</span>';
+            else if(ent.type==='dir') col='<span class="dir">'+en+'</span>';
+            else if(ent.executable) col='<span class="exec">'+en+'</span>';
+            else col=en;
+            printTo(pn,perms+' '+size+' '+date+' '+col);
+          }
+        }
+        break;
+
+      case 'cd':
+        resolved=resolvePath(args[0]||'~',pn);
+        if(!args[0]) resolved=['home','vloon'];
+        var cdDir=getDir(resolved);
+        if(!cdDir){printTo(pn,'cd: '+esc(args[0]||'')+': No such file or directory','error');break;}
+        if(resolved.join('/')!==pn.cwd.join('/')) pn.prevCwd=pn.cwd.slice();
+        pn.cwd=resolved;
+        renderPrompt(pn);
+        break;
+
+      case 'pwd':printTo(pn,'/'+pn.cwd.join('/'));break;
+      case 'whoami':printTo(pn,'vloon');break;
+      case 'hostname':printTo(pn,'portfolio');break;
+      case 'date':printTo(pn,new Date().toString());break;
+      case 'clear':pn.output.innerHTML='';break;
+      case 'exit':break;
+
+      case 'cat':
+        if(!args[0]){printTo(pn,'cat: missing operand','error');break;}
+        var catPath=resolvePath(args[0],pn);
+        var catNode=getNode(catPath);
+        if(!catNode){printTo(pn,'cat: '+esc(args[0])+': No such file or directory','error');break;}
+        if(catNode.type==='dir'){printTo(pn,'cat: '+esc(args[0])+': Is a directory','error');break;}
+        var lines=catNode.content.split('\n');
+        for(var li=0;li<lines.length;li++) printTo(pn,esc(lines[li]));
+        break;
+
+      case 'echo':printTo(pn,argStr);break;
+
+      case 'touch':
+        if(!args[0]){printTo(pn,'touch: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        parent=getDir(getParent(resolved));
+        var fname=resolved[resolved.length-1];
+        if(node) break;
+        if(!parent){printTo(pn,'touch: cannot touch \''+esc(args[0])+'\': No such file or directory','error');break;}
+        parent.children[fname]={type:'file',content:''};
+        break;
+
+      case 'mkdir':
+        if(!args[0]){printTo(pn,'mkdir: missing operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        parent=getDir(getParent(resolved));
+        var dname=resolved[resolved.length-1];
+        if(node){printTo(pn,'mkdir: cannot create directory \''+esc(args[0])+'\': File exists','error');break;}
+        if(!parent){printTo(pn,'mkdir: cannot create directory: No such file or directory','error');break;}
+        parent.children[dname]={type:'dir',children:{}};
+        break;
+
+      case 'rm':
+        if(!args[0]){printTo(pn,'rm: missing operand','error');break;}
+        if(args[0]==='-rf'||args[0]==='-r'){printTo(pn,"rm: cannot remove: Permission denied",'error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        parent=getDir(getParent(resolved));
+        var rname=resolved[resolved.length-1];
+        if(!node){printTo(pn,'rm: cannot remove \''+esc(args[0])+'\': No such file or directory','error');break;}
+        if(node.type==='dir'&&Object.keys(node.children).length>0){printTo(pn,'rm: cannot remove: Directory not empty','error');break;}
+        if(rname==='the-final-flag.txt'||rname==='passwd'||rname==='shadow'){printTo(pn,"rm: cannot remove '"+rname+"': Permission denied",'error');break;}
+        delete parent.children[rname];
+        break;
+
+      case 'cp':
+        if(args.length<2){printTo(pn,'cp: missing file operand','error');break;}
+        srcR=resolvePath(args[0],pn);destR=resolvePath(args[1],pn);
+        srcN=getNode(srcR);
+        if(!srcN){printTo(pn,'cp: cannot stat: No such file or directory','error');break;}
+        if(srcN.type==='dir'){printTo(pn,'cp: -r not specified; omitting directory','error');break;}
+        var destN2=getNode(destR);
+        if(destN2&&destN2.type==='dir'){destR.push(args[0].split('/').pop());destN2=getNode(destR);}
+        var destP=getDir(getParent(destR)),destNm=destR[destR.length-1];
+        if(!destP){printTo(pn,'cp: cannot create: No such file or directory','error');break;}
+        destP.children[destNm]={type:'file',content:srcN.content,executable:srcN.executable};
+        break;
+
+      case 'mv':
+        if(args.length<2){printTo(pn,'mv: missing file operand','error');break;}
+        srcR=resolvePath(args[0],pn);destR=resolvePath(args[1],pn);
+        srcN=getNode(srcR);if(!srcN){printTo(pn,'mv: cannot stat: No such file or directory','error');break;}
+        var srcP=getDir(getParent(srcR)),srcNm=srcR[srcR.length-1];
+        var dd=getNode(destR);
+        if(dd&&dd.type==='dir'){destR.push(srcNm);dd=getNode(destR);}
+        var dp=getDir(getParent(destR)),dn=destR[destR.length-1];
+        if(!dp){printTo(pn,'mv: cannot move: No such file or directory','error');break;}
+        dp.children[dn]=srcN;delete srcP.children[srcNm];
+        break;
+
+      case 'nano':
+        if(!args[0]){printTo(pn,'nano: missing filename','error');break;}
+        resolved=resolvePath(args[0],pn);
+        var nNode=getNode(resolved);
+        if(nNode&&nNode.type==='dir'){printTo(pn,'nano: '+esc(args[0])+': Is a directory','error');break;}
+        pn.showNano({path:resolved,node:nNode,fname:resolved[resolved.length-1]});
+        break;
+
+      case 'ping':
+        var ip=args[0]||'8.8.8.8';
+        if(!/^[\d.]+$/.test(ip)){printTo(pn,'ping: '+esc(ip)+': Name or service not known','error');break;}
+        printTo(pn,'PING '+ip+' ('+ip+') 56(84) bytes of data.');
+        var times=[],seq=0,isG=ip==='8.8.8.8';
+        function sendPing(){
+          if(seq>=4){
+            printTo(pn,'');
+            printTo(pn,'--- '+ip+' ping statistics ---');
+            var loss=times.length<4?((4-times.length)/4*100):0;
+            printTo(pn,'4 packets transmitted, '+times.length+' received, '+Math.round(loss)+'% packet loss');
+            if(times.length>0){
+              times.sort(function(a,b){return a-b;});
+              var mn=times[0],mx=times[times.length-1];
+              var av=times.reduce(function(s,x){return s+x;},0)/times.length;
+              var dev=0;for(var ti=0;ti<times.length;ti++) dev+=Math.abs(times[ti]-av);
+              dev=(dev/times.length).toFixed(2);
+              printTo(pn,'rtt min/avg/max/mdev = '+mn.toFixed(2)+'/'+av.toFixed(2)+'/'+mx.toFixed(2)+'/'+dev+' ms');
+            }
+            return;
+          }
+          seq++;
+          var rtt=isG?0.5+Math.random()*4:15+Math.random()*60;
+          times.push(rtt);
+          var ttl=isG?117:50+Math.floor(Math.random()*20);
+          printTo(pn,'64 bytes from '+ip+': icmp_seq='+seq+' ttl='+ttl+' time='+rtt.toFixed(2)+' ms');
+          setTimeout(sendPing,350);
+        }
+        sendPing();
+        break;
+
+      case 'uname':
+        if(args[0]==='-a') printTo(pn,'Linux portfolio 6.8.0-vloon #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux');
+        else printTo(pn,'Linux');
+        break;
+
+      case 'neofetch':
+        var nl=['        ████████████         <span style="color:var(--accent)">vloon</span>@portfolio',
+          '      ██░░░░░░░░░░░░██       -------------',
+          '    ██░░░░░░░░░░░░░░░░██     OS: vLoonOS 2026.06 LTS',
+          '    ██░░░░░░░░░░░░░░░░██     Kernel: Linux 6.8.0-vloon',
+          '  ██░░░░░░░░░░░░░░░░░░░░██   Shell: bash 5.2',
+          '  ██░░░░░░░░░░░░░░░░░░░░██   Terminal: vLoon WebTTY',
+          '  ██░░░░░░░░████░░░░░░░░██   WM: tmux (split support)',
+          '    ██░░░░░░████░░░░░░██     Uptime: since i started coding',
+          '    ██░░░░░░░░░░░░░░░░██     Packages: 42 (apt), 7 (pip), 6 (ctf)',
+          '      ██░░░░░░░░░░░░██       CPU: Intel i7-13700K @ 5.4GHz',
+          '        ████████████         GPU: NVIDIA RTX 4070 Ti',
+          '                             Memory: 32GB DDR5 | Score: '+foundFlags.length+'/8 flags'];
+        for(var ni=0;ni<nl.length;ni++) printTo(pn,nl[ni]);
+        break;
+
+      case 'history':
+        for(var hi=0;hi<pn.history.length;hi++) printTo(pn,'  '+(hi+1)+'  '+esc(pn.history[hi]));
+        break;
+
+      case 'sudo':
+        printTo(pn,'vloon is not in the sudoers file. This incident will be reported.','error');
+        break;
+
+      case 'tree':
+        function treePrint(pathArr,prefix){
+          var dir=getDir(pathArr);if(!dir) return;
+          var keys=Object.keys(dir.children).filter(function(k){return k[0]!=='.';}).sort();
+          for(var ti=0;ti<keys.length;ti++){
+            var last=ti===keys.length-1;
+            var ch=dir.children[keys[ti]];
+            var ds=ch.type==='dir'?'<span class="dir">'+keys[ti]+'</span>':keys[ti];
+            printTo(pn,prefix+(last?'└── ':'├── ')+ds);
+            if(ch.type==='dir') treePrint(pathArr.concat([keys[ti]]),prefix+(last?'    ':'│   '));
+          }
+        }
+        printTo(pn,'.');
+        treePrint(pn.cwd,'');
+        break;
+
+      case 'grep':
+        var grepI=false,grepV=false,pattern='',fileArg='';
+        for(var gi=0;gi<args.length;gi++){
+          if(args[gi]==='-i') grepI=true;
+          else if(args[gi]==='-v') grepV=true;
+          else if(args[gi]==='-r'||args[gi]==='-R'){/* recursive not fully implemented in single-file mode*/}
+          else if(!pattern) pattern=args[gi];
+          else fileArg=args[gi];
+        }
+        if(!pattern){printTo(pn,'grep: missing pattern','error');break;}
+        // If no file arg, try stdin from redirect (handled outside)
+        if(!fileArg){printTo(pn,'grep: missing file operand','error');break;}
+        resolved=resolvePath(fileArg,pn);
+        var gNode=getNode(resolved);
+        if(!gNode){printTo(pn,'grep: '+esc(fileArg)+': No such file or directory','error');break;}
+        if(gNode.type==='dir'){
+          // recursive: search all files in directory
+          function grepDir(dirPath,pattern){
+            var d=getDir(dirPath);if(!d) return;
+            var ks=Object.keys(d.children);
+            for(var gk=0;gk<ks.length;gk++){
+              var ch=d.children[ks[gk]];
+              if(ch.type==='file'){
+                var ls=ch.content.split('\n');
+                for(var cl=0;cl<ls.length;cl++){
+                  var line=ls[cl];
+                  var matchLine=grepI?line.toLowerCase():line;
+                  var matchPat=grepI?pattern.toLowerCase():pattern;
+                  var found=matchLine.indexOf(matchPat)!==-1;
+                  if(grepV) found=!found;
+                  if(found) printTo(pn,ks[gk]+':'+esc(line));
+                }
+              }else if(ch.type==='dir'){
+                grepDir(dirPath.concat([ks[gk]]),pattern);
+              }
+            }
+          }
+          grepDir(resolved,pattern);
+        }else{
+          var gls=gNode.content.split('\n');
+          for(var cli=0;cli<gls.length;cli++){
+            var ln=gls[cli];
+            var mLn=grepI?ln.toLowerCase():ln;
+            var mPat=grepI?pattern.toLowerCase():pattern;
+            var fnd=mLn.indexOf(mPat)!==-1;
+            if(grepV) fnd=!fnd;
+            if(fnd) printTo(pn,esc(ln));
+          }
+        }
+        break;
+
+      case 'find':
+        var findName='',findType='';
+        for(var fi=1;fi<args.length;fi++){
+          if(args[fi]==='-name'&&fi+1<args.length){findName=args[fi+1];fi++;}
+          else if(args[fi]==='-type'&&fi+1<args.length){findType=args[fi+1];fi++;}
+        }
+        var findDir=args[0]?resolvePath(args[0],pn):pn.cwd.slice();
+        function findRec(dirPath,base){
+          var d=getDir(dirPath);if(!d) return;
+          var ks=Object.keys(d.children).sort();
+          for(var fk=0;fk<ks.length;fk++){
+            var nm=ks[fk],ch=d.children[nm];
+            var match=true;
+            if(findName){
+              var pat=findName.replace(/\*/g,'.*').replace(/\./g,'\\.');
+              if(!new RegExp('^'+pat+'$').test(nm)) match=false;
+            }
+            if(findType==='f'&&ch.type!=='file') match=false;
+            if(findType==='d'&&ch.type!=='dir') match=false;
+            if(match) printTo(pn,(base?base+'/'+nm:nm));
+            if(ch.type==='dir') findRec(dirPath.concat([nm]),base?base+'/'+nm:nm);
+          }
+        }
+        printTo(pn,args[0]?esc(args[0]):'.');
+        findRec(findDir,args[0]||undefined);
+        break;
+
+      case 'head':
+        var headN=10;
+        if(args[0]==='-n'&&args[1]){headN=parseInt(args[1])||10;args=args.slice(2);}
+        if(!args[0]){printTo(pn,'head: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'head: '+esc(args[0])+': No such file','error');break;}
+        var hls=node.content.split('\n');
+        for(var hli=0;hli<Math.min(headN,hls.length);hli++) printTo(pn,esc(hls[hli]));
+        break;
+
+      case 'tail':
+        var tailN=10;
+        if(args[0]==='-n'&&args[1]){tailN=parseInt(args[1])||10;args=args.slice(2);}
+        if(!args[0]){printTo(pn,'tail: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'tail: '+esc(args[0])+': No such file','error');break;}
+        var tls=node.content.split('\n');
+        var start=Math.max(0,tls.length-tailN);
+        for(var tli=start;tli<tls.length;tli++) printTo(pn,esc(tls[tli]));
+        break;
+
+      case 'wc':
+        if(!args[0]){printTo(pn,'wc: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'wc: '+esc(args[0])+': No such file','error');break;}
+        var wls=node.content.split('\n');
+        var linesW=wls.length,wordsW=node.content.split(/\s+/).filter(Boolean).length,charsW=node.content.length;
+        printTo(pn,String(linesW)+' '+String(wordsW)+' '+String(charsW)+' '+esc(args[0]));
+        break;
+
+      case 'sort':
+        if(!args[0]){printTo(pn,'sort: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'sort: '+esc(args[0])+': No such file','error');break;}
+        var sls=node.content.split('\n').sort();
+        for(var si=0;si<sls.length;si++) printTo(pn,esc(sls[si]));
+        break;
+
+      case 'strings':
+        if(!args[0]){printTo(pn,'strings: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'strings: '+esc(args[0])+': No such file','error');break;}
+        var content=node.content;
+        var cur='';
+        for(var ci=0;ci<content.length;ci++){
+          var ch=content.charCodeAt(ci);
+          if(ch>=32&&ch<=126){cur+=content[ci];}
+          else{if(cur.length>=4) printTo(pn,esc(cur));cur='';}
+        }
+        if(cur.length>=4) printTo(pn,esc(cur));
+        break;
+
+      case 'rot13':
+        if(!args[0]){printTo(pn,'Usage: rot13 <file>','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'rot13: '+esc(args[0])+': No such file','error');break;}
+        var rotContent=node.content;
+        var rotOut='';
+        for(var ri=0;ri<rotContent.length;ri++){
+          var c=rotContent[ri];
+          if(c>='a'&&c<='z') rotOut+=String.fromCharCode(((c.charCodeAt(0)-97+13)%26)+97);
+          else if(c>='A'&&c<='Z') rotOut+=String.fromCharCode(((c.charCodeAt(0)-65+13)%26)+65);
+          else rotOut+=c;
+        }
+        var rotLines=rotOut.split('\n');
+        for(var rli=0;rli<rotLines.length;rli++) printTo(pn,esc(rotLines[rli]));
+        break;
+
+      case 'base64':
+        var b64Decode=args[0]==='-d'||args[0]==='--decode';
+        var bFile=b64Decode?args[1]:args[0];
+        if(!bFile){printTo(pn,'base64: missing file operand','error');break;}
+        resolved=resolvePath(bFile,pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'base64: '+esc(bFile)+': No such file','error');break;}
+        try{
+          if(b64Decode){
+            var dv=atob(node.content.trim());
+            var dlines=dv.split('\n');
+            for(var dli=0;dli<dlines.length;dli++) printTo(pn,esc(dlines[dli]));
+          }else{
+            printTo(pn,esc(btoa(node.content)));
+          }
+        }catch(e){printTo(pn,'base64: invalid input','error');}
+        break;
+
+      case 'xxd':
+        if(!args[0]){printTo(pn,'xxd: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node||node.type==='dir'){printTo(pn,'xxd: '+esc(args[0])+': No such file','error');break;}
+        var xd=node.content;
+        for(var xi=0;xi<xd.length;xi+=16){
+          var hex='';for(var xj=0;xj<16&&xi+xj<xd.length;xj++) hex+=(xd.charCodeAt(xi+xj)<16?'0':'')+xd.charCodeAt(xi+xj).toString(16)+' ';
+          var asc='';for(var xk=0;xk<16&&xi+xk<xd.length;xk++){var cc=xd.charCodeAt(xi+xk);asc+=(cc>=32&&cc<=126)?xd[xi+xk]:'.';}
+          printTo(pn,esc((xi.toString(16).length<8?'0000000'.slice(0,8-xi.toString(16).length):'')+xi.toString(16)+': '+hex+' '.repeat(48-hex.length)+asc));
+        }
+        break;
+
+      case 'file':
+        if(!args[0]){printTo(pn,'file: missing operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node){printTo(pn,'file: '+esc(args[0])+': cannot open','error');break;}
+        if(node.type==='dir'){printTo(pn,esc(args[0])+': directory');}
+        else{
+          var fc=node.content||'';
+          if(fc.indexOf('\x89PNG')===0) printTo(pn,esc(args[0])+': PNG image data');
+          else if(fc.indexOf('\x7fELF')===0) printTo(pn,esc(args[0])+': ELF 64-bit LSB executable');
+          else if(fc.indexOf('PK')===0) printTo(pn,esc(args[0])+': Zip archive data');
+          else if(/^[A-Za-z0-9+\/=]+$/.test(fc.trim())&&fc.length>20) printTo(pn,esc(args[0])+': Base64 encoded data');
+          else printTo(pn,esc(args[0])+': ASCII text');
+        }
+        break;
+
+      case 'diff':
+        if(args.length<2){printTo(pn,'diff: missing operand','error');break;}
+        var dR1=resolvePath(args[0],pn),dR2=resolvePath(args[1],pn);
+        var dN1=getNode(dR1),dN2=getNode(dR2);
+        if(!dN1||!dN2){printTo(pn,'diff: No such file','error');break;}
+        var dl1=dN1.content.split('\n'),dl2=dN2.content.split('\n');
+        var dmax=Math.max(dl1.length,dl2.length);
+        for(var di=0;di<dmax;di++){
+          if(di>=dl1.length){printTo(pn,'> '+esc(dl2[di]));}
+          else if(di>=dl2.length){printTo(pn,'< '+esc(dl1[di]));}
+          else if(dl1[di]!==dl2[di]){printTo(pn,'< '+esc(dl1[di]));printTo(pn,'---');printTo(pn,'> '+esc(dl2[di]));}
+        }
+        break;
+
+      case 'chmod':
+        if(args[0]==='+x'&&args[1]){
+          resolved=resolvePath(args[1],pn);node=getNode(resolved);
+          if(!node){printTo(pn,'chmod: '+esc(args[1])+': No such file or directory','error');break;}
+          node.executable=true;
+        }else{printTo(pn,'chmod: invalid mode','error');}
+        break;
+
+      // ── NETWORK COMMANDS ──
+      case 'ifconfig':
+        printTo(pn,'eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500');
+        printTo(pn,'        inet 10.0.0.5  netmask 255.255.255.0  broadcast 10.0.0.255');
+        printTo(pn,'        ether 00:11:22:33:44:55  txqueuelen 1000');
+        printTo(pn,'');
+        printTo(pn,'lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536');
+        printTo(pn,'        inet 127.0.0.1  netmask 255.0.0.0');
+        printTo(pn,'');
+        printTo(pn,'tun0: flags=4305<UP,POINTOPOINT,RUNNING>  mtu 1500');
+        printTo(pn,'        inet 10.8.0.1  netmask 255.255.255.0');
+        break;
+
+      case 'netstat':
+        printTo(pn,'Active Internet connections (servers and established)');
+        printTo(pn,'Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program');
+        printTo(pn,'tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      123/sshd');
+        printTo(pn,'tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      456/nginx');
+        printTo(pn,'tcp        0      0 0.0.0.0:8080            0.0.0.0:*               LISTEN      789/ctf-server');
+        printTo(pn,'tcp        0      0 127.0.0.1:3306          0.0.0.0:*               LISTEN      234/mysqld');
+        printTo(pn,'tcp        0      0 0.0.0.0:<span style="color:#FF5F56">4444</span>            0.0.0.0:*               LISTEN      <span style="color:#FF5F56">1337/backdoor</span>');
+        break;
+
+      case 'nmap':
+        var target=args[0]||'127.0.0.1';
+        printTo(pn,'Starting Nmap 7.94 at '+new Date().toTimeString().slice(0,8));
+        printTo(pn,'Nmap scan report for '+target);
+        printTo(pn,'Not shown: 995 closed ports');
+        printTo(pn,'PORT     STATE SERVICE    VERSION');
+        printTo(pn,'22/tcp   open  ssh        OpenSSH 8.9p1');
+        printTo(pn,'80/tcp   open  http       nginx 1.24.0');
+        printTo(pn,'8080/tcp open  http       Werkzeug 2.3.0 (ctf.local)');
+        printTo(pn,'3306/tcp open  mysql      MySQL 8.0');
+        printTo(pn,'<span style="color:#FF5F56">4444/tcp open  backdoor   ??? suspicious</span>');
+        break;
+
+      case 'curl':
+        var url=args[args.length-1]||'';var verbose=args.indexOf('-v')!==-1||args.indexOf('--verbose')!==-1;
+        // Parse URL: host:port/path
+        var host=url,port='80',path='';
+        var colonI=url.indexOf(':'),slashI=url.indexOf('/');
+        if(colonI!==-1&&(slashI===-1||colonI<slashI)){host=url.slice(0,colonI);var rest=url.slice(colonI+1);var s2=rest.indexOf('/');port=s2===-1?rest:rest.slice(0,s2);path=s2===-1?'':rest.slice(s2);}
+        else if(slashI!==-1){host=url.slice(0,slashI);path=url.slice(slashI);}
+        if(verbose){
+          printTo(pn,'* Trying '+host+':'+port+'...');
+          printTo(pn,'* Connected to '+host+' ('+host+') port '+port);
+          printTo(pn,'> GET '+path+' HTTP/1.1');
+          printTo(pn,'> Host: '+host);
+          printTo(pn,'> User-Agent: curl/8.0');
+          printTo(pn,'>');
+          printTo(pn,'< HTTP/1.1 200 OK');
+          printTo(pn,'< Server: nginx/1.24.0');
+          printTo(pn,'< Content-Type: text/html');
+        }
+        if(host==='ctf.local'&&port==='8080'&&path==='/admin'){
+          if(verbose) printTo(pn,'< Set-Cookie: session=dmxvb25DVEZ7YzAwazEzX20wbjV0M3J9; HttpOnly');
+          printTo(pn,'<pre>Welcome admin! There is nothing here.</pre>');
+          printTo(pn,'<!-- Check the response headers more carefully next time? ;) -->');
+        }else if(host==='ctf.local'&&port==='8080'){
+          if(verbose) printTo(pn,'< Set-Cookie: admin=false; Path=/');
+          printTo(pn,'<pre>Welcome to the factory portal. You are not admin.</pre>');
+        }else if(host==='localhost'||host==='127.0.0.1'){
+          printTo(pn,'<html><body><h1>It works!</h1><p>nginx is running on vLoonOS.</p><p>Try port 8080 for CTF challenges.</p></body></html>');
+        }else{
+          printTo(pn,'<html><body><h1>Welcome to '+esc(host)+'</h1></body></html>');
+        }
+        break;
+
+      case 'wget':
+        var wurl=args[0]||'';
+        var wfilename=wurl.split('/').pop()||'index.html';
+        resolved=pn.cwd.slice();resolved.push(wfilename);
+        parent=getDir(getParent(resolved));
+        if(parent){
+          var wcontent='Downloaded content from '+wurl+' (simulated)';
+          if(wurl.indexOf('ctf.local')!==-1) wcontent='CTF Challenge Archive (simulated download)\nExtract with: tar -xzf '+wfilename+'\nOr browse directly in /ctf/';
+          parent.children[wfilename]={type:'file',content:wcontent};
+          printTo(pn,'-- '+new Date().toTimeString().slice(0,8)+'--  '+wurl);
+          printTo(pn,'Resolving '+esc(wurl.split('/')[0])+'... 10.0.0.5');
+          printTo(pn,'HTTP request sent, awaiting response... 200 OK');
+          printTo(pn,'Length: '+wcontent.length+' [text/plain]');
+          printTo(pn,'Saving to: \''+esc(wfilename)+'\'');
+          printTo(pn,'Saved ['+wcontent.length+']');
+        }
+        break;
+
+      case 'nc':
+        var ncHost=args[0]||'localhost',ncPort=args[1]||'4444';
+        printTo(pn,'Connecting to '+esc(ncHost)+':'+esc(ncPort)+'...');
+        if(ncHost==='localhost'&&ncPort==='4444'){
+          printTo(pn,'Connected!');
+          printTo(pn,'');
+          printTo(pn,' ██████████████████████████████████████████');
+          printTo(pn,' █  BACKDOOR ACCESS GRANTED               █');
+          printTo(pn,' █  FLAG: vloonCTF{p0rt_kn0ck1ng_pr0}     █');
+          printTo(pn,' ██████████████████████████████████████████');
+          printTo(pn,'');
+          printTo(pn,'Connection closed.');
+        }else{
+          printTo(pn,'Connection refused','error');
+        }
+        break;
+
+      case 'ssh':
+        var sshTarget=args[0]||'';
+        printTo(pn,'The authenticity of host \''+esc(sshTarget)+'\' can\'t be established.');
+        printTo(pn,'ECDSA key fingerprint is SHA256:vL00nC7Fp0r7f0l10.');
+        printTo(pn,'Are you sure you want to continue connecting? (yes/no)');
+        printTo(pn,'Warning: Permanently added \''+esc(sshTarget)+'\' to the list of known hosts.');
+        if(sshTarget==='vloon-server'){
+          printTo(pn,'');
+          printTo(pn,'Welcome to vloon-server (Ubuntu 24.04 LTS)');
+          printTo(pn,' * Documentation: https://help.ubuntu.com');
+          printTo(pn,'Last login: Sun Jun 28 09:45:01 2026 from 10.0.0.5');
+          printTo(pn,'vloon@vloon-server:~$ <span style="color:var(--text-dim)">(connection simulated)</span>');
+          printTo(pn,'');
+          printTo(pn,'There\'s a note here: "The backdoor port number is the same as the flag points for challenge 5."');
+        }else{
+          printTo(pn,'Permission denied (publickey).','error');
+        }
+        break;
+
+      case 'dig':
+        var dTarget=args[0]||'localhost';
+        printTo(pn,'; <<>> DiG 9.18 <<>> '+esc(dTarget));
+        printTo(pn,';; Got answer:');
+        printTo(pn,';; ->>HEADER<<- opcode: QUERY, status: NOERROR');
+        printTo(pn,';; flags: qr rd ra; QUERY: 1, ANSWER: 1');
+        printTo(pn,'');
+        printTo(pn,';; ANSWER SECTION:');
+        if(dTarget==='ctf.local') printTo(pn,esc(dTarget)+'.  300  IN  A  192.168.1.1');
+        else if(dTarget==='vloon-server') printTo(pn,esc(dTarget)+'.  300  IN  A  10.0.0.5');
+        else if(dTarget==='localhost') printTo(pn,esc(dTarget)+'.  0    IN  A  127.0.0.1');
+        else printTo(pn,esc(dTarget)+'.  300  IN  A  8.8.8.8');
+        break;
+
+      // ── KALI TOOLS ──
+      case 'john':
+        printTo(pn,'John the Ripper 1.9.0-jumbo-1 [linux-gnu 64-bit]');
+        printTo(pn,'Loaded 2 password hashes (sha512crypt, Base64)');
+        printTo(pn,'Proceeding with wordlist:/usr/share/wordlists/rockyou.txt');
+        printTo(pn,'123456          (root)');
+        printTo(pn,'Press Ctrl+C to abort, session will be saved');
+        printTo(pn,'Proceeding with incremental:ASCII');
+        var vloonHash=args[0]?resolvePath(args[0],pn):['etc','shadow'];
+        var vNode=getNode(vloonHash);
+        if(vNode){
+          var hs=vNode.content;
+          var b64Match=hs.match(/\$1\$([^:]+)/);
+          if(b64Match){
+            printTo(pn,'Found base64 hash in vloon entry...');
+            var decoded=atob(b64Match[1]);
+            printTo(pn,'vloon: '+esc(decoded));
+            printTo(pn,'!!! FLAG FOUND: '+esc(decoded),'success');
+          }
+        }
+        printTo(pn,'1 password hash cracked, 1 left');
+        break;
+
+      case 'hydra':
+        printTo(pn,'Hydra v9.5 starting (simulated)');
+        printTo(pn,'[DATA] attacking '+esc(args[args.length-1]||'ssh://localhost'));
+        printTo(pn,'[DATA] 1 task, 1 server, 20 login tries');
+        printTo(pn,'[22][ssh] host: localhost  login: root   password: 123456');
+        printTo(pn,'[22][ssh] host: localhost  login: vloon  password: <span style="color:var(--accent)">vloonCTF</span>');
+        printTo(pn,'1 of 1 target completed, 2 valid passwords found');
+        break;
+
+      case 'msfconsole':
+        printTo(pn,'<span style="color:#FF5F56">');
+        printTo(pn,'  ________________________________________________');
+        printTo(pn,' /                                                \\');
+        printTo(pn,'|    METASPLOIT 6.3  (simulated edition)            |');
+        printTo(pn,' \\__________________  ____________________________/');
+        printTo(pn,'                    \\/');
+        printTo(pn,'</span>');
+        printTo(pn,'       =[ metasploit v6.3.4-dev                   ]');
+        printTo(pn,'+ -- --=[ 2345 exploits - 1234 auxiliary - 456 post');
+        printTo(pn,'+ -- --=[ 1387 payloads - 45 encoders - 11 nops');
+        printTo(pn,'');
+        printTo(pn,'msf6 > <span style="color:var(--text-dim)">search flag</span>');
+        printTo(pn,'Matching Modules:');
+        printTo(pn,'  exploit/ctf/vloon/flag_finder');
+        printTo(pn,'msf6 > <span style="color:var(--text-dim)">use exploit/ctf/vloon/flag_finder</span>');
+        printTo(pn,'msf6 exploit(flag_finder) > <span style="color:var(--text-dim)">run</span>');
+        printTo(pn,'[*] Searching filesystem for flags...');
+        printTo(pn,'[*] Found '+foundFlags.length+' flags so far. Keep exploring!');
+        printTo(pn,'');
+        break;
+
+      case 'aircrack-ng':
+        printTo(pn,'Opening '+esc(args[0]||'capture.cap'));
+        printTo(pn,'Read 1429 packets.');
+        printTo(pn,'   #  BSSID              ESSID                     Encryption');
+        printTo(pn,'   1  00:11:22:33:44:55  vLoonWiFi              WPA2 (1 handshake)');
+        printTo(pn,'   2  AA:BB:CC:DD:EE:FF  CTF_Challenge          WPA2');
+        printTo(pn,'');
+        printTo(pn,'Quitting aircrack-ng. (no real cracking here!)');
+        break;
+
+      case 'steghide':
+        printTo(pn,'steghide: simulated steganography tool');
+        if(args.indexOf('extract')!==-1&&args.indexOf('-sf')!==-1){
+          var sfIdx=args.indexOf('-sf');
+          printTo(pn,'Extracting from '+esc(args[sfIdx+1]||'file')+'...');
+          printTo(pn,'No embedded data found in this file.');
+          printTo(pn,'Try: <span style="color:var(--accent)">strings</span> instead!');
+        }else{printTo(pn,'Usage: steghide extract -sf <file>');}
+        break;
+
+      case 'binwalk':
+        if(!args[0]){printTo(pn,'binwalk: missing file operand','error');break;}
+        resolved=resolvePath(args[0],pn);node=getNode(resolved);
+        if(!node){printTo(pn,'binwalk: '+esc(args[0])+': No such file','error');break;}
+        printTo(pn,'DECIMAL       HEXADECIMAL     DESCRIPTION');
+        printTo(pn,'---------------------------------------------------');
+        if(args[0].indexOf('hidden.png')!==-1||resolved.join('/').indexOf('challenge4')!==-1){
+          printTo(pn,'0             0x0             PNG image, 1 x 1, 8-bit grayscale');
+          printTo(pn,'68            0x44            Zlib compressed data');
+          printTo(pn,'240           0xF0            PNG image data (IEND chunk)');
+          printTo(pn,'252           0xFC            <span style="color:var(--accent)">Raw ASCII text (possible hidden data!)</span>');
+        }else{
+          printTo(pn,'0             0x0             Data');
+          if(resolved.join('/').indexOf('challenge3')!==-1||args[0].indexOf('mystery')!==-1){
+            printTo(pn,'64            0x40            ELF binary header');
+            printTo(pn,'128           0x80            <span style="color:var(--accent)">ASCII text embedded</span>');
+          }
+        }
+        break;
+
+      // ── SYSTEM COMMANDS ──
+      case 'ps':
+        printTo(pn,'USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND');
+        printTo(pn,'root         1  0.0  0.1  10240  4096 ?        Ss   Jun27   0:01 /sbin/init');
+        printTo(pn,'root       123  0.0  0.2  15360  8192 ?        Ss   Jun27   0:00 /usr/sbin/sshd');
+        printTo(pn,'root       456  0.0  0.3  20480 12288 ?        Ss   Jun27   0:02 nginx: master');
+        printTo(pn,'root       789  0.0  0.1  11264  4096 ?        Ss   Jun27   0:00 <span style="color:#FF5F56">/usr/bin/backdoor</span>');
+        printTo(pn,'mysql      234  0.1  1.2 102400 49152 ?        Ssl  Jun27   0:45 /usr/sbin/mysqld');
+        printTo(pn,'www-data   345  0.0  0.2  16384  8192 ?        S    Jun27   0:01 nginx: worker');
+        printTo(pn,'vloon      567  0.0  0.1   9216  4096 pts/0    Ss   '+new Date().toTimeString().slice(0,8)+'   0:00 -bash');
+        break;
+
+      case 'kill':
+        var kpid=parseInt(args[0]);
+        if(!kpid){printTo(pn,'kill: invalid pid','error');break;}
+        printTo(pn,'kill -TERM '+kpid);
+        printTo(pn,'Process '+kpid+' terminated. (simulated)');
+        break;
+
+      case 'env':
+        printTo(pn,'SHELL=/bin/bash');
+        printTo(pn,'PWD=/'+pn.cwd.join('/'));
+        printTo(pn,'HOME=/home/vloon');
+        printTo(pn,'USER=vloon');
+        printTo(pn,'HOSTNAME=portfolio');
+        printTo(pn,'CTF_HINT=check_the_root_directory');
+        printTo(pn,'TERM=xterm-256color');
+        printTo(pn,'LANG=en_US.UTF-8');
+        break;
+
+      case 'export':
+        printTo(pn,'export: variable set (simulated). Use <span style="color:var(--accent)">env</span> to view.');
+        break;
+
+      case 'alias':
+        printTo(pn,'alias ll=\'ls -la\'');
+        printTo(pn,'alias la=\'ls -a\'');
+        printTo(pn,'alias ctf=\'cd /opt/ctf\'');
+        break;
+
+      case 'which':
+        var wc=args[0]||'';
+        var known=['ls','cd','cat','grep','curl','nmap','ssh','nc','nano','echo','touch','mkdir','rm','cp','mv','ping','head','tail','wc','sort','strings','base64','rot13','xxd','find','file','diff','chmod','tree','whoami','hostname','date','uname','ps','kill','ifconfig','netstat','dig','wget','john','hydra','msfconsole','binwalk','neofetch','clear','exit','history','sudo','tmux','ctf-hints','ctf-status','help','man','alias','which','env','export','source','crontab','ssh-keygen','steghide','aircrack-ng'];
+        if(known.indexOf(wc)!==-1) printTo(pn,'/usr/bin/'+esc(wc));
+        else printTo(pn,esc(wc)+' not found');
+        break;
+
+      case 'crontab':
+        printTo(pn,'# m h  dom mon dow   command');
+        printTo(pn,'*/1 * * * * root echo "tick: $(date)" >> /tmp/cron_output.txt');
+        printTo(pn,'0 3 * * * root /usr/sbin/logrotate /etc/logrotate.conf');
+        printTo(pn,'@reboot root /usr/bin/backdoor --start');
+        break;
+
+      case 'ssh-keygen':
+        printTo(pn,'Generating public/private rsa key pair.');
+        printTo(pn,'Enter file in which to save the key (/home/vloon/.ssh/id_rsa):');
+        printTo(pn,'Enter passphrase (empty for no passphrase):');
+        printTo(pn,'Your identification has been saved.');
+        printTo(pn,'Your public key has been saved.');
+        printTo(pn,'The key fingerprint is: SHA256:vL00nC7Fk3yG3n3r4t0r');
+        printTo(pn,'(Simulated — no real key generated)');
+        break;
+
+      case 'source':
+        printTo(pn,'source: '+esc(argStr)+' sourced (simulated)');
+        break;
+
+      // ── TMUX / SPLIT ──
+      case 'tmux':
+        if(args[0]==='kill'||args[0]==='close'){
+          if(panes.length>1) removePane(activePane);
+        }else{
+          if(panes.length>=2){printTo(pn,'tmux: already split. Use <span style="color:var(--accent)">tmux kill</span> to close current pane.','info');break;}
+          addPane();
+        }
+        break;
+
+      // ── CTF META COMMANDS ──
+      case 'ctf-hints':
+        printTo(pn,'<span style="color:var(--accent)">vLoon CTF Arena — 7 Challenges</span>','ctf');
+        printTo(pn,'All flags: vloonCTF{...}  |  Challenges: /opt/ctf/challenge1-6  |  Projects: /projects/');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 1</span> — Transformation (Crypto, 50pts)');
+        printTo(pn,'  Hint: Check /ctf/challenge1/enc.txt');
+        printTo(pn,'  Tool: rot13');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 2</span> — Cookie Monster (Web, 75pts)');
+        printTo(pn,'  Hint: curl -v ctf.local:8080/admin');
+        printTo(pn,'  Tool: base64 -d');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 3</span> — Strings It (Forensics, 100pts)');
+        printTo(pn,'  Hint: /ctf/challenge3/mystery.bin');
+        printTo(pn,'  Tool: strings | grep vloonCTF');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 4</span> — What Lies Beneath (Forensics, 125pts)');
+        printTo(pn,'  Hint: /ctf/challenge4/hidden.png');
+        printTo(pn,'  Tool: binwalk or strings');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 5</span> — Based (Crypto, 150pts)');
+        printTo(pn,'  Hint: /ctf/challenge5/layered.txt');
+        printTo(pn,'  Tool: base64 -d (twice!)');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Challenge 6</span> — First Grep (General, 200pts)');
+        printTo(pn,'  Hint: /ctf/challenge6/files/ has 100 files');
+        printTo(pn,'  Tool: grep -r vloonCTF /ctf/challenge6/files/');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:#FFBD2E">BONUS</span> — The Final Flag (300pts)');
+        printTo(pn,'  Hint: Where does only root go? Does this sandbox actually enforce permissions?');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:#FFBD2E">Challenge 7</span> — Source Code Leak (General, 175pts)');
+        printTo(pn,'  Hint: Check /projects/morefirework/ for something hidden');
+        printTo(pn,'  Tool: grep -r vloonCTF /projects/');
+        break;
+
+      case 'ctf-status':
+        printTo(pn,'<span style="color:var(--accent)">CTF Progress: '+foundFlags.length+'/8 flags found</span>','ctf');
+        printTo(pn,'');
+        for(var fkey in FLAGS){
+          var found=false;
+          for(var ff=0;ff<foundFlags.length;ff++){if(foundFlags[ff]===fkey){found=true;break;}}
+          printTo(pn,(found?'<span style="color:#4ADE80">✓</span>':'<span style="color:#FF5F56">✗</span>')+' '+FLAGS[fkey]+(found?'':' <span style="color:#555">not yet found</span>'));
+        }
+        break;
+
+      case 'man':
+        var manPages={
+          'ls':'ls - list directory contents\n\nOptions:\n  -l    long format\n  -a    show hidden files\n  -la   both',
+          'cd':'cd - change working directory\n\ncd [dir]\n  dir defaults to ~ (home), .. goes up',
+          'cat':'cat - concatenate files and print',
+          'grep':'grep - print lines matching a pattern\n\nOptions:\n  -i    ignore case\n  -r    recursive\n  -v    invert match',
+          'strings':'strings - print sequences of printable characters\n\nUseful for finding text in binary files.',
+          'rot13':'rot13 - ROT13 cipher decoder\n\nApplies Caesar cipher with shift of 13.',
+          'base64':'base64 - encode/decode base64\n\n  -d    decode',
+          'ctf-hints':'ctf-hints - display hints for CTF challenges',
+          'nmap':'nmap - Network exploration tool and port scanner',
+          'curl':'curl - transfer a URL\n\n  -v    verbose output'
+        };
+        var mc=args[0];
+        if(manPages[mc]) printTo(pn,manPages[mc]);
+        else printTo(pn,'No manual entry for '+esc(mc||'')+'\nAvailable: ls, cd, cat, grep, strings, rot13, base64, ctf-hints, nmap, curl','info');
+        break;
+
+      case 'help':
+        printTo(pn,'<span style="color:var(--accent)">vLoonOS Kali Terminal</span> — '+Object.keys(commands).length+' commands available','info');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Navigation:</span>  ls, cd, pwd, tree, find');
+        printTo(pn,'<span style="color:var(--accent)">Files:</span>       cat, echo, touch, mkdir, rm, cp, mv, nano, head, tail, wc, sort, diff, chmod');
+        printTo(pn,'<span style="color:var(--accent)">Processing:</span>  grep, strings, base64, rot13, xxd, file');
+        printTo(pn,'<span style="color:var(--accent)">Network:</span>     curl, wget, ping, nmap, netstat, ssh, nc, dig, ifconfig');
+        printTo(pn,'<span style="color:var(--accent)">Kali Tools:</span>  john, hydra, msfconsole, binwalk, steghide, aircrack-ng');
+        printTo(pn,'<span style="color:var(--accent)">System:</span>      ps, kill, env, export, alias, which, crontab, ssh-keygen');
+        printTo(pn,'<span style="color:var(--accent)">Meta:</span>        neofetch, history, sudo, clear, tmux, man, help');
+        printTo(pn,'<span style="color:var(--accent)">CTF:</span>         ctf-hints, ctf-status');
+        printTo(pn,'');
+        printTo(pn,'<span style="color:var(--accent)">Operators:</span>   ;  (chain)  &&  (and)  >  (redirect)  >>  (append)');
+        printTo(pn,'');
+        printTo(pn,'Try: <span style="color:var(--accent)">ctf-hints</span> to start the challenges!','ctf');
+        break;
+
+      default:
+        // Try running executable with ./
+        if(cmd.slice(0,2)==='./'){
+          var exeName=cmd.slice(2);
+          resolved=resolvePath(exeName,pn);node=getNode(resolved);
+          if(node&&node.type==='file'&&node.executable){
+            var elines=node.content.split('\n');
+            for(var eli=0;eli<elines.length;eli++) printTo(pn,esc(elines[eli]));
+            break;
+          }
+        }
+        printTo(pn,'command not found: '+esc(cmd),'error');
+        printTo(pn,'Type <span style="color:var(--accent)">help</span> to see available commands.','info');
+    }
+  }
+
+  // Track flags in output
+  var origPrint=printTo;
+  printTo=function(pn,text,cls){
+    if(typeof text==='string'){
+      var flagMatch=text.match(/vloonCTF\{[^}]+\}/);
+      if(flagMatch&&foundFlags.indexOf(flagMatch[0])===-1){
+        foundFlags.push(flagMatch[0]);
+      }
+    }
+    origPrint(pn,text,cls);
+  };
+
+  var commands={
+    ls:1,cd:1,pwd:1,cat:1,echo:1,touch:1,mkdir:1,rm:1,cp:1,mv:1,nano:1,
+    ping:1,whoami:1,hostname:1,uname:1,neofetch:1,date:1,history:1,sudo:1,
+    clear:1,tree:1,exit:1,man:1,help:1,
+    grep:1,find:1,head:1,tail:1,wc:1,sort:1,strings:1,base64:1,rot13:1,xxd:1,file:1,diff:1,chmod:1,
+    curl:1,wget:1,ifconfig:1,netstat:1,ssh:1,nmap:1,nc:1,dig:1,
+    john:1,hydra:1,msfconsole:1,aircrackng:1,steghide:1,binwalk:1,
+    ps:1,kill:1,env:1,'export':1,alias:1,which:1,crontab:1,'ssh-keygen':1,source:1,
+    tmux:1,'ctf-hints':1,'ctf-status':1
+  };
+
+  // ── PANE BINDING ──
+  function bindPane(pn){
+    pn.input.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
+        if(pn.nanoEl.classList.contains('active')) return;
+        var val=pn.input.value.trim();
+        if(!val) return;
+        // Echo command
+        var echoLine=document.createElement('div');
+        echoLine.className='term-line cmd';
+        echoLine.innerHTML='<span class="tprompt">'+esc(pn.promptEl.textContent)+'</span>'+esc(val);
+        pn.output.appendChild(echoLine);
+        pn.output.scrollTop=pn.output.scrollHeight;
+
+        pn.history.push(val);pn.historyIdx=pn.history.length;
+
+        // Check for flags in output
+        function checkFlag(s){
+          var m=s.match(/vloonCTF\{[^}]+\}/);
+          if(m&&foundFlags.indexOf(m[0])===-1){foundFlags.push(m[0]);}
+        }
+
+        // Parse operators: ; && > >> <
+        var segments=val.split(/(?<!\\);/).map(function(s){return s.trim();});
+        for(var seg=0;seg<segments.length;seg++){
+          var segVal=segments[seg];
+          // Handle &&
+          var andParts=segVal.split('&&').map(function(s){return s.trim();});
+          for(var ap=0;ap<andParts.length;ap++){
+            var partVal=andParts[ap];
+            // Parse redirect: > file or >> file
+            var redirectFile=null,redirectAppend=false;
+            var gtIdx=partVal.lastIndexOf('>>');
+            if(gtIdx===-1){gtIdx=partVal.lastIndexOf('>');if(gtIdx!==-1) redirectAppend=false;}
+            else{redirectAppend=true;}
+            if(gtIdx!==-1){
+              redirectFile=partVal.slice(gtIdx+(redirectAppend?2:1)).trim();
+              partVal=partVal.slice(0,gtIdx).trim();
+            }
+            // Parse stdin: < file
+            var stdinFile=null;
+            var ltIdx=partVal.indexOf('<');
+            if(ltIdx!==-1){
+              stdinFile=partVal.slice(ltIdx+1).trim();
+              partVal=partVal.slice(0,ltIdx).trim();
+            }
+
+            if(!partVal) continue;
+
+            var spaceIdx=partVal.indexOf(' ');
+            var cmd,argStr;
+            if(spaceIdx===-1){cmd=partVal;argStr='';}
+            else{cmd=partVal.slice(0,spaceIdx);argStr=partVal.slice(spaceIdx+1);}
+            cmd=cmd.toLowerCase();
+            var args=argStr.split(/\s+/).filter(Boolean);
+
+            if(stdinFile){
+              // For commands that support stdin: cat the file and prepend to args
+              var sRes=resolvePath(stdinFile,pn);
+              var sNode=getNode(sRes);
+              if(sNode&&sNode.type==='file') args.push(sNode.content);
+            }
+
+            if(redirectFile){
+              // Capture output: override print temporarily
+              var captured=[];
+              var origPrintTo=printTo;
+              printTo=function(pnn,text,cls){
+                if(pnn===pn){
+                  captured.push({text:text,cls:cls||''});
+                  checkFlag(text);
+                  // Still show in terminal
+                  origPrintTo(pnn,text,cls);
+                }else{origPrintTo(pnn,text,cls);}
+              };
+              dispatch(cmd,args,argStr,pn);
+              printTo=origPrintTo;
+              // Write captured to file
+              var rRes=resolvePath(redirectFile,pn);
+              var rParent=getDir(getParent(rRes));
+              var rName=rRes[rRes.length-1];
+              if(rParent){
+                var content=captured.map(function(c){return c.text.replace(/<[^>]*>/g,'');}).join('\n');
+                if(redirectAppend&&rParent.children[rName]){
+                  rParent.children[rName].content+='\n'+content;
+                }else{
+                  rParent.children[rName]={type:'file',content:content};
+                }
+              }
+            }else{
+              dispatch(cmd,args,argStr,pn);
+            }
+          }
+        }
+        pn.input.value='';
+      }else if(e.key==='ArrowUp'){
+        e.preventDefault();
+        if(pn.historyIdx>0){pn.historyIdx--;pn.input.value=pn.history[pn.historyIdx];}
+      }else if(e.key==='ArrowDown'){
+        e.preventDefault();
+        if(pn.historyIdx<pn.history.length-1){pn.historyIdx++;pn.input.value=pn.history[pn.historyIdx];}
+        else{pn.historyIdx=pn.history.length;pn.input.value='';}
+      }else if(e.key==='Tab'){
+        e.preventDefault();
+        var val=pn.input.value;
+        var lastSpace=val.lastIndexOf(' ');
+        var partial=lastSpace===-1?val:val.slice(lastSpace+1);
+        var dir=getDir(pn.cwd);
+        if(!dir) return;
+        var matches=Object.keys(dir.children).filter(function(k){return k.indexOf(partial)===0;});
+        if(matches.length===1){
+          var replacement=matches[0];
+          if(dir.children[matches[0]].type==='dir') replacement+='/';
+          if(lastSpace===-1) pn.input.value=replacement;
+          else pn.input.value=val.slice(0,lastSpace+1)+replacement;
+        }else if(matches.length>1){
+          printTo(pn,'');
+          for(var mi=0;mi<matches.length;mi++){
+            var m=matches[mi];
+            var cls=dir.children[m].type==='dir'?'dir':(dir.children[m].executable?'exec':'');
+            printTo(pn,m+(dir.children[m].type==='dir'?'/':''),cls);
+          }
+        }
+      }else if(e.key==='Escape'){
+        pn.input.value='';
+        pn.input.blur();
+      }
     });
+
+    // Nano keyboard shortcuts
+    pn.nanoTextarea.addEventListener('keydown',function(e){
+      if(e.ctrlKey&&(e.key==='o'||e.key==='O')){
+        e.preventDefault();
+        if(!pn.nanoFile) return;
+        var content=pn.nanoTextarea.value;
+        var parDir=getDir(getParent(pn.nanoFile.path));
+        if(parDir){
+          if(!pn.nanoFile.node) pn.nanoFile.node={type:'file'};
+          pn.nanoFile.node.content=content;
+          parDir.children[pn.nanoFile.fname]=pn.nanoFile.node;
+        }
+        pn.updateNanoStatus();
+        pn.nanoStatus.textContent='[ Wrote '+content.split('\n').length+' lines ]';
+      }else if(e.ctrlKey&&(e.key==='x'||e.key==='X')){
+        e.preventDefault();
+        // Auto-save
+        if(pn.nanoFile){
+          var c2=pn.nanoTextarea.value;
+          var pd=getDir(getParent(pn.nanoFile.path));
+          if(pd){if(!pn.nanoFile.node) pn.nanoFile.node={type:'file'};pn.nanoFile.node.content=c2;pd.children[pn.nanoFile.fname]=pn.nanoFile.node;}
+        }
+        pn.nanoEl.classList.remove('active');
+        pn.output.style.display='';
+        pn.nanoTextarea.value='';
+        pn.nanoFile=null;
+        pn.input.focus();
+      }else if(e.ctrlKey&&(e.key==='k'||e.key==='K')){
+        e.preventDefault();
+        var ta=pn.nanoTextarea;
+        var start=ta.selectionStart,end=ta.selectionEnd;
+        var val=ta.value;
+        var ls=val.lastIndexOf('\n',start-1)+1;
+        var le=val.indexOf('\n',end);
+        if(le===-1) le=val.length;
+        pn.nanoClipboard=val.slice(ls,le);
+        ta.value=val.slice(0,ls)+val.slice(le+1);
+        ta.selectionStart=ta.selectionEnd=Math.min(ls,ta.value.length);
+        pn.updateNanoStatus();
+      }else if(e.ctrlKey&&(e.key==='u'||e.key==='U')){
+        e.preventDefault();
+        if(!pn.nanoClipboard) return;
+        var ta2=pn.nanoTextarea;
+        var pos=ta2.selectionStart;
+        var pre=ta2.value.slice(0,pos);
+        var post=ta2.value.slice(pos);
+        var ins=(pre.length>0&&pre[pre.length-1]!=='\n'?'\n':'')+pn.nanoClipboard;
+        ta2.value=pre+ins+post;
+        ta2.selectionStart=ta2.selectionEnd=pos+ins.length;
+        pn.updateNanoStatus();
+      }
+    });
+    pn.nanoTextarea.addEventListener('input',function(){pn.updateNanoStatus();});
+  }
+
+  // Bind pane 0
+  bindPane(panes[0]);
+  renderPrompt(panes[0]);
+
+  // ── PANE CLICK TO FOCUS ──
+  panesEl.addEventListener('click',function(e){
+    var paneEl=e.target.closest('.term-pane');
+    if(!paneEl) return;
+    var idx=parseInt(paneEl.getAttribute('data-pane'));
+    if(idx===activePane) return;
+    panes[activePane].el.classList.remove('active');
+    activePane=idx;
+    panes[activePane].el.classList.add('active');
+    panes[activePane].input.focus();
   });
 
-  // Keep arrow visible on last-hovered card even when mouse leaves
-  document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {});
-
-  // Update arrow on window resize
-  window.addEventListener('resize', () => {
-    if (activeIdx === -1) return;
-    const card = pCards[activeIdx];
-    const wrapper = card.closest('.projects-wrapper');
-    const wr = wrapper.getBoundingClientRect();
-    const cr = card.getBoundingClientRect();
-    arrow.style.top = (cr.top - wr.top + cr.height/2 - 15) + 'px';
+  // ── SPLIT BUTTON ──
+  termSplitBtn.addEventListener('click',function(){
+    if(panes.length>=2) removePane(activePane);
+    else addPane();
   });
+
+  // ── CHIP CLICKS ──
+  termChips.addEventListener('click',function(e){
+    var chip=e.target.closest('.term-chip');
+    if(!chip) return;
+    var cmd=chip.getAttribute('data-cmd');
+    var pn=getPane();
+    pn.input.value=cmd;
+    pn.input.focus();
+    pn.input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter'}));
+    pn.input.value='';
+  });
+
+  // ── INIT ──
+  printTo(panes[0],'Welcome to <span style="color:var(--accent)">vLoonOS Kali</span> — a real CTF playground!','info');
+  printTo(panes[0],'Type <span style="color:var(--accent)">ctf-hints</span> to see 6 picoCTF-style challenges.','ctf');
+  printTo(panes[0],'Type <span style="color:var(--accent)">tmux</span> to split the terminal into two panes.','info');
+  printTo(panes[0],'Type <span style="color:var(--accent)">help</span> for '+Object.keys(commands).length+' available commands.','info');
+  printTo(panes[0],'');
+
+  })();
 </script>
 </body>
 </html>

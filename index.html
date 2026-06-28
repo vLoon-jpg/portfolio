@@ -700,7 +700,7 @@
   // /home/vloon (existing content + new hidden files)
   var home=D('home/vloon');
   var hC=home.children;
-  hC['.bash_history']=f('.bash_history','ls -la\ncd projects\ncat about.md\nneofetch\nping 8.8.8.8\necho "flag{not_so_hidden_after_all}"\nnmap localhost\ncurl ctf.local:8080/admin\ncd /ctf\nls challenge*\ncat challenge1/README.txt\nwhoami\nsudo rm -rf /\nman grep\nstrings /opt/ctf/challenge3/mystery.bin\ncd /root\ncat the-final-flag.txt\n');
+  hC['.bash_history']=f('.bash_history','ls -la\ncd projects\ncat about.md\nneofetch\nping 8.8.8.8\necho "flag{not_so_hidden_after_all}"\nnmap localhost\ncurl ctf.local:8080/admin\ncd /opt/ctf\nls challenge*\ncat challenge1/README.txt\ncd /projects\nls\ngrep -r vloonCTF .\ncd /root\ncat the-final-flag.txt\n');
   hC['ctf-welcome.txt']=f('ctf-welcome.txt','Welcome to the vLoon CTF Arena!\n================================\n\nThere are 7 hidden flags throughout this system.\nAll flags use the format: vloonCTF{...}\n\nChallenges are in /opt/ctf/challenge1 through /opt/ctf/challenge6\nReal project source code is in /projects/\nType "ctf-hints" for help getting started.\nType "ctf-status" to track your progress.\n\nGood luck, hacker!\n');
   D('home/vloon/.ssh');
   hC['.ssh'].children['id_rsa']=f('id_rsa','-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA...this is just for show...\n-----END RSA PRIVATE KEY-----');
@@ -1059,7 +1059,7 @@
           '  ██░░░░░░░░░░░░░░░░░░░░██   Terminal: vLoon WebTTY',
           '  ██░░░░░░░░████░░░░░░░░██   WM: tmux (split support)',
           '    ██░░░░░░████░░░░░░██     Uptime: since i started coding',
-          '    ██░░░░░░░░░░░░░░░░██     Packages: 42 (apt), 7 (pip), 6 (ctf)',
+          '    ██░░░░░░░░░░░░░░░░██     Packages: 42 (apt), 7 (pip), 7 (ctf)',
           '      ██░░░░░░░░░░░░██       CPU: Intel i7-13700K @ 5.4GHz',
           '        ████████████         GPU: NVIDIA RTX 4070 Ti',
           '                             Memory: 32GB DDR5 | Score: '+foundFlags.length+'/8 flags'];

@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Levy (vLoon) — Student, modder, tinkerer. Minecraft modding, game dev, automation. Based in Amlapura, Bali.">
+  <meta property="og:title" content="vLoon — Levy | Portfolio">
+  <meta property="og:description" content="Student, modder, tinkerer. Minecraft mods, game dev, and automation tools. From Amlapura, Bali.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://avatars.githubusercontent.com/vLoon-jpg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="vLoon — Levy | Portfolio">
+  <meta name="twitter:description" content="Student, modder, tinkerer. Minecraft mods, game dev, and automation tools.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='20' font-weight='900' fill='%23FF6B01' font-family='system-ui,sans-serif'%3EL%3C/text%3E%3C/svg%3E">
   <title>vLoon — Levy | Portfolio</title>
   <script type="module">
     import { animate, stagger, splitText } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
@@ -67,8 +76,8 @@
     .nav-links a:hover::after{transform:scaleX(1)}
     .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
     .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
-    .nav-overlay{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg-alt);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s;transform:translateX(100%)}
-    .nav-overlay.open{display:flex;transform:translateX(0)}
+    .nav-overlay{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg-alt);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s ease;transform:translateX(100%);pointer-events:none}
+    .nav-overlay.open{transform:translateX(0);pointer-events:auto}
     .nav-overlay a{font-size:1.5rem;font-weight:600;color:var(--text)}
 
     /* HERO — our glow + Agnes typography */
@@ -186,7 +195,7 @@
   <div class="container">
     <div class="hero-badge"><span class="dot"></span> Currently modding Minecraft</div>
     <h1 class="hero-name">Levy <span>(vLoon)</span></h1>
-    <p class="hero-sub">Kelas XI &middot; SMA Negeri 2 Amlapura, Bali</p>
+    <p class="hero-sub">Kelas XII &middot; SMA Negeri 2 Amlapura, Bali</p>
     <p class="hero-motto" id="heroMotto"></p>
     <div class="hero-buttons">
       <a href="#projects" class="btn">See my work &rarr;</a>
@@ -203,15 +212,14 @@
     <div class="about-grid">
       <div class="about-text">
         <p>
-          I'm Levy — known online as <strong style="color:#fff">vLoon</strong>. I'm in my eleventh year at
+          I'm Levy — known online as <strong style="color:#fff">vLoon</strong>. I'm in my twelfth year at
           <strong style="color:#fff">SMANDA</strong> (SMA Negeri 2 Amlapura) in Bali, Indonesia.
           I've been obsessed with how software works from the inside out: modding games,
           scripting automation, building tools, and occasionally writing things that look
-          slightly dangerous (for educational purposes, of course).
+          slightly dangerous (for educational purposes, of course 😼).
         </p>
         <p>
-          My mantra is simple — if I don't know how something works, I take it apart.
-          If it breaks, I learn. Then I build something better.
+          I always say, if it works it works
         </p>
       </div>
       <div class="quick-facts">
@@ -219,7 +227,7 @@
         <ul>
           <li><span>&raquo;</span> <span>Location: Amlapura, Bali, Indonesia</span></li>
           <li><span>&raquo;</span> <span>Languages: Indonesian, English</span></li>
-          <li><span>&raquo;</span> <span>Currently: Kelas XI, SMANDA</span></li>
+          <li><span>&raquo;</span> <span>Currently: Kelas XII, SMANDA</span></li>
           <li><span>&raquo;</span> <span>Vibe: Modder, tinkerer, automation gremlin</span></li>
         </ul>
       </div>
@@ -430,15 +438,21 @@
       });
     }
 
-    // Typewriter motto
+    // Rotating typewriter motto
     const motto = document.getElementById('heroMotto');
     if (motto) {
-      const text = '\u201CI break things, then build cooler things\u201D';
-      let i = 0;
-      const type = () => {
-        if (i < text.length) { motto.textContent += text[i]; i++; setTimeout(type, 60); }
-        else { motto.style.borderRight = 'none'; }
-      };
+      // ───── EDIT THESE ─────
+      const phrases = [
+        'If it works, it works',
+        'Always do git commit',
+        "It's always me against the world",
+      ];
+      // ───────────────────────
+
+      let phraseIdx = 0;
+      let charIdx = 0;
+      let state = 'typing'; // 'typing' | 'pause' | 'deleting'
+
       motto.style.borderRight = '2px solid var(--accent)';
       motto.style.color = 'var(--accent)';
       motto.style.fontWeight = '600';
@@ -446,7 +460,37 @@
       motto.style.fontStyle = 'italic';
       motto.style.marginBottom = '32px';
       motto.style.display = 'inline-block';
-      setTimeout(type, 1200);
+
+      const tick = () => {
+        const phrase = phrases[phraseIdx];
+
+        if (state === 'typing') {
+          if (charIdx < phrase.length) {
+            motto.textContent += phrase[charIdx];
+            charIdx++;
+            setTimeout(tick, 60);
+          } else {
+            state = 'pause';
+            setTimeout(tick, 2000); // pause before deleting
+          }
+        } else if (state === 'pause') {
+          state = 'deleting';
+          setTimeout(tick, 0);
+        } else if (state === 'deleting') {
+          if (charIdx > 0) {
+            charIdx--;
+            motto.textContent = phrase.slice(0, charIdx);
+            setTimeout(tick, 30); // delete faster than typing
+          } else {
+            phraseIdx = (phraseIdx + 1) % phrases.length;
+            charIdx = 0;
+            state = 'typing';
+            setTimeout(tick, 800); // pause before next phrase
+          }
+        }
+      };
+
+      setTimeout(tick, 1200);
     }
 
     // Rest
@@ -459,7 +503,7 @@
       delay: anime.stagger(100, { start: 600 }),
       easing: 'cubicBezier(.4, 0, .2, 1)',
     });
-  }
+  });
 
   // Terminal cursor arrow for projects
   const arrow = document.getElementById('selectArrow');
@@ -477,11 +521,8 @@
     });
   });
 
-  // Hide arrow when no card is hovered
-  document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {
-    activeIdx = -1;
-    arrow.classList.remove('active');
-  });
+  // Keep arrow visible on last-hovered card even when mouse leaves
+  document.querySelector('.projects-wrapper').addEventListener('mouseleave', () => {});
 
   // Update arrow on window resize
   window.addEventListener('resize', () => {

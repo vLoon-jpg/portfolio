@@ -1,0 +1,87 @@
+{
+  "exclude_dirs": [
+    ".git",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    ".agents",
+    ".claude",
+    ".ruff_cache",
+    ".github",
+    "Testing",
+    ".hermes",
+    "pipecat-outbound-wa"
+  ],
+  "projects": {
+    "morefirework": {
+      "title": "More Firework",
+      "emoji": "\ud83e\ude84",
+      "url": "https://github.com/vLoon-jpg/morefirework",
+      "tags": ["Java", "Fabric", "Minecraft", "Game Mod"],
+      "description": "A Minecraft Fabric mod that turns fireworks into a deep combat system with ore-ingot rockets, elemental effects, and devastating combos."
+    },
+    "RimWorldDownloader": {
+      "title": "RimWorld Downloader",
+      "emoji": "\ud83d\udd2e",
+      "url": "https://github.com/vLoon-jpg/RimWorldDownloader",
+      "tags": ["Python", "Steam", "Game Mods", "CLI"],
+      "description": "Download RimWorld mods directly from Steam Workshop servers without requiring a local Steam client or authentication."
+    },
+    "edu-virus": {
+      "title": "Edu-Virus",
+      "emoji": "\ud83e\udda0",
+      "url": "https://github.com/vLoon-jpg/edu-virus",
+      "tags": ["Python", "Security", "C2", "Educational"],
+      "description": "Educational malware/C2 system demo for classroom assignments. Demonstrates trojan architecture with pastebin-based command & control."
+    },
+    "ai-education-pptx": {
+      "title": "AI Education PPTX",
+      "emoji": "\ud83e\udd16",
+      "url": "https://github.com/vLoon-jpg/ai-education-pptx",
+      "tags": ["Python", "PowerPoint", "Automation"],
+      "description": "Automated PowerPoint presentation builder exploring how AI is changing high school education. Generates polished, designed slides from Python."
+    },
+    "biology-pptx": {
+      "title": "Biology PPTX",
+      "emoji": "\ud83c\udf31",
+      "url": "https://github.com/vLoon-jpg/biology-pptx",
+      "tags": ["Python", "PowerPoint", "Automation"],
+      "description": "A beautifully designed PowerPoint presentation on photosynthesis, generated entirely from Python code with a green nature palette."
+    },
+    "english-slang-pptx": {
+      "title": "English Slang PPTX",
+      "emoji": "\ud83d\udcd6",
+      "url": "https://github.com/vLoon-jpg/english-slang-pptx",
+      "tags": ["JavaScript", "PowerPoint", "Automation"],
+      "description": "JavaScript-powered slide deck on the evolution of English slang in the digital age. Explores how internet culture reshapes language."
+    },
+    "epic-claimer": {
+      "title": "Epic Games Claimer",
+      "emoji": "\ud83c\udf81",
+      "url": "https://github.com/vLoon-jpg/epic-claimer",
+      "tags": ["Python", "Playwright", "Automation", "Discord"],
+      "description": "An autonomous Python script that checks for free weekly promotions on the Epic Games Store, claims them automatically, and sends Discord notifications."
+    },
+    "hermes-mcp-whatsapp": {
+      "title": "Hermes MCP WhatsApp",
+      "emoji": "\ud83d\udcf1",
+      "url": "https://github.com/vLoon-jpg/hermes-mcp-whatsapp",
+      "tags": ["Python", "MCP", "WhatsApp", "Pipecat"],
+      "description": "MCP server that lets AI assistants initiate outbound WhatsApp voice calls through a Pipecat bot. Bridge between LLMs and phone calls."
+    },
+    "counting-sort": {
+      "title": "Counting Sort",
+      "emoji": "\ud83d\udd22",
+      "url": "https://github.com/vLoon-jpg/counting-sort",
+      "tags": ["C++", "Python", "Algorithms"],
+      "description": "Counting sort algorithm implementations in C++ and Python — a linear time sorting algorithm for competitive programming."
+    },
+    "vLoon-jpg": {
+      "title": "vLoon GitHub Profile",
+      "emoji": "\ud83d\ude80",
+      "url": "https://github.com/vLoon-jpg",
+      "tags": ["Profile", "Documentation"],
+      "description": "My GitHub profile README — a summary of who I am, what I build, and where to find me. Student, modder, automation enthusiast."
+    }
+  }
+}

@@ -82,6 +82,62 @@
       "url": "https://github.com/vLoon-jpg",
       "tags": ["Profile", "Documentation"],
       "description": "My GitHub profile README — a summary of who I am, what I build, and where to find me. Student, modder, automation enthusiast."
+    },
+    "minesweeper-react": {
+      "title": "Minesweeper",
+      "emoji": "\ud83d\udca3",
+      "url": "https://github.com/vLoon-jpg/minesweeper-react",
+      "tags": ["React", "TypeScript", "Tailwind", "Game"],
+      "description": "Classic Minesweeper rebuilt in React + Zustand + Tailwind. Beginner/intermediate/expert presets, custom board sizes, chord reveal, best-time tracking, and full keyboard accessibility."
+    },
+    "tetris": {
+      "title": "Tetris",
+      "emoji": "\ud83e\udde9",
+      "url": "https://github.com/vLoon-jpg/tetris",
+      "tags": ["React", "TypeScript", "Tailwind", "Game"],
+      "description": "Browser Tetris built with React. Classic piece rotation, line clearing, and progressive speed increase."
+    },
+    "flappy-bird": {
+      "title": "Flappy Bird",
+      "emoji": "\ud83d\udc26",
+      "url": "https://github.com/vLoon-jpg/flappy-bird",
+      "tags": ["React", "TypeScript", "Game"],
+      "description": "Flappy Bird clone in React. Tap or spacebar to flap, dodge pipes, beat your high score."
+    },
+    "pacman": {
+      "title": "Pac-Man",
+      "emoji": "\ud83d\udc7e",
+      "url": "https://github.com/vLoon-jpg/pacman",
+      "tags": ["React", "TypeScript", "Game"],
+      "description": "Pac-Man clone in React. Classic dot-eating gameplay with ghost AI."
+    },
+    "doom": {
+      "title": "Doom Clone",
+      "emoji": "\ud83d\udd2b",
+      "url": "https://github.com/vLoon-jpg/doom",
+      "tags": ["React", "TypeScript", "Game", "3D"],
+      "description": "Raycasting FPS in React — Doom-style 3D rendering from a 2D map, running entirely in the browser."
+    },
+    "Auto-Gmail-Creator": {
+      "title": "Auto Gmail Creator",
+      "emoji": "\ud83d\udce7",
+      "url": "https://github.com/vLoon-jpg/Auto-Gmail-Creator",
+      "tags": ["Python", "Selenium", "Automation"],
+      "description": "Bulk automated Google account registration bot with stealth webdriver to bypass anti-bot detection."
+    },
+    "gmail-account-creator": {
+      "title": "Gmail Account Creator",
+      "emoji": "\ud83d\udcec",
+      "url": "https://github.com/vLoon-jpg/gmail-account-creator",
+      "tags": ["Python", "Selenium", "Automation", "Security"],
+      "description": "Semi-automated Gmail account creation tool using Selenium + undetected-chromedriver. Automates 5 of 8 Google signup steps with anti-bot bypass and custom dropdown handling."
+    },
+    "wa-reminder": {
+      "title": "WhatsApp Reminder Assistant",
+      "emoji": "\u23f0",
+      "url": "https://github.com/vLoon-jpg/wa-reminder",
+      "tags": ["Python", "FastAPI", "Node.js", "WhatsApp", "Docker"],
+      "description": "Natural language WhatsApp reminder bot. Text it a reminder, it remembers. FastAPI backend + PostgreSQL + Baileys WhatsApp sidecar, all containerised with Docker."
     }
   }
 }

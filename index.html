@@ -13,6 +13,9 @@
   <meta name="twitter:description" content="Student, modder, tinkerer. Minecraft mods, game dev, and automation tools.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23000'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-size='20' font-weight='900' fill='%23FF6B01' font-family='system-ui,sans-serif'%3EL%3C/text%3E%3C/svg%3E">
   <title>vLoon — Levy | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
   <script type="module">
     import { animate, stagger, splitText } from 'https://cdn.jsdelivr.net/npm/animejs@4.5.0/+esm';
     // Bridge v3 API (anime({targets, ...})) to v4 (animate(targets, params))
@@ -28,9 +31,14 @@
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
     body{
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-      background:#000;color:#e0e0e0;line-height:1.6;overflow-x:hidden
+      font-family:var(--sans);
+      background:var(--bg);color:#d6d6d6;line-height:1.6;overflow-x:hidden;
+      background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
+      background-size:48px 48px;
+      padding-bottom:30px;
+      counter-reset:sec
     }
+    ::selection{background:var(--accent);color:#000}
     /* Noise texture — our signature */
     body::after{
       content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:9999;opacity:.03;
@@ -42,151 +50,185 @@
     /* DESIGN TOKENS */
     :root{
       --accent:#FF6B01;--accent-hover:#FF8C33;--accent-glow:rgba(255,107,1,.12);
-      --bg-alt:#0d0d0d;--border:#1a1a1a;
-      --text:#fff;--text-secondary:#aaa;--text-muted:#888;
-      --section-pad:100px 0;--content-max:1000px;
+      --green:#33FF66;
+      --bg:#050505;--bg-alt:#0b0b0b;--border:#1d1d1d;--frame:rgba(255,107,1,.35);
+      --text:#fff;--text-secondary:#a8a8a8;--text-muted:#7a7a7a;
+      --mono:'JetBrains Mono','Cascadia Code','Consolas',monospace;
+      --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      --section-pad:96px 0;--content-max:1000px;
     }
 
     /* LAYOUT */
     .container{max-width:var(--content-max);margin:0 auto;padding:0 24px}
     .section{padding:var(--section-pad);border-bottom:1px solid var(--border);position:relative}
     .section:last-of-type{border-bottom:none}
-    h2{font-size:clamp(1.6rem,4vw,2rem);font-weight:800;color:var(--text);margin-bottom:12px}
-    .section-sub{font-size:1rem;color:var(--text-muted);margin-bottom:40px;max-width:600px}
+    h2{font-family:var(--mono);font-size:clamp(1.35rem,3.2vw,1.8rem);font-weight:700;color:var(--text);margin-bottom:12px;text-transform:uppercase;letter-spacing:.03em}
+    .section h2::before{counter-increment:sec;content:'0' counter(sec) ' // ';color:var(--accent)}
+    .section-sub{font-family:var(--mono);font-size:.85rem;color:var(--text-muted);margin-bottom:44px;max-width:640px}
+    .section-sub::before{content:'> ';color:var(--green)}
 
     /* TAGS */
-    .tag{display:inline-block;background:var(--accent-glow);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:.75rem;font-weight:600;margin:2px 4px 2px 0}
+    .tag{display:inline-block;font-family:var(--mono);color:var(--text-secondary);padding:2px 0;font-size:.7rem;font-weight:500;margin:2px 10px 2px 0}
+    .tag::before{content:'[';color:var(--accent)}
+    .tag::after{content:']';color:var(--accent)}
 
     /* BUTTONS */
-    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-weight:700;padding:12px 28px;border-radius:8px;font-size:.9rem;transition:all .2s;border:none;cursor:pointer}
-    .btn:hover{background:#fff;color:#000;transform:translateY(-2px)}
-    .btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+    .btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#000;font-family:var(--mono);font-weight:700;padding:12px 20px;border-radius:0;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;transition:background .15s,color .15s,border-color .15s;border:none;cursor:pointer}
+    .btn::before{content:'['}
+    .btn::after{content:']'}
+    .btn:hover{background:#fff;color:#000}
+    .btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent)}
     .btn-outline:hover{background:var(--accent-glow);color:var(--accent)}
 
-    /* NAV — our glass nav, simplified */
-    nav{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+    /* NAV — mission control strip */
+    nav{position:fixed;top:0;left:0;width:100%;z-index:100;background:rgba(5,5,5,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
     nav .container{display:flex;align-items:center;justify-content:space-between;height:56px}
-    .nav-logo{font-weight:800;font-size:1.1rem;color:var(--text)}
+    .nav-logo{font-family:var(--mono);font-weight:700;font-size:.85rem;color:var(--text);letter-spacing:.02em}
     .nav-logo .fade{color:var(--text-muted)}
     .nav-logo .accent{color:var(--accent)}
-    .nav-links{display:flex;gap:24px;list-style:none}
-    .nav-links a{font-size:.85rem;color:var(--text-secondary);position:relative}
+    .nav-links{display:flex;gap:26px;list-style:none}
+    .nav-links a{font-family:var(--mono);font-size:.72rem;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary)}
+    .nav-links a::before{content:'//';color:var(--accent);margin-right:4px;opacity:0;transition:opacity .15s}
     .nav-links a:hover{color:var(--text)}
-    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .2s}
-    .nav-links a:hover::after{transform:scaleX(1)}
+    .nav-links a:hover::before{opacity:1}
     .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px}
-    .hamburger span{display:block;width:22px;height:2px;background:var(--text);border-radius:2px}
-    .nav-overlay{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg-alt);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s ease;transform:translateX(100%);pointer-events:none}
+    .hamburger span{display:block;width:22px;height:2px;background:var(--text)}
+    .nav-overlay{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;background:var(--bg);z-index:99;padding:40px 24px;flex-direction:column;gap:24px;transition:transform .3s ease;transform:translateX(100%);pointer-events:none}
     .nav-overlay.open{transform:translateX(0);pointer-events:auto}
-    .nav-overlay a{font-size:1.5rem;font-weight:600;color:var(--text)}
+    .nav-overlay a{font-family:var(--mono);font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text)}
+    .nav-overlay a::before{content:'// ';color:var(--accent)}
 
-    /* HERO — our glow + Agnes typography */
+    /* STATUS LINE — persistent bottom strip */
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+    .statusline{position:fixed;left:0;right:0;bottom:0;z-index:100;background:var(--bg);border-top:1px solid var(--border);font-family:var(--mono);font-size:.66rem;color:var(--text-muted);padding:6px 24px;display:flex;align-items:center;gap:8px;letter-spacing:.04em;user-select:none}
+    .statusline .sl-user{color:var(--accent);font-weight:700}
+    .statusline .sl-ok{color:var(--green)}
+    .statusline .sl-cursor{display:inline-block;width:7px;height:12px;background:var(--accent);animation:blink 1.1s steps(1) infinite;margin-left:auto}
+
+    /* HERO — boot sequence */
     #hero{min-height:100vh;display:flex;align-items:center;padding-top:56px;position:relative;overflow:hidden}
-    #hero::before{content:'';position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,107,1,.06) 0%,transparent 60%);pointer-events:none}
     #hero .container{position:relative;z-index:1}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-glow);border:1px solid var(--accent);border-radius:100px;padding:5px 14px;font-size:.75rem;font-weight:600;color:var(--accent);margin-bottom:16px;animation:pulse 2s ease-in-out infinite}
-    .hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s ease-in-out infinite}
-    .hero-name{font-size:clamp(2.4rem,6vw,4rem);font-weight:900;line-height:1.1;color:var(--text);margin-bottom:12px}
+    .hero-boot{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:.78rem;color:var(--text-muted);margin-bottom:30px}
+    .hero-boot .ok{color:var(--green)}
+    .hero-boot .accent{color:var(--accent)}
+    .hero-name{font-family:var(--mono);font-size:clamp(2.4rem,6.5vw,4.2rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;color:var(--text);margin-bottom:14px}
     .hero-name span{color:var(--accent)}
-    .hero-sub{font-size:1.15rem;color:var(--text-secondary);margin-bottom:8px}
-    .hero-motto{font-size:1.3rem;font-weight:600;color:var(--accent);margin-bottom:32px;font-style:italic}
-    .hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-sub{font-family:var(--mono);font-size:.9rem;color:var(--text-secondary);margin-bottom:10px}
+    .hero-motto{font-family:var(--mono);font-size:1.05rem;font-weight:500;color:var(--accent);margin-bottom:36px;min-height:1.6em}
+    .hero-buttons{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+    .hero-coords{font-family:var(--mono);font-size:.7rem;color:var(--text-muted);letter-spacing:.08em}
 
-    /* ABOUT — Agnes Quick Facts sidebar, our layout */
-    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
-    .about-text{color:#ccc;font-size:1rem;line-height:1.7}
+    /* ABOUT — config-file readout */
+    .about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:start}
+    .about-text{color:#c8c8c8;font-size:1rem;line-height:1.75}
     .about-text p+p{margin-top:16px}
-    .quick-facts{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:24px}
-    .quick-facts h3{color:var(--text);font-size:.9rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+    .quick-facts{background:var(--bg-alt);border:1px solid var(--border);padding:24px;position:relative}
+    .quick-facts::before,.quick-facts::after{content:'';position:absolute;width:12px;height:12px;border-color:var(--accent);border-style:solid}
+    .quick-facts::before{top:-1px;left:-1px;border-width:1px 0 0 1px}
+    .quick-facts::after{bottom:-1px;right:-1px;border-width:0 1px 1px 0}
+    .quick-facts h3{font-family:var(--mono);color:var(--text);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+    .quick-facts h3::before{content:'$ cat ';color:var(--text-muted);text-transform:none}
     .quick-facts ul{list-style:none;display:flex;flex-direction:column;gap:10px}
-    .quick-facts li{display:flex;gap:8px;font-size:.9rem}
+    .quick-facts li{display:flex;gap:8px;font-family:var(--mono);font-size:.78rem}
     .quick-facts li span:first-child{color:var(--accent);font-weight:700}
     .quick-facts li span:last-child{color:var(--text-secondary)}
 
-    /* SKILLS — 6 individual cards */
-    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-    .skill-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:32px 24px;text-align:center;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px}
-    .skill-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.3);border-color:var(--accent)}
-    .skill-card .skill-emoji{font-size:2rem}
-    .skill-card .skill-name{color:var(--text);font-weight:700;font-size:1.05rem}
-    .skill-card .skill-desc{color:var(--text-secondary);font-size:.85rem;line-height:1.5}
-    .skill-card .skill-link{color:var(--accent);font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:4px;opacity:.7;transition:opacity .2s}
+    /* SKILLS — HUD grid */
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .skill-card{background:var(--bg-alt);border:1px solid var(--border);padding:20px;text-align:left;transition:border-color .15s,box-shadow .15s;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+    .skill-card:hover{border-color:var(--accent);box-shadow:0 0 18px rgba(255,107,1,.12)}
+    .skill-card .skill-index{font-family:var(--mono);font-size:.68rem;color:var(--accent);letter-spacing:.06em}
+    .skill-card .skill-name{font-family:var(--mono);color:var(--text);font-weight:700;font-size:.95rem;text-transform:uppercase;letter-spacing:.03em}
+    .skill-card .skill-desc{color:var(--text-secondary);font-size:.82rem;line-height:1.55}
+    .skill-card .skill-link{font-family:var(--mono);color:var(--accent);font-size:.68rem;font-weight:500;letter-spacing:.04em;margin-top:auto;opacity:.6;transition:opacity .15s}
     .skill-card:hover .skill-link{opacity:1}
 
-    /* PROJECTS — our cards, Agnes vertical list */
-    .projects-list{display:flex;flex-direction:column;gap:20px}
-    .project-card{background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease}
+    /* PROJECTS — ledger rows (DOM owned by update.py; style via CSS only) */
+    .projects-list{counter-reset:proj;display:flex;flex-direction:column;gap:0;border:1px solid var(--border)}
+    .project-card{counter-increment:proj;background:transparent;border-bottom:1px solid var(--border);padding:22px 24px 22px 76px;position:relative;overflow:hidden;transition:background .15s}
+    .project-card:last-child{border-bottom:none}
     .project-card{cursor:pointer}
-    .project-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent-hover))}
-    .project-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-    .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-    .project-header h3{color:var(--text);font-size:1.15rem}
-    .project-link-icon{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--accent-glow);color:var(--accent);font-size:.85rem;transition:all .2s;flex-shrink:0}
-    .project-link-icon:hover{background:var(--accent);color:#000}
-    .project-card > p{color:var(--text-secondary);font-size:.9rem;margin-bottom:14px;line-height:1.6}
-    .project-tags{display:flex;flex-wrap:wrap;gap:6px}
+    .project-card::before{content:counter(proj,decimal-leading-zero);position:absolute;left:24px;top:25px;font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--accent)}
+    .project-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .2s}
+    .project-card:hover{background:var(--bg-alt)}
+    .project-card:hover::after{transform:scaleY(1)}
+    .project-header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+    .project-header h3{font-family:var(--mono);color:var(--text);font-size:1rem;letter-spacing:.01em}
+    .project-link-icon{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--border);color:var(--accent);font-size:.8rem;font-family:var(--mono);transition:all .15s;flex-shrink:0}
+    .project-card:hover .project-link-icon{background:var(--accent);border-color:var(--accent);color:#000}
+    .project-card > p{color:var(--text-secondary);font-size:.88rem;margin-bottom:12px;line-height:1.6}
+    .project-tags{display:flex;flex-wrap:wrap;gap:0 2px}
     /* Terminal cursor arrow */
     .projects-wrapper{position:relative}
-    .select-arrow{position:absolute;left:-24px;top:0;font-size:1.2rem;font-weight:700;color:var(--accent);font-family:monospace;pointer-events:none;transition:top .3s cubic-bezier(.4,0,.2,1);opacity:0}
+    .select-arrow{position:absolute;left:-24px;top:0;font-size:1.2rem;font-weight:700;color:var(--accent);font-family:var(--mono);pointer-events:none;transition:top .3s cubic-bezier(.4,0,.2,1);opacity:0}
     .select-arrow.active{opacity:1}
 
-    /* CONTACT — our pill buttons, Agnes layout */
+    /* CONTACT — framed cells */
     .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .contact-card{display:flex;flex-direction:column;align-items:center;gap:8px;background:var(--bg-alt);border:1px solid var(--border);border-radius:12px;padding:28px 16px;transition:border-color .4s ease,transform .4s ease,box-shadow .4s ease}
-    .contact-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:0 8px 24px rgba(255,107,1,.08)}
-    .contact-card .icon{font-size:1.8rem}
-    .contact-card .name{color:var(--text);font-weight:600;font-size:.95rem}
-    .contact-card .handle{color:var(--text-muted);font-size:.8rem}
+    .contact-card{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:var(--bg-alt);border:1px solid var(--border);padding:22px;transition:border-color .15s,box-shadow .15s}
+    .contact-card:hover{border-color:var(--accent);box-shadow:0 0 18px rgba(255,107,1,.1)}
+    .contact-card .icon{font-family:var(--mono);font-size:.68rem;color:var(--accent);letter-spacing:.06em}
+    .contact-card .name{font-family:var(--mono);color:var(--text);font-weight:700;font-size:.9rem;text-transform:uppercase;letter-spacing:.03em}
+    .contact-card .handle{font-family:var(--mono);color:var(--text-muted);font-size:.75rem}
 
     /* FOOTER */
-    footer{padding:32px 0;border-top:1px solid var(--border);text-align:center}
-    footer p{color:#555;font-size:.8rem}
+    footer{padding:28px 0 40px;border-top:1px solid var(--border)}
+    footer p{font-family:var(--mono);color:#555;font-size:.72rem}
+    footer .footer-exit{color:var(--green);margin-bottom:6px}
     footer span{color:var(--accent)}
 
     /* RESPONSIVE */
     @media (max-width:768px){
-      :root{--section-pad:60px 0}
+      :root{--section-pad:64px 0}
       .nav-links{display:none}.hamburger{display:flex}
       .about-grid{grid-template-columns:1fr}
-      .skills-grid{grid-template-columns:1fr}
+      .skills-grid{grid-template-columns:repeat(2,1fr)}
       .contact-grid{grid-template-columns:1fr}
       .hero-buttons{flex-direction:column;align-items:flex-start}
+      .project-card{padding:18px 18px 18px 58px}
+      .project-card::before{left:18px;top:21px}
     }
     @media (max-width:480px){
       .container{padding:0 16px}
       .quick-facts{padding:16px}
+      .skills-grid{grid-template-columns:1fr}
+      .statusline .sl-loc{display:none}
+    }
+    @media (prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
     }
 
     /* SCROLLBAR */
     ::-webkit-scrollbar{width:8px}
-    ::-webkit-scrollbar-track{background:#0a0a0a}
-    ::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
-    ::-webkit-scrollbar-thumb:hover{background:#555}
+    ::-webkit-scrollbar-track{background:#050505}
+    ::-webkit-scrollbar-thumb{background:#2a2a2a}
+    ::-webkit-scrollbar-thumb:hover{background:var(--accent)}
 
     /* ═══════════════ TERMINAL WIDGET ═══════════════ */
     .term-window{
-      background:#050505;border:1px solid #1a1a1a;border-radius:8px;overflow:hidden;
-      margin-bottom:20px;box-shadow:0 4px 24px rgba(0,0,0,.4);
+      background:#050505;border:1px solid var(--frame);border-radius:0;overflow:hidden;
+      margin-bottom:20px;box-shadow:0 0 30px rgba(255,107,1,.07);
     }
+    .term-window:focus-within{border-color:var(--accent)}
     .term-titlebar{
       background:#111;padding:8px 14px;display:flex;align-items:center;gap:8px;
-      font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      font-family:var(--mono);
       font-size:.72rem;color:#666;border-bottom:1px solid #1a1a1a;user-select:none;
     }
     .term-titlebar span:first-of-type{margin-left:0}
     .term-split-btn{
       margin-left:auto;background:none;border:1px solid #333;color:#666;
-      font-family:inherit;font-size:.65rem;cursor:pointer;padding:2px 8px;border-radius:4px;
+      font-family:inherit;font-size:.65rem;cursor:pointer;padding:2px 8px;border-radius:0;
       transition:all .15s;
     }
     .term-split-btn:hover{color:var(--accent);border-color:var(--accent)}
-    .term-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .term-dot{width:9px;height:9px;border-radius:0;flex-shrink:0}
     .term-dot:nth-child(1){background:#FF5F56}
     .term-dot:nth-child(2){background:#FFBD2E}
     .term-dot:nth-child(3){background:#27C93F}
     .term-body{
-      padding:16px;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      padding:16px;font-family:var(--mono);
       position:relative;
     }
     .term-body::after{
@@ -231,17 +273,20 @@
     .term-chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
     .term-hint{font-size:.8rem;color:var(--text-muted);margin-right:4px;user-select:none}
     .term-chip{
-      background:var(--accent-glow);color:var(--accent);border:1px solid rgba(255,107,1,.25);
-      padding:4px 12px;border-radius:100px;font-size:.72rem;font-weight:600;
-      cursor:pointer;transition:all .2s;font-family:inherit;
+      background:transparent;color:var(--text-secondary);border:1px solid var(--border);
+      padding:4px 12px;border-radius:0;font-size:.72rem;font-weight:500;
+      cursor:pointer;transition:all .15s;font-family:var(--mono);
     }
+    .term-chip::before{content:'$ ';color:var(--green)}
     .term-chip:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+    .term-chip:hover::before{color:#000}
+    .term-hint{font-family:var(--mono)}
 
     /* Nano editor */
     .term-nano{display:none;position:relative;z-index:2}
     .term-nano.active{display:flex;flex-direction:column;min-height:200px;max-height:380px}
     .term-nano-bar{
-      background:#111;color:#fff;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      background:#111;color:#fff;font-family:var(--mono);
       font-size:.72rem;padding:4px 12px;border-bottom:1px solid #1a1a1a;
       display:flex;justify-content:space-between;user-select:none;
     }
@@ -250,15 +295,15 @@
     .term-nano-bar .dim{color:#888}
     .term-nano-textarea{
       flex:1;min-height:150px;max-height:300px;background:#050505;color:#c0c0c0;
-      border:none;outline:none;padding:12px;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;
+      border:none;outline:none;padding:12px;font-family:var(--mono);
       font-size:.82rem;resize:none;line-height:1.7;tab-size:4;
     }
     .term-nano-status{
-      background:#111;color:#ccc;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      background:#111;color:#ccc;font-family:var(--mono);
       font-size:.7rem;padding:4px 12px;border-top:1px solid #1a1a1a;user-select:none;
     }
     .term-nano-shortcuts{
-      background:#111;color:#999;font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+      background:#111;color:#999;font-family:var(--mono);
       font-size:.68rem;padding:4px 12px;display:flex;gap:16px;flex-wrap:wrap;user-select:none;
     }
     .term-nano-shortcuts span{color:#fff}
@@ -283,9 +328,11 @@
 <body>
 
 <!-- NAV -->
+<div class="statusline"><span class="sl-user">vloon@portfolio</span><span>~</span><span class="sl-ok">[ONLINE]</span><span class="sl-loc">&middot; Amlapura, Bali &middot; UTC+8</span><span class="sl-cursor"></span></div>
+
 <nav>
   <div class="container">
-    <a href="#hero" class="nav-logo"><span class="accent">L</span><span class="fade">v</span></a>
+    <a href="#hero" class="nav-logo"><span class="accent">vloon</span><span class="fade">@portfolio</span>:~$</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
@@ -309,7 +356,11 @@
 <!-- HERO -->
 <section id="hero">
   <div class="container">
-    <div class="hero-badge"><span class="dot"></span> Currently modding Minecraft</div>
+    <div class="hero-boot">
+      <span>&gt; boot vloon.dev v2.0 <span class="ok">[ OK ]</span></span>
+      <span>&gt; mounting /projects /skills /ctf <span class="ok">[ OK ]</span></span>
+      <span>&gt; status: <span class="accent">currently modding minecraft</span></span>
+    </div>
     <h1 class="hero-name">Levy <span>(vLoon)</span></h1>
     <p class="hero-sub">Kelas XII &middot; SMA Negeri 2 Amlapura, Bali</p>
     <p class="hero-motto" id="heroMotto"></p>
@@ -317,6 +368,7 @@
       <a href="#projects" class="btn">See my work &rarr;</a>
       <a href="#contact" class="btn btn-outline">Contact me</a>
     </div>
+    <p class="hero-coords">// -8.45&deg;S 115.61&deg;E &middot; AMLAPURA &middot; BALI &middot; UTC+8</p>
   </div>
 </section>
 
@@ -358,37 +410,37 @@
     <p class="section-sub">Languages, frameworks, and platforms I work with regularly.</p>
     <div class="skills-grid">
       <div class="skill-card" onclick="window.open('https://www.java.com','_blank')">
-        <span class="skill-emoji">&#x260E;</span>
+        <span class="skill-index">0x01</span>
         <span class="skill-name">Java</span>
         <span class="skill-desc">Fabric mods, Minecraft plugins, school projects</span>
         <span class="skill-link">java.com &rarr;</span>
       </div>
       <div class="skill-card" onclick="window.open('https://dotnet.microsoft.com/en-us/languages/csharp','_blank')">
-        <span class="skill-emoji">&#x23;&#x20E3;</span>
+        <span class="skill-index">0x02</span>
         <span class="skill-name">C#</span>
         <span class="skill-desc">Unity game dev, school assignments</span>
         <span class="skill-link">dotnet.microsoft.com &rarr;</span>
       </div>
       <div class="skill-card" onclick="window.open('https://python.org','_blank')">
-        <span class="skill-emoji">&#x1F40D;</span>
+        <span class="skill-index">0x03</span>
         <span class="skill-name">Python</span>
         <span class="skill-desc">Automation, web scraping, C2 tools, scripts</span>
         <span class="skill-link">python.org &rarr;</span>
       </div>
       <div class="skill-card" onclick="window.open('https://unity.com','_blank')">
-        <span class="skill-emoji">&#x1F3AE;</span>
+        <span class="skill-index">0x04</span>
         <span class="skill-name">Unity</span>
         <span class="skill-desc">2D/3D game dev, flappy bird clones, physics</span>
         <span class="skill-link">unity.com &rarr;</span>
       </div>
       <div class="skill-card" onclick="window.open('https://fabricmc.net','_blank')">
-        <span class="skill-emoji">&#x26CF;</span>
+        <span class="skill-index">0x05</span>
         <span class="skill-name">Fabric Modding</span>
         <span class="skill-desc">Mixin, Gradle, combat mechanics, data components</span>
         <span class="skill-link">fabricmc.net &rarr;</span>
       </div>
       <div class="skill-card" onclick="window.open('https://n8n.io','_blank')">
-        <span class="skill-emoji">&#x2699;</span>
+        <span class="skill-index">0x06</span>
         <span class="skill-name">n8n</span>
         <span class="skill-desc">Self-hosted automation workflows, webhooks, API bridges</span>
         <span class="skill-link">n8n.io &rarr;</span>
@@ -401,7 +453,7 @@
 <section id="featured-projects" class="section">
   <div class="container">
     <h2>Featured Projects</h2>
-    <p class="section-sub">Things I've built — mods, tools, automation scripts, and school projects. (10 projects)</p>
+    <p class="section-sub">Things I've built — mods, tools, automation scripts, and school projects. (18 projects)</p>
     <div class="projects-list">
     <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/morefirework','_blank')">
       <div class="project-header">
@@ -424,7 +476,7 @@
         <h3>🦠 Edu-Virus</h3>
         <span class="project-link-icon">↗</span>
       </div>
-      <p>Educational malware/C2 system demo for classroom assignments. Demonstrates trojan architecture with pastebin-based command & control.</p>
+      <p>Educational malware/C2 system demo for classroom assignments. Demonstrates trojan architecture with pastebin-based command &amp; control.</p>
       <div class="project-tags"><span class="tag">Python</span><span class="tag">Security</span><span class="tag">C2</span><span class="tag">Educational</span></div>
     </div>
     <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/ai-education-pptx','_blank')">
@@ -483,6 +535,70 @@
       <p>My GitHub profile README — a summary of who I am, what I build, and where to find me. Student, modder, automation enthusiast.</p>
       <div class="project-tags"><span class="tag">Profile</span><span class="tag">Documentation</span></div>
     </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/minesweeper-react','_blank')">
+      <div class="project-header">
+        <h3>💣 Minesweeper</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Classic Minesweeper rebuilt in React + Zustand + Tailwind. Beginner/intermediate/expert presets, custom board sizes, chord reveal, best-time tracking, and full keyboard accessibility.</p>
+      <div class="project-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span><span class="tag">Game</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/tetris','_blank')">
+      <div class="project-header">
+        <h3>🧩 Tetris</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Browser Tetris built with React. Classic piece rotation, line clearing, and progressive speed increase.</p>
+      <div class="project-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span><span class="tag">Game</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/flappy-bird','_blank')">
+      <div class="project-header">
+        <h3>🐦 Flappy Bird</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Flappy Bird clone in React. Tap or spacebar to flap, dodge pipes, beat your high score.</p>
+      <div class="project-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Game</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/pacman','_blank')">
+      <div class="project-header">
+        <h3>👾 Pac-Man</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Pac-Man clone in React. Classic dot-eating gameplay with ghost AI.</p>
+      <div class="project-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Game</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/doom','_blank')">
+      <div class="project-header">
+        <h3>🔫 Doom Clone</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Raycasting FPS in React — Doom-style 3D rendering from a 2D map, running entirely in the browser.</p>
+      <div class="project-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Game</span><span class="tag">3D</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/Auto-Gmail-Creator','_blank')">
+      <div class="project-header">
+        <h3>📧 Auto Gmail Creator</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Bulk automated Google account registration bot with stealth webdriver to bypass anti-bot detection.</p>
+      <div class="project-tags"><span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">Automation</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/gmail-account-creator','_blank')">
+      <div class="project-header">
+        <h3>📬 Gmail Account Creator</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Semi-automated Gmail account creation tool using Selenium + undetected-chromedriver. Automates 5 of 8 Google signup steps with anti-bot bypass and custom dropdown handling.</p>
+      <div class="project-tags"><span class="tag">Python</span><span class="tag">Selenium</span><span class="tag">Automation</span><span class="tag">Security</span></div>
+    </div>
+    <div class="project-card" onclick="window.open('https://github.com/vLoon-jpg/wa-reminder','_blank')">
+      <div class="project-header">
+        <h3>⏰ WhatsApp Reminder Assistant</h3>
+        <span class="project-link-icon">↗</span>
+      </div>
+      <p>Natural language WhatsApp reminder bot. Text it a reminder, it remembers. FastAPI backend + PostgreSQL + Baileys WhatsApp sidecar, all containerised with Docker.</p>
+      <div class="project-tags"><span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Node.js</span><span class="tag">WhatsApp</span><span class="tag">Docker</span></div>
+    </div>
     </div>
   </div>
 </section>
@@ -539,17 +655,17 @@
     <p class="section-sub">Let's connect — I'm always open to collaborations, mod ideas, or just chatting.</p>
     <div class="contact-grid">
       <a href="https://github.com/vLoon-jpg" target="_blank" class="contact-card">
-        <span class="icon">🐙</span>
+        <span class="icon">//01</span>
         <span class="name">GitHub</span>
         <span class="handle">@vLoon-jpg</span>
       </a>
       <a href="https://instagram.com/the_vloon" target="_blank" class="contact-card">
-        <span class="icon">📸</span>
+        <span class="icon">//02</span>
         <span class="name">Instagram</span>
         <span class="handle">@the_vloon</span>
       </a>
       <a href="mailto:crabmuck@gmail.com" class="contact-card">
-        <span class="icon">✉️</span>
+        <span class="icon">//03</span>
         <span class="name">Email</span>
         <span class="handle">crabmuck@gmail.com</span>
       </a>
@@ -560,6 +676,7 @@
 
 <footer>
   <div class="container">
+    <p class="footer-exit">process exited with code 0</p>
     <p>&copy; 2026 Levy (vLoon) &mdash; Pande Made Raditya Dhiparthama. Built with <span>&lt;/&gt;</span> in Amlapura, Bali.</p>
   </div>
 </footer>
@@ -576,6 +693,12 @@
   }
 
   waitForAnime(() => {
+    // Respect reduced-motion: skip entrance animations, show motto statically
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const m = document.getElementById('heroMotto');
+      if (m) m.textContent = 'If it works, it works';
+      return;
+    }
     // Sections + cards — only hide children, not the container
     const sections = document.querySelectorAll('.section');
     const cards = document.querySelectorAll('.skill-card,.contact-card');
@@ -657,12 +780,7 @@
       let charIdx = 0;
       let state = 'typing'; // 'typing' | 'pause' | 'deleting'
 
-      motto.style.borderRight = '2px solid var(--accent)';
-      motto.style.color = 'var(--accent)';
-      motto.style.fontWeight = '600';
-      motto.style.fontSize = '1.3rem';
-      motto.style.fontStyle = 'italic';
-      motto.style.marginBottom = '32px';
+      motto.style.borderRight = '9px solid var(--accent)';
       motto.style.display = 'inline-block';
 
       const tick = () => {

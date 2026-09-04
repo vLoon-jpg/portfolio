@@ -12,6 +12,7 @@ Usage:
 Configuration: portfolio/projects_config.json
 """
 
+import html
 import json
 import re
 import sys
@@ -192,18 +193,34 @@ def build_project_card(project_name, config_projects, exclude_dirs):
     }
 
 
+def _esc(value):
+    """HTML-escape a value for safe insertion into element/attribute text."""
+    return html.escape(str(value), quote=True)
+
+
+def _esc_js_attr(value):
+    """Escape a value used inside a single-quoted JS string within a
+    double-quoted HTML attribute (e.g. onclick="window.open('...')").
+
+    Backslash-escape JS metacharacters first (survives HTML entity decoding),
+    then HTML-escape so it cannot break out of the attribute."""
+    js = str(value).replace("\\", "\\\\").replace("'", "\\'")
+    js = js.replace("\n", "").replace("\r", "")
+    return html.escape(js, quote=True)
+
+
 def render_cards_html(project_cards):
     """Generate HTML for project cards."""
     cards_html = []
     for card in project_cards:
         tags_html = "".join(
-            f'<span class="tag">{tag}</span>' for tag in card["tags"]
+            f'<span class="tag">{_esc(tag)}</span>' for tag in card["tags"]
         )
         cards_html.append(CARD_TEMPLATE.format(
-            url=card["url"],
-            emoji=card["emoji"],
-            title=card["title"],
-            description=card["description"],
+            url=_esc_js_attr(card["url"]),
+            emoji=_esc(card["emoji"]),
+            title=_esc(card["title"]),
+            description=_esc(card["description"]),
             tags_html=tags_html,
         ))
     return "\n".join(cards_html)
